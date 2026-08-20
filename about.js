@@ -186,9 +186,55 @@
         // should push along with it rather than standing still.
         animateLine(document.querySelector(".eod-about-hero__cta"), 1);
 
+        // Sticky photo starts as a small circular reveal centred over
+        // the heading — Evy felt the full card blocked the intro text,
+        // and wanted it small + round there instead, staying centred
+        // (deliberately still overlapping the heading, just much less
+        // of it) — then grows into its normal rounded-rectangle shape
+        // as the page scrolls from the title block into the body text.
+        // Uses clip-path (one circle(), just growing its own radius),
+        // NOT the card's actual width/height: push() above only
+        // re-measures photoEl on ScrollTrigger.refresh() (page load/
+        // resize), not on every scroll tick, so animating the real box
+        // size would leave the lede/detail push amount permanently
+        // baked to whatever size the photo happened to be AT LOAD (the
+        // small circle) — under-pushing the text once the card visibly
+        // grows past it. clip-path sidesteps that: the box's own
+        // getBoundingClientRect() never changes, only what's painted
+        // inside it does, so photoEl's real size is the full card the
+        // whole time and every other measurement here stays honest.
+        // End radius (20em) is comfortably bigger than the card's own
+        // worst-case corner-to-centre distance (~16em, at the clamp's
+        // widest 20em/25em w/h) so it reads as fully unclipped — the
+        // card's own border-radius (already on .eod-journey__photo)
+        // takes over as the visible edge from that point on.
+        var titleBlockEl = document.querySelector(".eod-about-hero__title-block");
+        if (titleBlockEl) {
+          var shapeTw = gsap.fromTo(photoEl,
+            { clipPath: "circle(2.75em at 50% 50%)" },
+            {
+              clipPath: "circle(20em at 50% 50%)",
+              ease: "none",
+              scrollTrigger: {
+                trigger: titleBlockEl,
+                start: "top top",
+                end: "bottom top",
+                scrub: true,
+              },
+            }
+          );
+          triggers.push(shapeTw.scrollTrigger);
+        }
+
         return function () {
           triggers.forEach(function (t) { t.kill(); });
           split.revert();
+          // Without this, switching to mobile mid-session (a resize
+          // crossing the 1025px breakpoint, not just a page load) left
+          // the last scrubbed clip-path radius stuck on photoEl — the
+          // mobile layout never sets clip-path itself, so nothing would
+          // otherwise clear it back to fully unclipped.
+          gsap.set(photoEl, { clearProps: "clipPath" });
         };
       });
 
