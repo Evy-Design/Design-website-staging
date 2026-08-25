@@ -78,10 +78,8 @@ window.EOD_CONTENT = {
       image: "assets/timeline/The Penguin Cover Design Award.webp",
       alt: "The Girl, Woman, Other Penguin book cover design",
       body: "My book design cover was shortlisted for the 2022 Fiction category, Girl, Woman, Other by Bernardine Evaristo with Penguin Random House UK. Everything was incredible. I've learned alot and met some amazing and inspirational people. I'm grateful and honoured to have been selected for this.",
-      // TODO: point at the real case-study/project page once one
-      // exists — falling back to the general work page for now.
       ctaLabel: "View this project",
-      ctaHref: "/projects"
+      ctaHref: "project.html?slug=penguin-cover-design-award"
     },
     {
       year: "2021 – 2018",
@@ -96,6 +94,94 @@ window.EOD_CONTENT = {
       image: "assets/timeline/Masterclass.webp",
       alt: "Evy's Masterclass coursework",
       body: "I am a dedicated worker who thrives on new challenges. And as they say, working hard pays off. So, after the first year of my study, I was accepted into the Masterclass of my college. Every year a select number of people are allowed to enter this class. This class is for students with a higher level of design and who wants an extra challenge. In this class you get more assignments and you work together with the class for external companies."
+    }
+  ],
+  // Projects grid (projects.html) + case-study pages (project.html —
+  // one shared template, reads ?slug= to pick which entry here to
+  // render). Add a new project by adding a new object here, nowhere
+  // else — same pattern as `timeline` above. `deliverables` and
+  // `process` are both OPTIONAL, same reasoning as `body`/`cta` on a
+  // timeline entry: omit either on a project that doesn't have one.
+  projects: [
+    {
+      slug: "blockchain",
+      title: "What the F*ck is Blockchain?",
+      // Grid thumbnail (projects.html) — deliberately its own image,
+      // separate from `hero` below: the source design uses a
+      // DIFFERENT image for the grid card than for the detail page's
+      // own top image, for every project that has both.
+      cover: "assets/projects/blockchain/cover.jpg",
+      // Detail page's (project.html) large top image.
+      hero: "assets/projects/blockchain/gallery-1.png",
+      alt: "Spread from the What the F*ck is Blockchain magazine",
+      description: "You have probably already heard about its Bitcoin, NFTs or Blockchain. On the news, on social media or just in a conversation. It is everywhere. But what does it all mean? People throw around terms such as blockchain, crypto art, ledger, and NFTs and expect other people to understand what they mean. So, I made a magazine explaining the basics of blockchain in the simplest way possible. This work was also displayed at the NewDesigners exhibition in London.",
+      deliverables: ["Rebranding", "Design System", "UX Design decisions"],
+      // Each entry is either a single full-width image ("full") or a
+      // side-by-side pair ("pair", exactly 2 srcs) — this is the real
+      // flow from the source design: full, pair, pair, full, pair,
+      // full, not a uniform grid. See projects.css's own comment on
+      // .eod-project__gallery for how these two types render.
+      gallery: [
+        { type: "full", src: ["assets/projects/blockchain/gallery-2.jpg"] },
+        { type: "pair", src: ["assets/projects/blockchain/gallery-3.jpg", "assets/projects/blockchain/gallery-4.jpg"] },
+        { type: "pair", src: ["assets/projects/blockchain/gallery-5.jpg", "assets/projects/blockchain/gallery-6.jpg"] },
+        { type: "full", src: ["assets/projects/blockchain/gallery-7.jpg"] },
+        // "text" block: left h2 heading, right body copy — same
+        // column split as the title/description and process rows
+        // (projects.css .eod-project__gallery-row--text). Placeholder
+        // copy — Evy asked for a spot to explain more about the
+        // image right below, edit these two strings directly.
+        { type: "text", heading: "Add a heading", body: "Write more about this image here." },
+        { type: "pair", src: ["assets/projects/blockchain/gallery-8.jpg", "assets/projects/blockchain/gallery-9.jpg"] },
+        { type: "full", src: ["assets/projects/blockchain/gallery-10.jpg"] }
+      ],
+      process: {
+        text: "In the first video, you can see me working hard. I like to mix manual drawings with digital designs. In the second video, you can see my research and sketches.",
+        videos: ["assets/projects/blockchain/process-1.mp4", "assets/projects/blockchain/process-2.mp4"]
+      }
+    },
+    {
+      slug: "my-type-of-place",
+      title: "My Type Of Place",
+      cover: "assets/projects/my-type-of-place/cover.jpg",
+      hero: "assets/projects/my-type-of-place/gallery-1.jpg",
+      alt: "Illuminated typography installation in an alley",
+      description: "This alley is mainly known as the pissing alley, but also as a scary alley where you don’t want to be in the evening. I have highlighted this with all kinds of colourful typography that also refer to the text that is there. With all kinds of jokes about peeing, it is already a nice place for an Instagram story. But when I looked at my target group I saw that most young people who come here find the most important thing in the evening to show where they have been out on social media. I could use this to make this alley safer as well because no one wants to appear naked or peeing on Instagram. Therefore, by having large luminous letters stuck between the walls I made it a perfect place to take pictures for. Plus it lights up the alley too.",
+      // Source design repeats the hero image again mid-sequence (a
+      // deliberate bookend, not a mistake — it does the same on the
+      // Penguin project below) — kept here to match.
+      gallery: [
+        { type: "pair", src: ["assets/projects/my-type-of-place/gallery-2.jpg", "assets/projects/my-type-of-place/gallery-3.jpg"] },
+        { type: "full", src: ["assets/projects/my-type-of-place/gallery-1.jpg"] },
+        { type: "pair", src: ["assets/projects/my-type-of-place/cover.jpg", "assets/projects/my-type-of-place/gallery-4.jpg"] }
+      ]
+    },
+    {
+      slug: "penguin-cover-design-award",
+      title: "The Penguin Cover Design Award",
+      cover: "assets/projects/penguin-cover-design-award/cover.jpg",
+      hero: "assets/projects/penguin-cover-design-award/cover.jpg",
+      alt: "The Girl, Woman, Other Penguin book cover design",
+      description: "My book design cover was shortlisted for the 2022 Fiction category, Girl, Woman, Other by Bernardine Evaristo with Penguin Random House UK. Everything was incredible. I've learned a lot and met some amazing and inspirational people. I'm grateful and honoured to have been selected for this.",
+      gallery: [
+        { type: "full", src: ["assets/projects/penguin-cover-design-award/gallery-1.png"] }
+      ],
+      process: {
+        text: "I first let loose on paper and sketches and visual illustrations dealing with women, class, race, and sexuality. I always go a long way on this, but I find it difficult to illustrate something that reflects all these subjects at once. So, I took a break from my sketchbook and started reading the first chapter. When I started reading the book, it began with a scene where they mentioned the theatre. I did some theatre myself, and I remembered there were always saying “don’t forget the red thread of the story”, so the thought of doing something with thread was already in my mind. I tried to stop illustrating the situations too literally and was focusing more on what it made the characters feel. The several topics made me feel stuck. And then the red thread comes in handy. I tried many things like making the letters stuck or one person, but I feel like it didn’t bring out all the stories of the book. I remember that I both thread to take photos for the book cover, and I was playing with the thread in my hand when I realized you can express so much with hands. We do things with our hands. Then everything was falling together fast. Subjects I have linked with hands and rope. All these hands visualize a topic; some are pulling, some are stuck, some are being played and some pick up the paces. I like that it doesn’t immediately give away what it is about but does connect well with the subjects.",
+        images: ["assets/projects/penguin-cover-design-award/gallery-2.jpg"]
+      }
+    },
+    {
+      slug: "cense",
+      title: "Cense",
+      cover: "assets/projects/cense/cover.jpg",
+      hero: "assets/projects/cense/cover.jpg",
+      alt: "Cense project cover"
+      // TODO: description/gallery still pending — the source Figma
+      // page for this one wasn't finished yet at the time this was
+      // built (same "#" / "/projects" placeholder pattern as the
+      // other unfinished TODOs above). Card links to a case-study page
+      // that just shows the cover + title until this is filled in.
     }
   ],
   cta: {
@@ -202,7 +288,144 @@ window.EOD_CONTENT = {
     }
   }
 
+  // Shared by both project render functions below — the exact same
+  // markup as the Timeline's own secondary-button CTAs above, just
+  // factored out since it's now used in three places instead of one.
+  function secondaryButtonInner(label) {
+    return (
+      '<span class="eod-btn__secondary-viewport">' +
+        '<span class="eod-btn__secondary-track">' +
+          '<span class="eod-btn__arrow-slot eod-btn__arrow-slot--lead" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>' +
+          '<span class="eod-btn__label">' + label + "</span>" +
+          '<span class="eod-btn__arrow-slot eod-btn__arrow-slot--trail" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>' +
+        "</span>" +
+      "</span>"
+    );
+  }
+
+  // Projects grid (projects.html, "My work") — each card is its own
+  // fixed-frame link: the cover photo fills it, and the title sits
+  // just below the frame's bottom edge as a secondary-button-styled
+  // caption (Evy: "de tekst is het zelfde als de secondary button").
+  // On hover the photo slides up by exactly the caption's own height
+  // (--eod-projects-caption-h, see projects.css) while the caption
+  // slides up into the gap that opens up beneath it — a push, not an
+  // overlay, per Evy's own description of the effect. Pure CSS
+  // (:hover), nothing here drives the motion itself.
+  function renderProjectsGrid() {
+    const grid = document.querySelector(".eod-projects__grid");
+    if (!grid) return;
+    const items = window.EOD_CONTENT.projects;
+
+    grid.innerHTML = items.map(function (item, i) {
+      return (
+        '<a href="project.html?slug=' + item.slug + '" class="eod-projects__card" data-eod-reveal data-eod-reveal-delay="' + (i % 4) + '">' +
+          '<span class="eod-projects__photo-wrap">' +
+            '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" />' +
+          "</span>" +
+          '<span class="eod-projects__caption">' +
+            '<span class="eod-btn eod-btn--secondary eod-projects__caption-btn">' + secondaryButtonInner(item.title) + "</span>" +
+          "</span>" +
+        "</a>"
+      );
+    }).join("");
+  }
+
+  // Project detail (project.html) — one shared template for every
+  // case study, picking which project via ?slug= in the URL rather
+  // than being a separate HTML file per project (same reasoning as
+  // the Timeline/Awards being data-driven instead of hand-duplicated
+  // markup: adding project #5 means adding an object above, not a
+  // new page). gallery/deliverables/process are each only rendered
+  // if the project actually provides them — see Cense above for a
+  // project that currently has neither (a placeholder awaiting real
+  // content from Evy).
+  function renderProjectDetail() {
+    const root = document.querySelector("[data-eod-project-detail]");
+    if (!root) return;
+    const slug = new URLSearchParams(window.location.search).get("slug");
+    const items = window.EOD_CONTENT.projects;
+    const item = items.find(function (p) { return p.slug === slug; }) || items[0];
+    if (!item) return;
+
+    const heroEl = document.querySelector(".eod-project__hero-img");
+    if (heroEl) heroEl.src = item.hero || item.cover;
+
+    // Each gallery entry is { type: "full", src: [one] },
+    // { type: "pair", src: [two] }, or { type: "text", heading, body }
+    // — see the data's own comment for why (the source design flows
+    // full/pair/pair/full/…, not a uniform grid). A "pair" just
+    // renders its 2 images as siblings inside one row div; CSS
+    // (projects.css) handles the 50/50 split. A "text" row is its own
+    // left-heading/right-body two-column block, for explaining a
+    // specific image inline rather than only up top.
+    const gallery = document.querySelector(".eod-project__gallery");
+    if (gallery) {
+      gallery.innerHTML = (item.gallery || []).map(function (block) {
+        if (block.type === "text") {
+          return '<div class="eod-project__gallery-row eod-project__gallery-row--text">' +
+            '<h2 class="eod-project__gallery-text-heading">' + block.heading + "</h2>" +
+            '<p class="eod-project__gallery-text-body">' + block.body + "</p>" +
+          "</div>";
+        }
+        const imgs = block.src.map(function (src) {
+          return '<img class="eod-project__gallery-img" src="' + src + '" alt="" />';
+        }).join("");
+        return '<div class="eod-project__gallery-row eod-project__gallery-row--' + block.type + '">' + imgs + "</div>";
+      }).join("");
+      gallery.hidden = !item.gallery || !item.gallery.length;
+    }
+
+    const titleEl = document.querySelector(".eod-project__title");
+    if (titleEl) titleEl.textContent = item.title;
+    document.title = "Evy Diepenbroek — " + item.title;
+
+    const descEl = document.querySelector(".eod-project__description");
+    if (descEl) descEl.textContent = item.description || "";
+
+    const deliverablesEl = document.querySelector(".eod-project__deliverables");
+    if (deliverablesEl) {
+      const has = item.deliverables && item.deliverables.length;
+      deliverablesEl.hidden = !has;
+      if (has) {
+        deliverablesEl.innerHTML = (
+          '<h3 class="eod-project__aside-label">What I delivered:</h3>' +
+          '<ul class="eod-project__tags">' +
+            item.deliverables.map(function (d) { return "<li>" + d + "</li>"; }).join("") +
+          "</ul>"
+        );
+      }
+    }
+
+    const processEl = document.querySelector(".eod-project__process");
+    if (processEl) {
+      const has = item.process && item.process.text;
+      processEl.hidden = !has;
+      if (has) {
+        const media = (
+          (item.process.videos || []).map(function (src) {
+            return '<video class="eod-project__process-media" src="' + src + '" controls playsinline></video>';
+          }).join("") +
+          (item.process.images || []).map(function (src) {
+            return '<img class="eod-project__process-media" src="' + src + '" alt="" />';
+          }).join("")
+        );
+        processEl.innerHTML = (
+          '<h2 class="eod-project__aside-label">The process:</h2>' +
+          "<p>" + item.process.text + "</p>" +
+          (media ? '<div class="eod-project__process-gallery">' + media + "</div>" : "")
+        );
+      }
+    }
+    // "Look at other projects" itself (the card carousel) is built by
+    // project-slider.js, not here — it needs the DOM fully settled
+    // (clones, a drag proxy) before the slider math can run, which
+    // doesn't fit this function's plain render-and-done shape.
+  }
+
   renderAwards();
   renderCta();
   renderTimeline();
+  renderProjectsGrid();
+  renderProjectDetail();
 })();

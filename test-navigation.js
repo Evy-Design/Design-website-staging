@@ -60,7 +60,16 @@
         toggleEl.getBoundingClientRect()
       ];
 
-      var isDark = false;
+      // Weighted majority across BOTH sample points, not "any single
+      // light patch wins" — the logo and toggle sit over different
+      // parts of a busy hero photo (e.g. the blockchain project's
+      // thumbnail-grid mockup), so one of them alone can land on a
+      // light patch even while the header as a whole clearly reads
+      // as dark. Media samples contribute their full per-pixel vote
+      // (more signal, since they're grids); a plain background-color
+      // match contributes one vote at full confidence.
+      var lightWeight = 0;
+      var totalWeight = 0;
       for (var i = 0; i < points.length; i++) {
         var rect = points[i];
         var x = rect.left + rect.width / 2;
@@ -73,13 +82,22 @@
         header.style.pointerEvents = '';
 
         if (el) {
-          var bg = getEffectiveBackground(el);
-          if (bg && isLightColor(bg)) {
-            isDark = true;
-            break;
+          var mediaEl = findMediaElement(el);
+          var mediaStats = mediaEl ? sampleLightStats(mediaEl, rect) : null;
+          if (mediaStats) {
+            lightWeight += mediaStats.lightCount;
+            totalWeight += mediaStats.total;
+          } else {
+            var bg = getEffectiveBackground(el);
+            if (bg) {
+              lightWeight += isLightColor(bg) ? 1 : 0;
+              totalWeight += 1;
+            }
           }
         }
       }
+
+      var isDark = totalWeight > 0 && lightWeight / totalWeight > 0.5;
 
       if (isDark) {
         header.classList.add('is--dark');
@@ -98,6 +116,128 @@
         current = current.parentElement;
       }
       return null;
+    }
+
+    // A CSS background-color is invisible to photos/videos — a dark
+    // hero photo sitting on a section with a plain white
+    // background-color (e.g. .eod-project__hero) reads as "light" to
+    // getEffectiveBackground even though the pixels under the nav are
+    // actually dark. So: if the sampled point lands on (or inside) an
+    // <img>/<video>, read the real pixel color straight off its
+    // decoded frame instead of trusting an ancestor's declared
+    // background-color.
+    function findMediaElement(el) {
+      var current = el;
+      var depth = 0;
+      while (current && depth < 3) {
+        if (current.tagName === 'IMG' || current.tagName === 'VIDEO') return current;
+        current = current.parentElement;
+        depth++;
+      }
+      return null;
+    }
+
+    // A single pixel is too easy to get unlucky on — the blockchain
+    // hero photo, for instance, is mostly black but has light
+    // magazine-page thumbnails scattered across it, so one exact
+    // sample point can land on a light thumbnail edge and read the
+    // whole thing as "light". Counting light vs dark across the
+    // element's full box instead reflects the overall tone a reader
+    // perceives there, instead of one lucky/unlucky pixel.
+    //
+    // Drawn 1:1 (no drawImage scaling) — letting drawImage itself
+    // downscale straight to a small canvas turned out to be
+    // non-deterministic here: the exact same region, sampled
+    // repeatedly with nothing on the page changing, returned a
+    // different light/dark split on every call (seen swinging from
+    // 0% to 65% light for the same patch), presumably GPU-dependent
+    // minification behaviour. Copying the region byte-for-byte and
+    // then doing our own strided read in JS below is slower per call
+    // but actually deterministic.
+    var pixelSampleCanvas = null;
+    // Nav elements (logo, menu toggle) are small — this cap only
+    // guards the pathological case of a huge rect, it never fires
+    // for the actual nav hit areas, so drawImage stays a plain 1:1
+    // copy in practice (no minification, no non-determinism).
+    var MAX_COPY_AREA = 200000;
+    var TARGET_SAMPLES = 400;
+    function sampleLightStats(el, targetRect) {
+      try {
+        var isVideo = el.tagName === 'VIDEO';
+        var naturalW = isVideo ? el.videoWidth : el.naturalWidth;
+        var naturalH = isVideo ? el.videoHeight : el.naturalHeight;
+        if (!naturalW || !naturalH) return null;
+        if (isVideo && el.readyState < 2) return null;
+
+        var rect = el.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) return null;
+
+        var fx0 = (targetRect.left - rect.left) / rect.width;
+        var fy0 = (targetRect.top - rect.top) / rect.height;
+        var fx1 = (targetRect.right - rect.left) / rect.width;
+        var fy1 = (targetRect.bottom - rect.top) / rect.height;
+        fx0 = Math.min(1, Math.max(0, fx0));
+        fy0 = Math.min(1, Math.max(0, fy0));
+        fx1 = Math.min(1, Math.max(0, fx1));
+        fy1 = Math.min(1, Math.max(0, fy1));
+        if (fx1 <= fx0 || fy1 <= fy0) return null;
+
+        // object-fit: cover mapping (the only object-fit this site's
+        // hero/gallery media uses) from box-space back to the
+        // decoded frame's own pixel coordinates.
+        var elementRatio = rect.width / rect.height;
+        var naturalRatio = naturalW / naturalH;
+        var coverW, coverH, coverX, coverY;
+        if (naturalRatio > elementRatio) {
+          coverH = naturalH;
+          coverW = naturalH * elementRatio;
+          coverX = (naturalW - coverW) / 2;
+          coverY = 0;
+        } else {
+          coverW = naturalW;
+          coverH = naturalW / elementRatio;
+          coverX = 0;
+          coverY = (naturalH - coverH) / 2;
+        }
+
+        var srcX = coverX + fx0 * coverW;
+        var srcY = coverY + fy0 * coverH;
+        var srcW = (fx1 - fx0) * coverW;
+        var srcH = (fy1 - fy0) * coverH;
+
+        // Copy at 1:1 scale — only shrinks if the region's area
+        // exceeds MAX_COPY_AREA, which the actual nav hit areas never
+        // do (keeps getImageData bounded in the pathological case
+        // without asking drawImage to blend/minify in the normal one).
+        var area = srcW * srcH;
+        var copyScale = area > MAX_COPY_AREA ? Math.sqrt(MAX_COPY_AREA / area) : 1;
+        var copyW = Math.max(1, Math.round(srcW * copyScale));
+        var copyH = Math.max(1, Math.round(srcH * copyScale));
+
+        if (!pixelSampleCanvas) pixelSampleCanvas = document.createElement('canvas');
+        pixelSampleCanvas.width = copyW;
+        pixelSampleCanvas.height = copyH;
+        var ctx = pixelSampleCanvas.getContext('2d', { willReadFrequently: true });
+        ctx.imageSmoothingEnabled = false;
+        ctx.clearRect(0, 0, copyW, copyH);
+        ctx.drawImage(el, srcX, srcY, srcW, srcH, 0, 0, copyW, copyH);
+        var data = ctx.getImageData(0, 0, copyW, copyH).data;
+        var pixelCount = copyW * copyH;
+        var stride = Math.max(1, Math.floor(pixelCount / TARGET_SAMPLES));
+        var lightCount = 0, total = 0;
+        for (var p = 0; p < pixelCount; p += stride) {
+          var offset = p * 4;
+          var luminance = (0.299 * data[offset] + 0.587 * data[offset + 1] + 0.114 * data[offset + 2]) / 255;
+          if (luminance > 0.6) lightCount++;
+          total++;
+        }
+        if (!total) return null;
+        return { lightCount: lightCount, total: total };
+      } catch (e) {
+        // Cross-origin or not-yet-decoded — fall back to the
+        // background-color walk in the caller.
+        return null;
+      }
     }
 
     function isLightColor(color) {
