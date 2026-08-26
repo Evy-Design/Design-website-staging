@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Evy Diepenbroek — Projects</title>
+  <link rel="stylesheet" href="shared.css?v=12" />
+  <link rel="stylesheet" href="test-navigation.css?v=5" />
+  <link rel="stylesheet" href="projects.css?v=15" />
+  <style>body { margin: 0; }</style>
+  <!-- Must load before the nav/footer injector scripts below, which
+       call window.EOD_CHROME synchronously as the HTML is parsed. -->
+  <script src="chrome.js?v=1"></script>
+</head>
+<body>
+
+  <!-- Nav — single source of truth is chrome.js (EOD_CHROME.nav()),
+       not this file. -->
+  <script>document.currentScript.insertAdjacentHTML("beforebegin", EOD_CHROME.nav());</script>
+
+  <main class="eod-page">
+    <!-- Grid of case studies, rendered by content.js's renderProjectsGrid()
+         from window.EOD_CONTENT.projects — add a project there, not here.
+         See projects.css for the hover push mechanic. -->
+    <section class="eod-projects">
+      <div class="eod-projects__inner">
+        <h1 class="eod-projects__heading">My work</h1>
+        <ul class="eod-projects__grid"></ul>
+      </div>
+    </section>
+
+    <!-- Cycling word/badge, suffix and body copy are rendered by
+         content.js from window.EOD_CONTENT.cta — identical to the
+         Home/About page section, edit the text there to update all. -->
+    <section class="eod-cta">
+      <div class="eod-cta__group">
+        <div class="eod-cta__lede" data-eod-reveal="left">
+          I am a
+          <span class="eod-cta__badge" aria-hidden="true" data-eod-cycle="cta-role"></span>
+        </div>
+        <h2 class="eod-cta__title" data-eod-reveal="right">
+          <span class="eod-cta__word" data-eod-cycle="cta-role"></span>
+          <span class="eod-cta__suffix"></span>
+        </h2>
+        <div class="eod-cta__row" data-eod-reveal="right" data-eod-reveal-delay="1">
+          <p class="eod-cta__body"></p>
+          <a href="/contact" class="eod-btn eod-btn--dark">
+            <span class="eod-btn__label">Contact me</span>
+            <span class="eod-btn__circle eod-btn__circle--accent" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
+            <span class="eod-btn__circle eod-btn__circle--white" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  <!-- Footer — single source of truth is chrome.js (EOD_CHROME.footer()). -->
+  <script>document.currentScript.insertAdjacentHTML("beforebegin", EOD_CHROME.footer());</script>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/CustomEase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/Observer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
+  <script src="test-navigation.js?v=9"></script>
+  <script src="content.js?v=15"></script>
+  <script src="script.js?v=28"></script>
+</body>
+</html>
