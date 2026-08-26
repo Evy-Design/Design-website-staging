@@ -260,7 +260,13 @@
 .eod-project__deliverables {
   margin-top: 2em;
 }
-.eod-project__aside-label {
+/* Caption text (Evy: "dit is caption text") — the small uppercase
+   label ahead of a block of body copy ("What I delivered:",
+   "The process:"). One shared class rather than each usage rolling
+   its own, so it can't drift; both usages render an <h2> now too,
+   not one h2 and one h3 as before ("zorg dat overal waar dit
+   gebruikt wordt gelinkt staat aan caption"). */
+.eod-project__caption {
   margin: 0 0 0.75em;
   font-size: 0.8em;
   font-weight: 400;
@@ -300,10 +306,11 @@
   grid-template-columns: 1fr 1fr;
 }
 /* Left h2 heading / right body copy, same column split as
-   .eod-project__body-inner and .eod-project__process — a spot to
-   explain more about a specific image inline, not just the page's
-   own top intro (Evy: "een sectie met left header en right body
-   text... aboven this photo"). */
+   .eod-project__body-inner — a spot to explain more about a specific
+   image inline, not just the page's own top intro (Evy: "een sectie
+   met left header en right body text... aboven this photo"), and also
+   what the old standalone "process" section became (Evy: "Delete
+   this and add here a text explain section"). */
 .eod-project__gallery-row--text {
   grid-template-columns: 1fr 1fr;
   gap: 3em;
@@ -323,54 +330,51 @@
 }
 .eod-project__gallery-img {
   width: 100%;
-  height: 100%;
-  aspect-ratio: 16 / 10;
+  /* Fixed height on the IMAGE itself, not the row — so every single
+     photo lands on the same height whether it's alone in a "full"
+     row, side by side in a "pair" (desktop), or stacked in a "pair"
+     that's gone to 1 column (mobile, see below): each one is its own
+     grid item at this height regardless of how many share the row
+     (Evy: "alle gallery row section mogen even hoog zijn", then
+     later "op mobile mag alles onder elkaar" — a row-level height
+     can't satisfy both at once once a "pair" stacks to 2 images in
+     1 column, since two images sharing one fixed row height would
+     just halve each; per-image height doesn't have that problem).
+     In svh, not a fixed em (Evy: "de hoogte... mag ongeveer 70svh
+     zijn") — scales with the actual viewport instead of a constant
+     that reads very differently across screen heights. object-fit:
+     cover does the actual cropping to fit whatever this is set to. */
+  height: 70svh;
+  min-width: 0;
   object-fit: cover;
   border-radius: var(--eod-projects-radius);
   display: block;
 }
-.eod-project__gallery-row--pair .eod-project__gallery-img {
-  aspect-ratio: 4 / 5;
+/* Full-screen black stage for a vertical/portrait process video
+   (Evy: "een full screen section die zwart is en dan de video hier
+   in het midden plaatsen") — background alone already runs edge to
+   edge (.eod-page section's own side padding, shared.css, only
+   insets the CONTENT, same trick .eod-hero uses on the home page),
+   so this needs no extra full-bleed handling of its own. The video
+   is capped, not stretched — object-fit doesn't apply since nothing
+   here forces its box to a different ratio, it just centers at up to
+   85% of the viewport height/full available width, whichever it
+   hits first. */
+.eod-project__vertical-video-section {
+  background: var(--eod-black);
+  min-height: 100svh;
+  padding: 4em 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.eod-project__process-section {
-  background: var(--eod-white);
-  /* Matches .eod-project__body's own top+bottom 6em (Evy: "deze
-     stukken tekst mogen meer margin aan de boven en onderkant
-     hebben") — this section only had padding-bottom before, so the
-     process row sat right up against the gallery above it while the
-     title/description row above had breathing room on both sides. */
-  padding-top: 6em;
-  padding-bottom: 6em;
-}
-.eod-project__process {
-  max-width: var(--eod-content-max);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3em;
-}
-.eod-project__process .eod-project__aside-label {
-  margin-bottom: 0;
-}
-.eod-project__process p {
-  grid-column: 2;
-  margin: 0;
-  font-size: 1em;
-  line-height: 1.6;
-  color: var(--eod-muted);
-}
-.eod-project__process-gallery {
-  grid-column: 2;
-  margin-top: 1.5em;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1em;
-}
-.eod-project__process-media {
-  width: 100%;
+.eod-project__vertical-video {
+  max-width: 100%;
+  max-height: 85svh;
+  width: auto;
+  height: auto;
   border-radius: var(--eod-projects-radius);
   display: block;
-  background: var(--eod-black);
 }
 .eod-project__nav {
   /* Site's own default page background (--eod-white), not the
@@ -378,9 +382,9 @@
      achtergrond van deze sectie mag gewoon de primary-bg kleur
      hebben". */
   background: var(--eod-white);
-  /* Bumped from 4em to match .eod-project__body/.eod-project__process-
-     section's own 6em (Evy: "ietjes meer ruimte aan de onderkant"). */
-  padding-bottom: 6em;
+  /* Bumped again, now to 8em, matching .eod-project__body's own
+     (Evy: "mag meer ruimte aan de boven en onderkant"). */
+  padding-bottom: 8em;
 }
 .eod-project__nav-inner {
   max-width: var(--eod-content-max);
@@ -400,7 +404,8 @@
    var, not a new one. */
 .eod-project__nav-inner:first-child {
   border-top: 1px solid var(--eod-border);
-  padding-top: 4em;
+  /* Bumped again, now to 8em, matching the section's own bottom. */
+  padding-top: 8em;
 }
 .eod-project__nav-label {
   margin: 0 0 1em;
@@ -537,31 +542,34 @@
   .eod-project__hero-img {
     aspect-ratio: 4 / 3;
   }
-  /* Title/description and process both go from side-by-side to
-     stacked — a 50/50 column split reads as too narrow for either
-     on a phone. .eod-project__deliverables isn't a grid itself
-     (it's nested inside .eod-project__body-right, which stacks
-     naturally once the outer grid above it goes to 1 column), so it
-     doesn't need touching here. */
-  .eod-project__body-inner,
-  .eod-project__process {
+  .eod-project__vertical-video-section {
+    padding: 2em 0;
+  }
+  /* Title/description goes from side-by-side to stacked — a 50/50
+     column split reads as too narrow on a phone.
+     .eod-project__deliverables isn't a grid itself (it's nested
+     inside .eod-project__body-right, which stacks naturally once the
+     outer grid above it goes to 1 column), so it doesn't need
+     touching here. */
+  .eod-project__body-inner {
     grid-template-columns: 1fr;
     gap: 1.5em;
   }
-  .eod-project__process p,
-  .eod-project__process-gallery {
-    grid-column: 1;
-  }
+  /* Pairs stack to 1 column here (Evy: "op mobile mag alles onder
+     elkaar") — safe to do now that the fixed height lives on each
+     IMAGE rather than the row (above): a stacked pair is just 2 grid
+     items in 1 column, each still 40svh on its own, so "every photo
+     the same height" keeps holding regardless of column count. */
   .eod-project__gallery-row--pair {
     grid-template-columns: 1fr;
+  }
+  .eod-project__gallery-img {
+    height: 40svh;
   }
   .eod-project__gallery-row--text {
     grid-template-columns: 1fr;
     gap: 0.75em;
     padding: 0;
-  }
-  .eod-project__process-gallery {
-    grid-template-columns: 1fr;
   }
   .eod-project-slider {
     --slider-gap: 1em;

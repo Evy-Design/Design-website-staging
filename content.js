@@ -133,11 +133,29 @@ window.EOD_CONTENT = {
         // image right below, edit these two strings directly.
         { type: "text", heading: "Add a heading", body: "Write more about this image here." },
         { type: "pair", src: ["assets/projects/blockchain/gallery-8.jpg", "assets/projects/blockchain/gallery-9.jpg"] },
-        { type: "full", src: ["assets/projects/blockchain/gallery-10.jpg"] }
+        { type: "full", src: ["assets/projects/blockchain/gallery-10.jpg"] },
+        // The old standalone "process" section was its own bespoke
+        // component duplicating this exact heading+body layout — Evy:
+        // "Delete this and add here a text explain section". Now
+        // just another "text" gallery block, same as any other.
+        { type: "text", heading: "The process:", body: "In the first video, you can see me working hard. I like to mix manual drawings with digital designs. In the second video, you can see my research and sketches." }
       ],
       process: {
-        text: "In the first video, you can see me working hard. I like to mix manual drawings with digital designs. In the second video, you can see my research and sketches.",
-        videos: ["assets/projects/blockchain/process-1.mp4", "assets/projects/blockchain/process-2.mp4"]
+        // Only the vertical process videos still live here — the
+        // full-screen black treatment they get (see
+        // .eod-project__vertical-video-section below) is genuinely
+        // different from anything the gallery's own block types do,
+        // so it keeps its own small data slot. { src, vertical: true }
+        // instead of a plain string routes them into their own
+        // full-screen black section (renderProjectDetail() below)
+        // rather than the small side-by-side tile grid, which
+        // cropped them awkwardly (Evy: "ik heb soms verticale
+        // videos, deze mag je dan gewoon in een full screen section
+        // zetten die zwart is").
+        videos: [
+          { src: "assets/projects/blockchain/process-1.mp4", vertical: true },
+          { src: "assets/projects/blockchain/process-2.mp4", vertical: true }
+        ]
       }
     },
     {
@@ -163,13 +181,15 @@ window.EOD_CONTENT = {
       hero: "assets/projects/penguin-cover-design-award/cover.jpg",
       alt: "The Girl, Woman, Other Penguin book cover design",
       description: "My book design cover was shortlisted for the 2022 Fiction category, Girl, Woman, Other by Bernardine Evaristo with Penguin Random House UK. Everything was incredible. I've learned a lot and met some amazing and inspirational people. I'm grateful and honoured to have been selected for this.",
+      // Process text + image folded into the gallery flow itself
+      // (see the blockchain project above for why) — a "text" block
+      // for the old process copy, then the process image as an
+      // ordinary "full" block right after it.
       gallery: [
-        { type: "full", src: ["assets/projects/penguin-cover-design-award/gallery-1.png"] }
-      ],
-      process: {
-        text: "I first let loose on paper and sketches and visual illustrations dealing with women, class, race, and sexuality. I always go a long way on this, but I find it difficult to illustrate something that reflects all these subjects at once. So, I took a break from my sketchbook and started reading the first chapter. When I started reading the book, it began with a scene where they mentioned the theatre. I did some theatre myself, and I remembered there were always saying “don’t forget the red thread of the story”, so the thought of doing something with thread was already in my mind. I tried to stop illustrating the situations too literally and was focusing more on what it made the characters feel. The several topics made me feel stuck. And then the red thread comes in handy. I tried many things like making the letters stuck or one person, but I feel like it didn’t bring out all the stories of the book. I remember that I both thread to take photos for the book cover, and I was playing with the thread in my hand when I realized you can express so much with hands. We do things with our hands. Then everything was falling together fast. Subjects I have linked with hands and rope. All these hands visualize a topic; some are pulling, some are stuck, some are being played and some pick up the paces. I like that it doesn’t immediately give away what it is about but does connect well with the subjects.",
-        images: ["assets/projects/penguin-cover-design-award/gallery-2.jpg"]
-      }
+        { type: "full", src: ["assets/projects/penguin-cover-design-award/gallery-1.png"] },
+        { type: "text", heading: "The process:", body: "I first let loose on paper and sketches and visual illustrations dealing with women, class, race, and sexuality. I always go a long way on this, but I find it difficult to illustrate something that reflects all these subjects at once. So, I took a break from my sketchbook and started reading the first chapter. When I started reading the book, it began with a scene where they mentioned the theatre. I did some theatre myself, and I remembered there were always saying “don’t forget the red thread of the story”, so the thought of doing something with thread was already in my mind. I tried to stop illustrating the situations too literally and was focusing more on what it made the characters feel. The several topics made me feel stuck. And then the red thread comes in handy. I tried many things like making the letters stuck or one person, but I feel like it didn’t bring out all the stories of the book. I remember that I both thread to take photos for the book cover, and I was playing with the thread in my hand when I realized you can express so much with hands. We do things with our hands. Then everything was falling together fast. Subjects I have linked with hands and rope. All these hands visualize a topic; some are pulling, some are stuck, some are being played and some pick up the paces. I like that it doesn’t immediately give away what it is about but does connect well with the subjects." },
+        { type: "full", src: ["assets/projects/penguin-cover-design-award/gallery-2.jpg"] }
+      ]
     },
     {
       slug: "cense",
@@ -389,7 +409,7 @@ window.EOD_CONTENT = {
       deliverablesEl.hidden = !has;
       if (has) {
         deliverablesEl.innerHTML = (
-          '<h3 class="eod-project__aside-label">What I delivered:</h3>' +
+          '<h2 class="eod-project__caption">What I delivered:</h2>' +
           '<ul class="eod-project__tags">' +
             item.deliverables.map(function (d) { return "<li>" + d + "</li>"; }).join("") +
           "</ul>"
@@ -397,25 +417,23 @@ window.EOD_CONTENT = {
       }
     }
 
-    const processEl = document.querySelector(".eod-project__process");
-    if (processEl) {
-      const has = item.process && item.process.text;
-      processEl.hidden = !has;
-      if (has) {
-        const media = (
-          (item.process.videos || []).map(function (src) {
-            return '<video class="eod-project__process-media" src="' + src + '" controls playsinline></video>';
-          }).join("") +
-          (item.process.images || []).map(function (src) {
-            return '<img class="eod-project__process-media" src="' + src + '" alt="" />';
-          }).join("")
+    // Any vertical/portrait process video gets its own full-bleed,
+    // full-black, full-screen section (Evy: "een full screen section
+    // die zwart is") — the old text+caption "process" block that
+    // used to sit alongside these has since moved into the gallery
+    // itself as a plain "text" block (see the gallery map above; Evy:
+    // "Delete this and add here a text explain section"), so this is
+    // now the only thing item.process still holds.
+    const verticalVideosEl = document.querySelector("[data-eod-process-vertical-videos]");
+    if (verticalVideosEl) {
+      const verticalVideos = (item.process && item.process.videos || []).filter(function (v) { return v && v.vertical; });
+      verticalVideosEl.innerHTML = verticalVideos.map(function (v) {
+        return (
+          '<section class="eod-project__vertical-video-section">' +
+            '<video class="eod-project__vertical-video" src="' + v.src + '" controls playsinline></video>' +
+          "</section>"
         );
-        processEl.innerHTML = (
-          '<h2 class="eod-project__aside-label">The process:</h2>' +
-          "<p>" + item.process.text + "</p>" +
-          (media ? '<div class="eod-project__process-gallery">' + media + "</div>" : "")
-        );
-      }
+      }).join("");
     }
     // "Look at other projects" itself (the card carousel) is built by
     // project-slider.js, not here — it needs the DOM fully settled

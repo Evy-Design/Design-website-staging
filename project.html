@@ -6,7 +6,7 @@
   <title>Evy Diepenbroek — Project</title>
   <link rel="stylesheet" href="shared.css?v=12" />
   <link rel="stylesheet" href="test-navigation.css?v=5" />
-  <link rel="stylesheet" href="projects.css?v=15" />
+  <link rel="stylesheet" href="projects.css?v=22" />
   <style>body { margin: 0; }</style>
   <!-- Must load before the nav/footer injector scripts below, which
        call window.EOD_CHROME synchronously as the HTML is parsed. -->
@@ -25,8 +25,10 @@
          study, not one file per project. -->
     <!-- Order below matches the source design's own editorial flow —
          hero image, THEN title/description, THEN deliverables, THEN
-         more gallery images, THEN process — not "all images, then all
-         text" like an earlier version of this page had. -->
+         gallery images interleaved with any "text" blocks (including
+         what used to be a separate "process" section) — not "all
+         images, then all text" like an earlier version of this page
+         had. -->
     <section class="eod-project__hero">
       <div class="eod-project__hero-top">
         <a href="/projects" class="eod-btn eod-btn--secondary eod-project__back">
@@ -58,13 +60,23 @@
       </div>
     </section>
 
+    <!-- The old standalone process-text section is gone — that
+         heading+body pattern is just another "text" block inside
+         .eod-project__gallery now (Evy: "Delete this and add here a
+         text explain section"; see content.js's gallery data). -->
     <section class="eod-project__gallery-section">
       <div class="eod-project__gallery"></div>
     </section>
 
-    <section class="eod-project__process-section">
-      <div class="eod-project__process" hidden></div>
-    </section>
+    <!-- Full-screen black section(s) for any vertical/portrait process
+         video (Evy: "ik heb soms verticale videos, deze mag je dan
+         gewoon in een full screen section zetten die zwart is") —
+         needs to be full-bleed/full-height, not capped to
+         --eod-content-max like the gallery above, so it stays its
+         own container. Populated by content.js's renderProjectDetail()
+         from any { src, vertical: true } entry in item.process.videos;
+         empty (and takes up no space) when a project has none. -->
+    <div data-eod-process-vertical-videos></div>
 
     <!-- "Look at other projects" — a draggable 3D spatial carousel
          (project-slider.js), each card the SAME .eod-projects__card
@@ -134,7 +146,7 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/Draggable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/InertiaPlugin.min.js"></script>
   <script src="test-navigation.js?v=9"></script>
-  <script src="content.js?v=15"></script>
+  <script src="content.js?v=18"></script>
   <script src="script.js?v=28"></script>
   <script src="project-slider.js?v=2"></script>
 </body>
