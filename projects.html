@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Evy Diepenbroek — Design</title>
+  <title>Evy Diepenbroek — Projects</title>
   <link rel="stylesheet" href="shared.css?v=12" />
   <link rel="stylesheet" href="test-navigation.css?v=5" />
-  <link rel="stylesheet" href="style.css?v=39" />
+  <link rel="stylesheet" href="projects.css?v=24" />
   <style>body { margin: 0; }</style>
   <!-- Must load before the nav/footer injector scripts below, which
        call window.EOD_CHROME synchronously as the HTML is parsed. -->
@@ -19,48 +19,19 @@
   <script>document.currentScript.insertAdjacentHTML("beforebegin", EOD_CHROME.nav());</script>
 
   <main class="eod-page">
-    <section class="eod-hero">
-      <div class="eod-hero__stage">
-        <div class="eod-backdrop"></div>
-        <div class="cards-tornado" data-3d-tornado-init>
-          <div class="cards-tornado__collection">
-            <div class="cards-tornado__list" data-3d-tornado-list></div>
-          </div>
-        </div>
-      </div>
-      <div class="eod-hero__overlay">
-        <div class="eod-hero__heading">
-          <span data-eod-reveal="left">Have a look</span>
-          <span data-eod-reveal="right">at all my work</span>
-        </div>
-      </div>
-
-      <div class="eod-hero__intro">
-        <h1 class="eod-hero__intro-title" data-eod-text="homeHeroTitle">Who is behind this work?<br /> Hi, I&rsquo;m<br />Evy Olivia<br />Diepenbroek</h1>
-        <div class="eod-hero__intro-body">
-          <p data-eod-text="homeHeroBody">I&rsquo;Am a Designer. always chasing what's next. I'm currently a nominated graphic designer with two degrees in the field and over 4 years of agency experience. </p>
-          <a href="about.html" class="eod-btn eod-btn--dark">
-            <span class="eod-btn__label">More about me</span>
-            <span class="eod-btn__circle eod-btn__circle--accent" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
-            <span class="eod-btn__circle eod-btn__circle--white" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Awards list is rendered by content.js from window.EOD_CONTENT.awards
-         (see content.js below) — identical to the Home page section,
-         edit the text there and it updates on both pages at once. -->
-    <section class="eod-awards" id="awards">
-      <div class="eod-awards__row">
-        <h2 class="eod-awards__title" data-eod-reveal>Awards</h2>
-        <ul class="eod-awards__list"></ul>
+    <!-- Grid of case studies, rendered by content.js's renderProjectsGrid()
+         from window.EOD_CONTENT.projects — add a project there, not here.
+         See projects.css for the hover push mechanic. -->
+    <section class="eod-projects">
+      <div class="eod-projects__inner">
+        <h1 class="eod-projects__heading">My work</h1>
+        <ul class="eod-projects__grid"></ul>
       </div>
     </section>
 
     <!-- Cycling word/badge, suffix and body copy are rendered by
-         content.js from window.EOD_CONTENT.cta — edit the text there,
-         not here, so the About page's identical CTA stays in sync. -->
+         content.js from window.EOD_CONTENT.cta — identical to the
+         Home/About page section, edit the text there to update all. -->
     <section class="eod-cta">
       <div class="eod-cta__group">
         <div class="eod-cta__lede" data-eod-reveal="left">
@@ -73,7 +44,7 @@
         </h2>
         <div class="eod-cta__row" data-eod-reveal="right" data-eod-reveal-delay="1">
           <p class="eod-cta__body"></p>
-          <a href="contact.html" class="eod-btn eod-btn--dark">
+          <a href="/contact" class="eod-btn eod-btn--dark">
             <span class="eod-btn__label">Contact me</span>
             <span class="eod-btn__circle eod-btn__circle--accent" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
             <span class="eod-btn__circle eod-btn__circle--white" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>

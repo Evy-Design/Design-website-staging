@@ -33,14 +33,19 @@
   }
 
   function highlightCurrentPage() {
-    var path = window.location.pathname.replace(/\/$/, '') || '/';
+    // Compare filenames, not full paths — links are page-relative
+    // (e.g. "about.html") so they work regardless of whether the site
+    // sits at a domain root or a GitHub Pages project subpath; the
+    // pathname's last segment is what actually identifies the page.
+    var pathname = window.location.pathname;
+    var currentFile = pathname.substring(pathname.lastIndexOf('/') + 1) || 'index.html';
     var links = document.querySelectorAll('.underlay-nav__link-large');
     links.forEach(function (link) {
       var hrefAttr = link.getAttribute('href');
       if (!hrefAttr) return; // disabled/"coming soon" items (e.g. Projects) aren't real links
-      var href = hrefAttr.replace(/\/$/, '') || '/';
+      var linkFile = hrefAttr.substring(hrefAttr.lastIndexOf('/') + 1) || 'index.html';
       link.classList.remove('w--current');
-      if (href === path) {
+      if (linkFile === currentFile) {
         link.classList.add('w--current');
       }
     });

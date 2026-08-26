@@ -44,10 +44,10 @@ window.EOD_CHROME = (function () {
     "</svg>";
 
   var NAV_LINKS = [
-    { href: "/", label: "Home" },
-    { href: "/projects", label: "Projects" },
-    { href: "/about", label: "About" },
-    { href: "/contact", label: "Contact" },
+    { href: "index.html", label: "Home" },
+    { href: "projects.html", label: "Projects" },
+    { href: "about.html", label: "About" },
+    { href: "contact.html", label: "Contact" },
   ];
 
   // No currentPage param, and no w--current here: test-navigation.js's
@@ -68,7 +68,7 @@ window.EOD_CHROME = (function () {
         '<header class="underlay-nav__header">' +
           '<div class="underlay-nav__bar">' +
             '<div class="underlay-nav__container">' +
-              '<a href="/" class="underlay-nav__logo">' + LOGO_SVG + "</a>" +
+              '<a href="index.html" class="underlay-nav__logo">' + LOGO_SVG + "</a>" +
               '<button data-underlay-nav-toggle aria-expanded="false" aria-label="open menu" class="underlay-nav__toggle">' +
                 '<span class="underlay-nav__toggle-text">' +
                   '<span class="underlay-nav__toggle-label">Menu</span>' +
