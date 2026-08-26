@@ -1,0 +1,33 @@
+name: Sync content from Sanity
+
+# Triggered by a Sanity webhook (see repo README/docs) posting to
+# https://api.github.com/repos/<owner>/<repo>/dispatches with
+# event_type "sanity-publish" whenever content is published in the
+# Studio. workflow_dispatch is kept as a manual fallback.
+on:
+  repository_dispatch:
+    types: [sanity-publish]
+  workflow_dispatch: {}
+
+jobs:
+  build-content:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch latest content from Sanity
+        run: node scripts/build-content.mjs
+
+      - name: Commit and push if content changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add content.json
+          git diff --staged --quiet && echo "No content changes." || git commit -m "Sync content from Sanity"
+          git push
