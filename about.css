@@ -1,0 +1,481 @@
+/* ===========================================================
+   Evy Diepenbroek — About page
+   Everything shared with Home/Contact (fonts, colours, spacing
+   tokens, .eod-page, .eod-btn, [data-eod-reveal], Awards, CTA,
+   Footer) lives in shared.css, loaded before this file — this one
+   only holds what's unique to the About page: the scroll-driven
+   hero, the design-journey timeline, and the logo tile grid.
+   =========================================================== */
+
+/* ---- Journey (hero + timeline, ONE shared sticky card) ----
+   The hero and the timeline each used to have their own sticky photo;
+   now they share a single one. .eod-journey__stack (the hero section
+   followed by the timeline section, stacked in normal flow) and
+   .eod-journey__photo-sticky occupy the SAME grid cell (the same
+   grid-overlay trick as before, just spanning both sections' combined
+   height now), so one sticky, centred photo card genuinely scrolls
+   through the entire thing without ever releasing and re-appearing at
+   the hero/timeline seam. It starts as Evy's portrait, flips over
+   into the first milestone's own photo right as that milestone
+   arrives (a literal 3D flip, not a fade — see initJourneyPush() in
+   about.js), then simply cross-fades between the remaining milestones
+   after that, same as before. */
+.eod-journey__grid {
+  display: grid;
+  /* minmax(0, 1fr), not a bare 1fr — a grid track's implicit minimum
+     width is its content's own min-content size, and something deep
+     in .eod-journey__stack (a long, nowrap timeline title/button
+     label) has a min-content wider than the viewport on mobile. A
+     bare 1fr still respects that floor, so the track (and everything
+     positioned against it) was quietly growing past the viewport's
+     own width — explicit 0 overrides that floor entirely, letting the
+     track — and the sticky photo sharing its cell — actually shrink
+     to fit. */
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  max-width: var(--eod-content-max);
+  margin: 0 auto;
+}
+.eod-journey__stack,
+.eod-journey__photo-sticky {
+  grid-column: 1;
+  grid-row: 1;
+}
+.eod-journey__stack {
+  position: relative;
+  z-index: 1;
+}
+.eod-journey__photo-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+}
+.eod-journey__photo {
+  position: relative;
+  margin: 0;
+  width: clamp(14em, 20vw, 20em);
+  aspect-ratio: 4 / 5;
+  border-radius: var(--eod-radius);
+  overflow: hidden;
+  box-shadow: 0 1.5em 3em rgba(0, 0, 0, 0.3);
+  /* Needed for the hero→first-milestone flip's rotateY to read as a
+     3D turn rather than a flat horizontal squash. */
+  perspective: 1400px;
+}
+.eod-journey__photo-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  /* Hides whichever of the hero portrait / first-milestone photo is
+     edge-on mid-flip (about.js's addHeroFlip() rotates them, coupled
+     180° out of phase, via rotateY) — every OTHER image's rotateY
+     simply stays 0, so this has no effect there and the plain opacity
+     crossfade is all that's visible. No CSS transition on opacity
+     here — about.js animates it via GSAP so a parallel CSS transition
+     can't fight it frame to frame. */
+  backface-visibility: hidden;
+}
+.eod-journey__photo-img.is-active {
+  /* Non-JS fallback only — once about.js runs it drives opacity
+     itself via inline styles, which win over this class regardless. */
+  opacity: 1;
+}
+@media (max-width: 1024px) {
+  .eod-journey {
+    /* Single source of truth for the mobile photo's width, shared by
+       the photo itself AND both the hero's and the timeline's text
+       columns (their left padding reserves exactly this much room) —
+       kept on the outer wrapper so it cascades to both sections. */
+    --eod-journey-photo-w: clamp(9em, 30vw, 13em);
+  }
+  /* See the desktop rule's own comment above for why 100svh flex-
+     centring can't just carry over here (mobile's stacked body text
+     runs many screens tall and would force an early sticky release),
+     and why 50% isn't the fix either (percentage `top` on a sticky
+     element resolves against its own containing block, not the
+     viewport) — this is the same measured, JS-free centring fix used
+     before, now shared by both sections. Deliberately `50svh`, not
+     `50vh` — everything else on this page (.eod-about-hero__title-block,
+     .eod-timeline__item, …) sizes itself off the SMALL viewport height
+     too, so this has to match it exactly: on a real phone, `vh` and
+     `svh` diverge the moment Safari's address bar shows/hides, and
+     mixing the two here was exactly what put the card visibly out of
+     alignment with the heading it's meant to sit beside. */
+  .eod-journey__photo-sticky {
+    height: auto;
+    top: calc(50svh - (var(--eod-journey-photo-w) * 1.25 / 2));
+    align-self: start;
+    justify-content: flex-start;
+    padding-left: 1.25em;
+  }
+  .eod-journey__photo {
+    width: var(--eod-journey-photo-w);
+  }
+}
+
+/* ---- Hero ----
+   Just the text now — title block, then body block, each 100svh and
+   flex-centred within itself; the sticky photo that visually overlays
+   them lives one level up (see .eod-journey above). Desktop: heading
+   centred, body text in two columns (lede/detail) flanking the photo
+   with a small rest gap. Mobile/tablet (see the media query): heading
+   and body text both right-aligned in the width remaining beside the
+   photo, which stays pinned to the left the whole time. Either way
+   the photo itself never moves horizontally or vertically beyond
+   simple sticky-centring — the "push apart as the card arrives"
+   motion is the TEXT's own doing (about.js, initHeroPush(), a plain
+   GSAP scrub with no pin — nothing here ever freezes). */
+.eod-about-hero {
+  position: relative;
+  background: var(--eod-white);
+  padding-bottom: 20svh;
+}
+.eod-about-hero__title-block {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* No side padding here — .eod-page section (shared.css) already
+     gives .eod-about-hero itself 2.5em, and this used to ALSO add its
+     own 2.5em on top of that, doubling the total inset from the
+     viewport edge to 5em instead of the 2.5em every other section
+     (Awards, CTA, …) uses. */
+}
+.eod-about-hero__heading {
+  margin: 0;
+  max-width: 10em;
+  font-size: clamp(2.25em, 4.4vw, 4.25em);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.eod-about-hero__body-block {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  /* No side padding here — see .eod-about-hero__title-block's own
+     comment above, same doubled-padding fix. */
+}
+.eod-about-hero__body-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3em;
+  width: 100%;
+}
+.eod-about-hero__body-col {
+  flex: 1 1 24em;
+  max-width: 24em;
+  min-width: 0;
+}
+.eod-about-hero__body-col--lede {
+  text-align: right;
+}
+.eod-about-hero__lede {
+  margin: 0;
+  font-size: 1.05em;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--eod-ink);
+}
+.eod-about-hero__detail {
+  margin: 0 0 1.5em;
+  font-size: 0.9em;
+  line-height: 1.65;
+  color: #6b6b6b;
+}
+.eod-about-hero__detail:last-of-type {
+  margin-bottom: 0;
+}
+.eod-about-hero__cta {
+  margin-top: 1.5em;
+  display: flex;
+  justify-content: flex-end;
+}
+/* [data-eod-reveal]'s own CSS transition covers BOTH opacity and
+   transform — harmless for every other reveal target, but this one
+   element is ALSO driven by about.js's scroll-scrubbed push, which
+   writes a fresh `transform` every scroll frame. Since CSS transitions
+   fire on ANY change to a transitioning property regardless of source,
+   each of those frame-by-frame writes was kicking off a competing
+   0.9s transition of its own — the two fighting over the same
+   property instead of one simply owning it. Dropping transform from
+   the list here leaves opacity's fade-in untouched and gives GSAP
+   sole, uncontested control of transform (which — combined with the
+   explicit y:0 in about.js's tween — was already effectively
+   overriding the reveal's own "rise" motion anyway; this just stops
+   it from actively fighting to do so first). */
+.eod-about-hero__cta[data-eod-reveal] {
+  transition-property: opacity;
+}
+@media (max-width: 1024px) {
+  .eod-about-hero__title-block,
+  .eod-about-hero__body-block {
+    justify-content: flex-end;
+    /* Left side genuinely needs this — it's clearance for the sticky
+       photo, not just inset-from-edge padding, so it stays. No
+       padding-right here anymore though: .eod-page section
+       (shared.css) already gives .eod-about-hero itself 1.25em on
+       mobile, and this used to ALSO add its own 1.25em on top of
+       that (same doubled-padding fix as the desktop rule above). */
+    padding-left: calc(var(--eod-journey-photo-w) + 2em);
+  }
+  /* The title block still sits pushed to the right (beside the card),
+     but reads the same ragged-right way the body copy does now — see
+     the comment on .eod-about-hero__body-col--lede below. */
+  .eod-about-hero__title-block {
+    text-align: left;
+  }
+  .eod-about-hero__heading {
+    max-width: none;
+  }
+  .eod-about-hero__body-row {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1.5em;
+  }
+  .eod-about-hero__body-col {
+    /* The desktop rule's flex-basis (24em) sizes WIDTH there, since
+       the row is flex-direction:row — but body-row switches to
+       flex-direction:column here, where that same 24em would instead
+       size HEIGHT, forcing each column to a 24em-tall box regardless
+       of its actual text length (a big dead gap under short content
+       like the lede). Resetting the basis to auto makes each column
+       just as tall as what's actually in it. */
+    flex-basis: auto;
+    max-width: none;
+    width: 100%;
+  }
+  /* The BLOCK still sits pushed over to the right (aligned under the
+     heading) — but multi-line body copy set ragged-LEFT reads far
+     easier than ragged-right, so the text within each line stays
+     left-aligned regardless of which side of the screen the column
+     itself lives on. */
+  .eod-about-hero__body-col--lede,
+  .eod-about-hero__body-col--detail {
+    text-align: left;
+  }
+}
+
+/* ---- "Time line" section ----
+   Just the text now — the sticky photo that visually overlays it
+   lives one level up (see .eod-journey above, and initJourneyPush()
+   in about.js for the flip/crossfade). Each milestone is its own
+   100svh-tall row, its year/title pushed left and its description
+   pushed right of centre once the sticky photo reaches it — the same
+   per-line push mechanic as the hero's lede/detail columns. */
+.eod-timeline {
+  position: relative;
+  background: var(--eod-black);
+  color: var(--eod-white);
+  /* This is the LAST section in .eod-journey__stack, so its own
+     trailing space is what decides where the shared sticky card
+     finally releases (see .eod-journey__stack in the comment above) —
+     a sticky element can only stay stuck while at least its own
+     height's worth of the stack remains below the current scroll
+     position. Desktop's photo-sticky is a full 100svh box, so this
+     needs to clear a full viewport's worth on its own; too little
+     here (as a smaller value here previously did) makes the card let
+     go and scroll away WHILE the last milestone's own button is still
+     mid-push, before you've actually seen it arrive. Comfortably more
+     than that shortfall, but still well short of the old 20svh this
+     used to be — Awards right after already has its own generous
+     padding-top, so this just needs to carry the card through the
+     last button, not add a second gap on top of that too. */
+  padding-bottom: 10em;
+}
+.eod-timeline__intro {
+  padding: 6em 2.5em 2em;
+  max-width: var(--eod-content-max);
+  margin: 0 auto;
+}
+.eod-timeline__heading {
+  margin: 0;
+  font-size: clamp(2.5em, 4vw, 4em);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+.eod-timeline__list {
+  position: relative;
+  z-index: 1;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.eod-timeline__item {
+  /* Shorter than a full viewport on purpose — 100svh per milestone
+     (matching the photo-sticky's own height) left a lot of dead space
+     between one milestone's centred content and the next's, reading
+     as too spread out. The per-line contact triggers don't care about
+     this height directly (they're anchored to each LINE's own
+     position, not the item's box), so shortening it just tightens the
+     rhythm between milestones without touching the push timing. */
+  min-height: 75svh;
+  display: flex;
+  align-items: center;
+  /* No side padding here — .eod-page section (shared.css) already
+     gives .eod-timeline itself 2.5em; this used to ALSO add its own
+     2.5em on top of that, doubling the total inset (see
+     .eod-about-hero__title-block's own comment for the same fix). */
+}
+.eod-timeline__row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3em;
+  width: 100%;
+}
+.eod-timeline__col {
+  flex: 1 1 22em;
+  max-width: 22em;
+  min-width: 0;
+}
+.eod-timeline__col--meta {
+  text-align: right;
+}
+.eod-timeline__col--desc {
+  text-align: left;
+}
+.eod-timeline__year {
+  display: block;
+  margin-bottom: 0.5em;
+  font-size: 0.9em;
+  opacity: 0.6;
+}
+.eod-timeline__title {
+  margin: 0;
+  font-size: clamp(1.4em, 2.1vw, 1.9em);
+  font-weight: 400;
+  line-height: 1.25;
+}
+.eod-timeline__desc {
+  margin: 0 0 1.5em;
+  font-size: 0.9em;
+  line-height: 1.65;
+  color: rgba(250, 250, 250, 0.7);
+}
+.eod-timeline__desc:last-of-type {
+  margin-bottom: 0;
+}
+.eod-timeline__cta {
+  margin-top: 1.5em;
+  display: flex;
+  justify-content: flex-start;
+}
+@media (max-width: 1024px) {
+  /* Bigger than the shared (desktop-tuned) 10em above — about.js's
+     mobile-only "end" tracking (see initJourneyPush()) explicitly
+     takes over the card's position once the last milestone's text is
+     done, briefly holding it bottom-aligned with that text before
+     fading it out — but that only works cleanly if the card's own
+     native CSS sticky release doesn't ALSO fire partway through and
+     yank its positioning out from under the JS. That fade plays out
+     over a short (200px) window, not a full card-height's worth of
+     scroll distance (an earlier version slid the card off-screen
+     instead of fading it, which needed far more room here — read as
+     a big empty gap of black before Awards). 18em comfortably clears
+     that short window with margin to spare. */
+  .eod-timeline {
+    padding-bottom: 18em;
+  }
+  /* No right padding in either rule below — .eod-page section
+     (shared.css) already gives .eod-timeline itself 1.25em on
+     mobile, and these used to ALSO add their own 1.25em on top of
+     that (same doubled-padding fix as the hero's own mobile rule
+     above). Left side keeps its calc() — that's clearance for the
+     sticky photo, not just inset-from-edge padding. */
+  .eod-timeline__intro {
+    padding: 4em 0 2em calc(var(--eod-journey-photo-w) + 2em);
+  }
+  .eod-timeline__item {
+    justify-content: flex-start;
+    padding-left: calc(var(--eod-journey-photo-w) + 2em);
+  }
+  .eod-timeline__row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25em;
+  }
+  .eod-timeline__col {
+    /* Same fix as .eod-about-hero__body-col above — the desktop
+       flex-basis (22em) sizes width there, but .eod-timeline__row is
+       flex-direction:column here, where it would otherwise force each
+       column to a 22em-tall box regardless of actual content. */
+    flex-basis: auto;
+    max-width: none;
+    width: 100%;
+  }
+  .eod-timeline__col--meta,
+  .eod-timeline__col--desc {
+    text-align: left;
+  }
+  .eod-timeline__cta {
+    justify-content: flex-start;
+  }
+}
+
+/* ---- Logo tile grid ----
+   Static for now (per the brief, the hover/interaction pass on this
+   grid is deferred to later) — a plain responsive grid of square
+   tiles, each holding one currentColor-independent brand mark
+   (simple-icons SVGs render at their own fixed black by default,
+   which reads fine as a quiet monochrome "worked with" strip against
+   the light background here — matching the rest of the site's own
+   black-on-white treatment elsewhere, e.g. Awards/nav). */
+.eod-logos {
+  background: var(--eod-white);
+  padding-top: 6em;
+  padding-bottom: 8em;
+}
+.eod-logos__grid {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: var(--eod-content-max);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* Used to be a 1px gap + border-coloured background showing through
+     it, drawing a thin dividing line around/between every tile — a
+     plain gap with no colour behind it removes that line entirely
+     while still keeping the tiles visually separated. */
+  gap: 1.5em;
+}
+.eod-logos__tile {
+  aspect-ratio: 3 / 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+}
+.eod-logos__tile img {
+  width: 100%;
+  height: 100%;
+  max-width: 6em;
+  max-height: 6em;
+  object-fit: contain;
+}
+@media (max-width: 767px) {
+  .eod-logos {
+    padding-top: 4em;
+    padding-bottom: 5.5em;
+  }
+  .eod-logos__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .eod-logos__tile {
+    padding: 1.25em;
+  }
+  .eod-logos__tile img {
+    max-width: 4.5em;
+    max-height: 4.5em;
+  }
+}

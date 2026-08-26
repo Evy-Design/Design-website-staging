@@ -1,0 +1,119 @@
+/* ===========================================================
+   Evy Diepenbroek — Contact page
+   Everything shared with the Home page (fonts, colours, nav-
+   adjacent styles, --eod-content-max, .eod-page, buttons, the
+   footer) lives in style.css, loaded right before this file —
+   this one only holds what's unique to .eod-contact itself.
+   =========================================================== */
+
+/* Full-screen first section — min-height, not height: a very
+   long/short viewport (or a browser zoom level) still gets the
+   text vertically centred instead of clipped. svh (not vh): stays
+   put as mobile browser chrome collapses/expands while scrolling,
+   same reasoning as .eod-hero/.eod-cta elsewhere in this project. */
+.eod-contact {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--eod-white);
+  color: var(--eod-ink);
+  transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Toggled by contact.js on hover (desktop/tablet with real hover
+   only — see the (hover: hover) guard there) — the whole section
+   flips to the accent blue while a link is hovered. */
+.eod-contact.is-active {
+  background: var(--eod-accent);
+  color: var(--eod-white);
+}
+
+.eod-contact__group {
+  width: 100%;
+  /* 800px per spec, but never wider than the viewport itself minus
+     some breathing room — max-width takes the SMALLER of the two
+     automatically. */
+  max-width: min(50rem, 100% - 2.5em);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.eod-contact__text {
+  margin: 0;
+  font-size: clamp(1.5em, 2.4vw, 2.25em);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.eod-contact__link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+}
+
+/* Word-by-word reveal-in — contact.js wraps every word (and each
+   .eod-contact__link, treated as one "word") in one of these, then
+   adds .is-inview with a per-word transition-delay (set inline, via
+   --i) once the paragraph scrolls into view. Same fade+rise
+   language as [data-eod-reveal] elsewhere in this project, just
+   staggered per word instead of per block. */
+.eod-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.4em);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 0.035s);
+}
+.eod-word.is-inview {
+  opacity: 1;
+  transform: translate(0);
+}
+
+/* Full-width reveal banner — the huge contact detail that slides
+   up from the bottom of the (full-screen) section while a link is
+   hovered. position: fixed + left/right: 0, not tied to
+   --eod-content-max like everything else on the page: this is
+   meant to break all the way out to the true viewport edges as a
+   deliberate "surprise" moment, not stay inside the normal content
+   column. pointer-events: none — purely decorative, must never
+   steal the hover off the link that triggered it. */
+.eod-contact__banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(15%);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.eod-contact__banner.is-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.eod-contact__banner-text {
+  display: block;
+  padding: 0 0.15em;
+  font-size: clamp(3em, 11vw, 9em);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--eod-white);
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .eod-contact {
+    padding-top: 3em;
+    padding-bottom: 3em;
+  }
+  .eod-contact__banner-text {
+    font-size: clamp(2em, 11vw, 5em);
+  }
+}
