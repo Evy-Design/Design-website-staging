@@ -189,6 +189,20 @@ window.EOD_CONTENT = (function () {
     const heroEl = document.querySelector(".eod-project__hero-img");
     if (heroEl) heroEl.src = item.hero || item.cover;
 
+    // Big title at the top of the hero, ahead of the image (Evy's new
+    // Figma layout) — separate from .eod-project__title further down,
+    // which stays as the smaller recap heading next to the
+    // description.
+    const heroTitleEl = document.querySelector(".eod-project__hero-title");
+    if (heroTitleEl) heroTitleEl.textContent = item.title;
+
+    const websiteBtn = document.querySelector(".eod-project__website-btn");
+    if (websiteBtn) {
+      const hasWebsite = !!item.websiteUrl;
+      websiteBtn.hidden = !hasWebsite;
+      if (hasWebsite) websiteBtn.href = item.websiteUrl;
+    }
+
     // Each gallery entry is { type: "full", src: [one] },
     // { type: "pair", src: [two] }, { type: "text", heading, body },
     // or { type: "video", video: one } — see Sanity's `galleryBlock`
@@ -225,6 +239,25 @@ window.EOD_CONTENT = (function () {
               '<video src="' + block.video + '" controls playsinline></video>' +
             "</div>" +
           "</div>";
+        }
+        if (block.type === "process") {
+          // Evy's new Figma layout (node …6871): a bordered card,
+          // badge + heading + body on the left, whatever media goes
+          // with it (an image OR a video — Sanity's own galleryBlock
+          // schema keeps these mutually exclusive for this type) on
+          // the right. Media is optional; the card still works
+          // text-only if a project's process has none.
+          const media = block.video
+            ? '<video src="' + block.video + '" controls playsinline></video>'
+            : (block.src && block.src[0] ? '<img src="' + block.src[0] + '" alt="" />' : "");
+          return '<div class="eod-project__process">' +
+            '<div class="eod-project__process-text">' +
+              (block.badgeLabel ? '<span class="eod-project__process-badge">' + block.badgeLabel + '</span>' : "") +
+              '<h2 class="eod-project__process-heading">' + block.heading + '</h2>' +
+              '<p class="eod-project__process-body">' + block.body + '</p>' +
+            '</div>' +
+            (media ? '<div class="eod-project__process-media">' + media + '</div>' : '') +
+          '</div>';
         }
         const imgs = (block.src || []).map(function (src) {
           return '<img class="eod-project__gallery-img" src="' + src + '" alt="" />';

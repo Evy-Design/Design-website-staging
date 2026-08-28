@@ -31,8 +31,8 @@ const PROJECTS_QUERY = `*[_type == "project"] | order(order asc){
   "slug": slug.current, title,
   "cover": cover.asset->url,
   "hero": coalesce(hero.asset->url, cover.asset->url),
-  alt, description, deliverables,
-  gallery[]{type, "src": images[].asset->url, heading, body, "video": video.asset->url}
+  alt, description, deliverables, websiteUrl,
+  gallery[]{type, "src": images[].asset->url, heading, body, badgeLabel, "video": video.asset->url}
 }`;
 
 function queryUrl(groq) {

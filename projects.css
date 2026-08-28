@@ -25,7 +25,9 @@
    step with every other rounded corner on the site by default, but
    can be tuned for just these pages by changing this one line. */
 .eod-page {
-  --eod-projects-radius: var(--eod-radius);
+  /* Tuned down from the site-wide --eod-radius (1em) — Evy: "mag de
+     radius van de corners iets minder rond zijn". */
+  --eod-projects-radius: 0.75em;
 }
 
 /* ---- Grid (projects.html, "My work") ---- */
@@ -170,9 +172,48 @@
      it with real breathing room to spare. */
   padding-top: 9em;
 }
-.eod-project__hero-img {
+/* Big title + optional "Go to website" button, ahead of the image —
+   Evy's new Figma layout (node 295:2229/295:6907): the title reads as
+   the page's real h1 now, with .eod-project__title further down
+   staying a smaller h2 recap next to the description. Same capped
+   width as the hero image/back-link so all three line up. */
+.eod-project__hero-title-row {
   max-width: var(--eod-content-max);
   margin: 0 auto;
+  display: flex;
+  gap: 2em;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 2em;
+}
+.eod-project__hero-title {
+  margin: 0;
+  font-size: clamp(2.5em, 6vw, 5em);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.eod-project__website-btn {
+  flex: none;
+}
+/* .eod-btn's own `display` declaration (shared.css) has higher
+   specificity than the browser's default [hidden] { display: none }
+   rule, so without this the button stayed visible even with the
+   `hidden` attribute set (content.js hides it whenever a project has
+   no websiteUrl) — confirmed live: hidden was true, computed display
+   was still "block". */
+.eod-project__website-btn[hidden] {
+  display: none;
+}
+.eod-project__hero-divider {
+  max-width: var(--eod-content-max);
+  margin: 0 auto;
+  height: 1px;
+  background: var(--eod-border);
+}
+.eod-project__hero-img {
+  max-width: var(--eod-content-max);
+  margin: 2em auto 0;
   width: 100%;
   aspect-ratio: 16 / 7;
   object-fit: cover;
@@ -399,6 +440,74 @@
   max-height: 100%;
   display: block;
 }
+/* "Process" — the bordered card from Evy's new Figma layout (node
+   …6871): badge + heading + body on the left, whatever media goes
+   with it on the right, inside one outlined card rather than the
+   process text and its media being separate elements in the page
+   flow. Sits as a direct child of .eod-project__gallery, same as any
+   other gallery row, so it picks up that container's own row gap for
+   free. */
+.eod-project__process {
+  border: 1px solid var(--eod-border);
+  border-radius: var(--eod-projects-radius);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3em;
+  padding: 3em;
+  min-height: 40svh;
+}
+.eod-project__process-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2em;
+  max-width: 28em;
+}
+.eod-project__process-badge {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--eod-border);
+  border-radius: 999px;
+  padding: 0.4em 1em;
+  font-size: 0.85em;
+  color: var(--eod-muted);
+}
+.eod-project__process-heading {
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.eod-project__process-body {
+  margin: 0;
+  font-size: 1em;
+  line-height: 1.6;
+  color: var(--eod-muted);
+}
+.eod-project__process-media {
+  border-radius: var(--eod-projects-radius);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--eod-black);
+}
+.eod-project__process-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* contain, not cover — same reasoning as .eod-project__gallery-video:
+   a portrait recording (this card's own video is one) would get
+   cropped badly by cover; the black background above letterboxes it
+   instead. */
+.eod-project__process-media video {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
 .eod-project__nav {
   /* Site's own default page background (--eod-white), not the
      slightly-off grey --eod-cta-bg this used before — Evy: "de
@@ -564,6 +673,22 @@
   }
   .eod-project__hero-img {
     aspect-ratio: 4 / 3;
+  }
+  .eod-project__hero-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1em;
+  }
+  .eod-project__process {
+    grid-template-columns: 1fr;
+    padding: 1.5em;
+    min-height: 0;
+  }
+  .eod-project__process-text {
+    max-width: none;
+  }
+  .eod-project__process-media {
+    height: 40svh;
   }
   /* Title/description goes from side-by-side to stacked — a 50/50
      column split reads as too narrow on a phone.
