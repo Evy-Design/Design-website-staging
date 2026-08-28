@@ -367,7 +367,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 3em;
   align-items: start;
-  padding: 1.5em 0;
+  padding: 6em 0 1.5em;
 }
 /* "Intro text" — the other Sanity block type sharing the heading/body
    markup above, for a block that leads straight into the media right
@@ -705,6 +705,15 @@
   color: var(--eod-ink);
   cursor: pointer;
   transition: opacity 0.2s ease;
+}
+/* 2em (32px) is under the 40px minimum mobile tap target (Evy:
+   "buttons... minimaal 40px hoog") — grown via padding + a matching
+   negative margin so the arrow glyph itself doesn't get bigger. */
+@media (max-width: 767px) {
+  .eod-project-slider__control-btn {
+    padding: 4px;
+    margin: -4px;
+  }
 }
 .eod-project-slider__control-btn:hover {
   opacity: 0.6;
