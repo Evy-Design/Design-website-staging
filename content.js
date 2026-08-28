@@ -159,7 +159,16 @@ window.EOD_CONTENT = (function () {
       return (
         '<a href="project?slug=' + item.slug + '" class="eod-projects__card" data-eod-reveal data-eod-reveal-delay="' + (i % 4) + '">' +
           '<span class="eod-projects__photo-wrap">' +
-            '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" />' +
+            // view-transition-name ties this photo to the matching
+            // one in .eod-project__hero-img on the destination page
+            // (see renderProjectDetail below) — the browser morphs
+            // this element's own position/size into the hero's spot
+            // across the full-page navigation instead of a plain
+            // reload (Evy: "als je op een case klikt gaat de
+            // afbeelding mee... de rest verdwijnt"). Needs "navigation:
+            // auto" opted into on both pages (shared.css) to fire at
+            // all — otherwise this is just an inert style property.
+            '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" style="view-transition-name: eod-hero-' + item.slug + '" />' +
           "</span>" +
           '<span class="eod-projects__caption">' +
             '<span class="eod-btn eod-btn--secondary eod-projects__caption-btn">' + secondaryButtonInner(item.title) + "</span>" +
@@ -216,6 +225,32 @@ window.EOD_CONTENT = (function () {
     if (heroVideoEl) {
       heroVideoEl.hidden = !hasHeroVideo;
       heroVideoEl.src = hasHeroVideo ? item.heroVideo : "";
+    }
+
+    // Shared-element page transition from the projects grid (Evy: "als
+    // je op een case klikt gaat de afbeelding mee... verplaatst naar
+    // zijn nieuwe plek, wat de hero-afbeelding van de case wordt").
+    // Same view-transition-name as this project's card image in
+    // renderProjectsGrid() above — the browser morphs one into the
+    // other across the navigation instead of a plain reload. Video
+    // heroes sit this out (a video can't morph from a static photo).
+    if (heroImgEl && !hasHeroVideo) {
+      heroImgEl.style.viewTransitionName = "eod-hero-" + item.slug;
+      // Lands at roughly the grid card's own size/ratio first (Evy:
+      // "de afbeelding dezelfde maat blijft"), then grows to the full
+      // hero size on the first scroll (Evy: "vanaf het moment dat je
+      // gaat scrollen wordt die volledig weergegeven") — see the
+      // .is--compact rule in projects.css for the actual sizing.
+      heroImgEl.classList.add("is--compact");
+      const expandHero = function () {
+        heroImgEl.classList.remove("is--compact");
+        window.removeEventListener("scroll", expandHero);
+      };
+      if (window.scrollY > 0) {
+        expandHero();
+      } else {
+        window.addEventListener("scroll", expandHero, {passive: true});
+      }
     }
 
     // Big title at the top of the hero, ahead of the image (Evy's new
