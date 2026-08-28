@@ -456,6 +456,14 @@
   border-radius: var(--eod-projects-radius);
   display: grid;
   grid-template-columns: 1fr 1fr;
+  /* An implicit "auto" row sizes to its content regardless of the
+     max-height below (a container's max-height doesn't feed back
+     into grid track sizing on its own) — minmax(0, 1fr) makes the
+     one row an actual flexible track that's capped by the available
+     (max-height-bounded) space instead, which is what lets the
+     min-height: 0 + overflow-y: auto on the two columns below
+     actually do something instead of just growing past the card. */
+  grid-template-rows: minmax(0, 1fr);
   gap: 3em;
   padding: 3em;
   min-height: 40svh;
