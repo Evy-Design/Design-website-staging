@@ -296,6 +296,24 @@ body.eod-is-scrolling .eod-btn {
   transform: translateX(calc(0.9em + 0.6em));
 }
 
+/* Mobile tap target — .eod-btn--secondary ("Go back", "Go to
+   overview", every Timeline link) is just plain text with no padding
+   of its own, so its visible size IS its clickable size: fine on
+   desktop with a mouse, too small to reliably tap on a phone (Evy:
+   "op mobiel moeten buttons... minimaal 40px hoog zijn"). This grows
+   the tappable area via padding + a matching negative margin so nei
+   the surrounding layout nor the label's own visual size changes —
+   same trick .underlay-nav__toggle already uses. */
+@media (max-width: 767px) {
+  .eod-btn--secondary {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    margin: -0.5em 0;
+    padding: 0.5em 0;
+  }
+}
+
 /* ---- Scroll-reveal-in: fade + rise (default), applied to any
    element carrying data-eod-reveal. script.js observes each one and
    adds .is-inview the first time it enters the viewport (load-time
