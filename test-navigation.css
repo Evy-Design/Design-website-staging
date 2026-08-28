@@ -320,24 +320,26 @@
   }
 
   .underlay-nav__logo {
-    width: 5em;
-    /* The wordmark itself renders ~16px tall at this width (aspect
-       ratio from its viewBox) — well under the 40px minimum tap
-       target for mobile (Evy: "buttons en logos minimaal 40px
-       hoog"). Padding + a matching negative margin grows the
-       clickable area without changing the logo's own visual size or
-       shifting surrounding layout — same trick .underlay-nav__toggle
-       already uses. */
-    padding: 12px 0;
-    margin: -12px 0;
+    /* The wordmark's own aspect ratio (viewBox 1228 x 244, LOGO_SVG
+       in chrome.js) is ~5.03:1 — width: 201px is what makes it render
+       at an actual 40px tall (Evy: "logo van de navigatie mogen op
+       mobiel ook wat groter, die 40px hoog graag" — a real visual
+       size, not just an invisible bigger tap area like the first pass
+       at this used). */
+    width: 201px;
   }
 
+  /* Evy: "de menu button... mag op mobiel ook wat groter, die 40px
+     hoog graag" — a real size bump (icon + label scaled up together,
+     not just the invisible tap-padding this had before). */
   .underlay-nav__toggle-text {
-    height: 1.25em;
+    height: 1.75em;
   }
-
   .underlay-nav__toggle-label {
-    font-size: 1em;
+    font-size: 1.375em;
+  }
+  .underlay-nav__toggle-icon {
+    font-size: 1.6em;
   }
 
   .underlay-nav__inner {
