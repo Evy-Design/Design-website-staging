@@ -148,6 +148,16 @@
           "body": null,
           "heading": null,
           "src": [
+            "https://cdn.sanity.io/images/16akn05z/production/257897e59a6196a7756ee2ffcb06c4c527b0a0c8-1536x1017.jpg"
+          ],
+          "type": "full",
+          "video": null
+        },
+        {
+          "badgeLabel": null,
+          "body": null,
+          "heading": null,
+          "src": [
             "https://cdn.sanity.io/images/16akn05z/production/6cd220372c77708d7d631dd4a0eb4aa9d540419e-1536x1177.jpg",
             "https://cdn.sanity.io/images/16akn05z/production/257897e59a6196a7756ee2ffcb06c4c527b0a0c8-1536x1017.jpg"
           ],
@@ -158,18 +168,16 @@
           "badgeLabel": null,
           "body": null,
           "heading": null,
-          "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/257897e59a6196a7756ee2ffcb06c4c527b0a0c8-1536x1017.jpg"
-          ],
-          "type": "full",
-          "video": null
+          "src": null,
+          "type": "video",
+          "video": "https://cdn.sanity.io/files/16akn05z/production/827726d5c342e8f6d58b699426497290f7507918.mp4"
         },
         {
-          "badgeLabel": null,
-          "body": "Write more about this image here.",
-          "heading": "Add a heading",
+          "badgeLabel": "The process",
+          "body": null,
+          "heading": "It is a lot of information, and after a while reading, that can get too much. That's why after a block of information, you can scan the book and it will come to life.",
           "src": null,
-          "type": "introText",
+          "type": "sectionText",
           "video": null
         },
         {
@@ -195,22 +203,15 @@
         },
         {
           "badgeLabel": "The process",
-          "body": "In the first video, you can see me working hard. I like to mix manual drawings with digital designs. In the second video, you can see my research and sketches.",
-          "heading": "The process:",
+          "body": "Throughout the process, I was involved every step of the way. That’s why you’ll see my face multiple times in this magazine ;) All the connections, illustrations, and everything else you see were created by me myself.",
+          "heading": "I handled everything from developing the idea and concept to conducting research, writing, collecting content, and designing the visuals.",
           "src": null,
           "type": "process",
-          "video": "https://cdn.sanity.io/files/16akn05z/production/0086de24cb4b933dab563930af3a1e490cfa105b.mp4"
-        },
-        {
-          "badgeLabel": null,
-          "body": null,
-          "heading": null,
-          "src": null,
-          "type": "video",
-          "video": "https://cdn.sanity.io/files/16akn05z/production/827726d5c342e8f6d58b699426497290f7507918.mp4"
+          "video": "https://cdn.sanity.io/files/16akn05z/production/961916dbd744d390add69bacb21b11ea4c0b3942.mp4"
         }
       ],
       "hero": "https://cdn.sanity.io/images/16akn05z/production/ebd158e7c5e1bd7a8f8cd151b669989889631725-1536x1024.png",
+      "heroVideo": null,
       "slug": "blockchain",
       "title": "What the F*ck is Blockchain?",
       "websiteUrl": null
@@ -255,6 +256,7 @@
         }
       ],
       "hero": "https://cdn.sanity.io/images/16akn05z/production/3a98183a14ad71bdd7403016fd10a86fdb80c9fd-1536x864.jpg",
+      "heroVideo": null,
       "slug": "my-type-of-place",
       "title": "My Type Of Place",
       "websiteUrl": null
@@ -277,30 +279,107 @@
         },
         {
           "badgeLabel": "The process",
-          "body": "I first let loose on paper and sketches and visual illustrations dealing with women, class, race, and sexuality. I always go a long way on this, but I find it difficult to illustrate something that reflects all these subjects at once. So, I took a break from my sketchbook and started reading the first chapter. When I started reading the book, it began with a scene where they mentioned the theatre. I did some theatre myself, and I remembered there were always saying “don’t forget the red thread of the story”, so the thought of doing something with thread was already in my mind. I tried to stop illustrating the situations too literally and was focusing more on what it made the characters feel. The several topics made me feel stuck. And then the red thread comes in handy. I tried many things like making the letters stuck or one person, but I feel like it didn’t bring out all the stories of the book. I remember that I both thread to take photos for the book cover, and I was playing with the thread in my hand when I realized you can express so much with hands. We do things with our hands. Then everything was falling together fast. Subjects I have linked with hands and rope. All these hands visualize a topic; some are pulling, some are stuck, some are being played and some pick up the paces. I like that it doesn’t immediately give away what it is about but does connect well with the subjects.",
-          "heading": "The process:",
+          "body": "I find it difficult to illustrate something that reflects all these subjects at once. So, I took a break from my sketchbook and started reading the first chapter. When I started reading the book, it began with a scene where they mentioned the theatre. I did some theatre myself, and I remembered there were always saying “ don’t forget the red thread of the story”, so the thought of doing something with thread was already in my mind. \n\nI tried to stop illustrating the situations too literally and was focusing more on what it made the characters feel. The several topics made me feel stuck. And then the red thread comes in handy. I tried many things like making the letters stuck or one person, but I feel like it didn’t bring out all the stories of the book. I remember that I both thread to take photos for the book cover, and I was playing with the thread in my hand when I realized you can express so much with hands. We do things with our hands. Then everything was falling together fast. Subjects I have linked with hands and rope. All these hands visualize a topic; some are pulling, some are stuck, some are being played and some pick up the paces. I like that it doesn’t immediately give away what it is about but does connect well with the subjects.",
+          "heading": "I first let loose on paper and sketches and visual illustrations dealing with women, class, race, and sexuality.",
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/c1a83ab474b7a0624857692fae67d1e5f6ab9b00-1536x621.jpg"
+            "https://cdn.sanity.io/images/16akn05z/production/ce93b34d561006c72097ea8f7158168452c79bd7-1600x579.png",
+            "https://cdn.sanity.io/images/16akn05z/production/c1a83ab474b7a0624857692fae67d1e5f6ab9b00-1536x621.jpg",
+            null
           ],
           "type": "process",
           "video": null
         }
       ],
       "hero": "https://cdn.sanity.io/images/16akn05z/production/23c589b96b196d30e25746d630b338f150c6d2a5-1536x864.jpg",
+      "heroVideo": null,
       "slug": "penguin-cover-design-award",
       "title": "The Penguin Cover Design Award",
       "websiteUrl": null
     },
     {
-      "alt": "Cense project cover",
+      "alt": "Cense project_Made-at-NOSUCH",
       "cover": "https://cdn.sanity.io/images/16akn05z/production/b4577fa04b2809e0b17f4af6a952a067921a087f-1536x674.jpg",
-      "deliverables": null,
+      "deliverables": [
+        "Visual Identity"
+      ],
       "description": null,
-      "gallery": null,
+      "gallery": [
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "heading": null,
+          "src": [
+            "https://cdn.sanity.io/images/16akn05z/production/acf568fb222fe9617c402b3b89fd56caa1bfbf55-1910x1181.jpg"
+          ],
+          "type": "full",
+          "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "heading": null,
+          "src": [
+            "https://cdn.sanity.io/images/16akn05z/production/65215712861a54a81af1beea2fef67fa7a8af9db-1920x1080.jpg",
+            "https://cdn.sanity.io/images/16akn05z/production/c4584649a4bacb041ba9839425a83003ba11d264-1502x845.png"
+          ],
+          "type": "pair",
+          "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "heading": null,
+          "src": [
+            "https://cdn.sanity.io/images/16akn05z/production/3df2d6c26a235cc8c4dedb2ff5fd81f8357f1698-1672x941.png"
+          ],
+          "type": "full",
+          "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "heading": null,
+          "src": [
+            null,
+            null
+          ],
+          "type": "pair",
+          "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "heading": null,
+          "src": [
+            "https://cdn.sanity.io/images/16akn05z/production/53b81d8ccd2bb29e4c70fe9ad4b5255d1ba1c03f-3840x2160.png"
+          ],
+          "type": "full",
+          "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "heading": null,
+          "src": [
+            "https://cdn.sanity.io/images/16akn05z/production/659403d4e1a64c63b0ff47c066dd8a7ad23ad040-5906x2594.jpg"
+          ],
+          "type": "full",
+          "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "heading": null,
+          "src": null,
+          "type": "video",
+          "video": "https://cdn.sanity.io/files/16akn05z/production/6df6275979f852e2ab2d5567ed2cf84318011738.mp4"
+        }
+      ],
       "hero": "https://cdn.sanity.io/images/16akn05z/production/b4577fa04b2809e0b17f4af6a952a067921a087f-1536x674.jpg",
+      "heroVideo": null,
       "slug": "cense",
       "title": "Cense",
-      "websiteUrl": null
+      "websiteUrl": "https://nosuch.nl/en/work/decoding-complexity/"
     },
     {
       "alt": null,
@@ -309,6 +388,7 @@
       "description": null,
       "gallery": null,
       "hero": "https://cdn.sanity.io/images/16akn05z/production/7e799ecf2c2138f266d18322d49621d33d5eb828-2250x2250.gif",
+      "heroVideo": null,
       "slug": "beyond-the-page",
       "title": "Editorial Beyond The Page: When 1+1=3",
       "websiteUrl": null
@@ -352,6 +432,7 @@
         }
       ],
       "hero": "https://cdn.sanity.io/images/16akn05z/production/d9498277b7812314bafb8157eb148da734f9fbf3-2000x1485.jpg",
+      "heroVideo": null,
       "slug": "narrow-vision-of-design",
       "title": "Dissertation: Narrow Vision of Design",
       "websiteUrl": null
