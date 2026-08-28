@@ -583,10 +583,14 @@
           "src": [
             {
               "isVideo": false,
-              "url": "https://cdn.sanity.io/images/16akn05z/production/7ea6d25710541ef3de95d5f8fe0b82468931d071-4001x2251.png"
+              "url": "https://cdn.sanity.io/images/16akn05z/production/9f47d40f43dce4133295f2b246d6c6faab170aef-1920x1080.png"
+            },
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/b322e3277fc7b48afc74b6b528a88d4ee43f941f-1920x1080.jpg"
             }
           ],
-          "type": "full",
+          "type": "pair",
           "video": null
         },
         {
@@ -596,14 +600,10 @@
           "src": [
             {
               "isVideo": false,
-              "url": "https://cdn.sanity.io/images/16akn05z/production/9f47d40f43dce4133295f2b246d6c6faab170aef-1920x1080.png"
-            },
-            {
-              "isVideo": false,
-              "url": "https://cdn.sanity.io/images/16akn05z/production/b322e3277fc7b48afc74b6b528a88d4ee43f941f-1920x1080.jpg"
+              "url": "https://cdn.sanity.io/images/16akn05z/production/7ea6d25710541ef3de95d5f8fe0b82468931d071-4001x2251.png"
             }
           ],
-          "type": "pair",
+          "type": "full",
           "video": null
         }
       ],
