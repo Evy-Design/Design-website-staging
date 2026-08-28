@@ -16,6 +16,7 @@
      - .eod-awards component
      - .eod-cta "I am a [ ] Design" component
      - .eod-footer* component
+     - Cross-document view transition (projects grid -> a case study)
    =========================================================== */
 
 /* PP Mori — self-hosted. These 3 files (fonts/PPMori-*.woff2) need to
@@ -972,4 +973,68 @@ body.eod-is-scrolling .eod-btn {
   .eod-footer__label {
     font-size: 0.9em;
   }
+}
+
+/* ---- Cross-document view transition: projects grid -> a case study
+   (Evy: "als je op een case klikt gaat de afbeelding mee... de rest
+   verdwijnt in een mooie out-transformatie... de afbeelding
+   verplaatst naar zijn nieuwe plek, wat de hero-afbeelding van de
+   case wordt"). "navigation: auto" is the opt-in for browsers that
+   support cross-document View Transitions (Chrome/Edge, Safari) — it
+   needs to be present on BOTH the page you're leaving and the page
+   you're landing on, which is exactly why this lives in shared.css
+   rather than projects.css/project.html's own stylesheet. On a
+   browser without support this rule is simply ignored and navigation
+   behaves like a normal page load — no fallback JS needed. The named
+   element itself (the clicked project's photo -> the case's hero
+   image) is tagged view-transition-name in content.js, matching by
+   slug so only that one image gets pulled out of the default
+   crossfade below and animated as its own group. */
+@view-transition {
+  navigation: auto;
+}
+/* Everything WITHOUT its own view-transition-name (i.e. the whole
+   rest of both pages) is the "root" group — a plain crossfade is the
+   browser default, just slowed down slightly to read as a deliberate
+   fade rather than a flicker. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+}
+/* The named hero image's own move+resize between its two pages.
+   "*" is every non-root named group — in practice only the hero
+   photo uses one, but this is written generically rather than
+   against one hardcoded name since the name itself is per-project
+   (eod-hero-<slug>, set in content.js). */
+::view-transition-group(*) {
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+}
+/* A project's hero image isn't always the same photo as its grid
+   cover (Evy: "sommige hero-afbeeldingen zijn anders dan de overview
+   hero-afbeelding, daarom wordt de afbeelding zelf geblurd en
+   verandert die naar de nieuwe hero-afbeelding terwijl deze van plek
+   verandert") — the browser already crossfades the old/new photo
+   automatically whenever they differ; this blur pulse rides along on
+   top of that crossfade so the swap itself reads as a deliberate
+   effect instead of a plain dissolve. Excluded from root (below) so
+   the rest of the page doesn't blur along with it. */
+@keyframes eod-hero-swap-blur {
+  0% {
+    filter: blur(0);
+  }
+  45% {
+    filter: blur(16px);
+  }
+  100% {
+    filter: blur(0);
+  }
+}
+::view-transition-image-pair(*) {
+  animation-name: eod-hero-swap-blur;
+  animation-duration: 0.6s;
+  animation-timing-function: ease;
+}
+::view-transition-image-pair(root) {
+  animation-name: none;
 }
