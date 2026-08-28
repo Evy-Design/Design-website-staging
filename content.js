@@ -157,7 +157,7 @@ window.EOD_CONTENT = (function () {
 
     grid.innerHTML = items.map(function (item, i) {
       return (
-        '<a href="/project?slug=' + item.slug + '" class="eod-projects__card" data-eod-reveal data-eod-reveal-delay="' + (i % 4) + '">' +
+        '<a href="project?slug=' + item.slug + '" class="eod-projects__card" data-eod-reveal data-eod-reveal-delay="' + (i % 4) + '">' +
           '<span class="eod-projects__photo-wrap">' +
             '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" />' +
           "</span>" +
