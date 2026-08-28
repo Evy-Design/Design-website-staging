@@ -186,8 +186,20 @@ window.EOD_CONTENT = (function () {
     const item = items.find(function (p) { return p.slug === slug; }) || items[0];
     if (!item) return;
 
-    const heroEl = document.querySelector(".eod-project__hero-img");
-    if (heroEl) heroEl.src = item.hero || item.cover;
+    // A hero video, when set in Sanity, plays instead of the hero
+    // image (Evy: "graag zou ik ook in de hero image een video willen
+    // kunnen plaatsen in sanity").
+    const heroImgEl = document.querySelector(".eod-project__hero-img");
+    const heroVideoEl = document.querySelector(".eod-project__hero-video");
+    const hasHeroVideo = !!item.heroVideo;
+    if (heroImgEl) {
+      heroImgEl.hidden = hasHeroVideo;
+      heroImgEl.src = item.hero || item.cover;
+    }
+    if (heroVideoEl) {
+      heroVideoEl.hidden = !hasHeroVideo;
+      heroVideoEl.src = hasHeroVideo ? item.heroVideo : "";
+    }
 
     // Big title at the top of the hero, ahead of the image (Evy's new
     // Figma layout) — separate from .eod-project__title further down,
@@ -243,20 +255,36 @@ window.EOD_CONTENT = (function () {
         if (block.type === "process") {
           // Evy's new Figma layout (node …6871): a bordered card,
           // badge + heading + body on the left, whatever media goes
-          // with it (an image OR a video — Sanity's own galleryBlock
+          // with it (images OR a video — Sanity's own galleryBlock
           // schema keeps these mutually exclusive for this type) on
           // the right. Media is optional; the card still works
           // text-only if a project's process has none.
-          const media = block.video
-            ? '<video src="' + block.video + '" controls playsinline></video>'
-            : (block.src && block.src[0] ? '<img src="' + block.src[0] + '" alt="" />' : "");
+          const images = block.src || [];
+          let media = "";
+          let mediaModifier = "";
+          if (block.video) {
+            media = '<video src="' + block.video + '" controls playsinline></video>';
+          } else if (images.length > 1) {
+            // More than 1 photo: stack them instead of showing just
+            // the first, and the text column goes sticky (CSS) so it
+            // stays in view while you scroll through the stack rather
+            // than scrolling away after the first photo's height
+            // (Evy: "als ze meer dan 1 foto toevoegen... dat de tekst
+            // links sticky is").
+            mediaModifier = " is--stacked";
+            media = images.map(function (src) {
+              return '<img src="' + src + '" alt="" />';
+            }).join("");
+          } else if (images[0]) {
+            media = '<img src="' + images[0] + '" alt="" />';
+          }
           return '<div class="eod-project__process">' +
             '<div class="eod-project__process-text">' +
               (block.badgeLabel ? '<span class="eod-project__process-badge">' + block.badgeLabel + '</span>' : "") +
               '<h2 class="eod-project__process-heading">' + block.heading + '</h2>' +
               '<p class="eod-project__process-body">' + block.body + '</p>' +
             '</div>' +
-            (media ? '<div class="eod-project__process-media">' + media + '</div>' : '') +
+            (media ? '<div class="eod-project__process-media' + mediaModifier + '">' + media + '</div>' : '') +
           '</div>';
         }
         const imgs = (block.src || []).map(function (src) {

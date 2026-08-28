@@ -6,7 +6,7 @@
   <title>Evy Diepenbroek — Project</title>
   <link rel="stylesheet" href="shared.css?v=14" />
   <link rel="stylesheet" href="test-navigation.css?v=6" />
-  <link rel="stylesheet" href="projects.css?v=29" />
+  <link rel="stylesheet" href="projects.css?v=33" />
   <style>body { margin: 0; }</style>
   <!-- Must load before the nav/footer injector scripts below, which
        call window.EOD_CHROME synchronously as the HTML is parsed. -->
@@ -58,6 +58,9 @@
       </div>
       <div class="eod-project__hero-divider"></div>
       <img class="eod-project__hero-img" alt="" />
+      <!-- Shown instead of the img above when the project has a
+           Sanity "heroVideo" set — see content.js's renderProjectDetail(). -->
+      <video class="eod-project__hero-video" autoplay muted loop playsinline hidden></video>
     </section>
 
     <!-- Title (left) / description (right) two-column split, per
@@ -156,7 +159,7 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/InertiaPlugin.min.js"></script>
   <script src="test-navigation.js?v=11"></script>
   <script src="sanity-client.js?v=2"></script>
-  <script src="content.js?v=24"></script>
+  <script src="content.js?v=26"></script>
   <script src="script.js?v=32"></script>
   <script src="project-slider.js?v=4"></script>
 </body>

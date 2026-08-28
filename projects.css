@@ -188,6 +188,7 @@
 }
 .eod-project__hero-title {
   margin: 0;
+  max-width: 50%;
   font-size: clamp(2.5em, 6vw, 5em);
   font-weight: 400;
   letter-spacing: -0.03em;
@@ -211,7 +212,8 @@
   height: 1px;
   background: var(--eod-border);
 }
-.eod-project__hero-img {
+.eod-project__hero-img,
+.eod-project__hero-video {
   max-width: var(--eod-content-max);
   margin: 2em auto 0;
   width: 100%;
@@ -219,6 +221,10 @@
   object-fit: cover;
   border-radius: var(--eod-projects-radius);
   display: block;
+}
+.eod-project__hero-img[hidden],
+.eod-project__hero-video[hidden] {
+  display: none;
 }
 /* "Go back" arrow, top of the hero (Evy: "een 'go back'-pijl
    helemaal bovenaan") — same capped width + auto margins as the hero
@@ -331,7 +337,11 @@
 }
 .eod-project__gallery-section {
   background: var(--eod-white);
-  padding-bottom: 3em;
+  /* Matches .eod-project__nav-inner:first-child's own padding-top
+     (8em) — the space above THAT section's divider line should equal
+     the space below it (Evy: "padding aan de onderkant moet net zo
+     groot zijn als na de line"). */
+  padding-bottom: 8em;
 }
 .eod-project__gallery {
   max-width: var(--eod-content-max);
@@ -462,6 +472,20 @@
   align-items: flex-start;
   gap: 2em;
   max-width: 28em;
+  /* Sticky always, not just when there's more than 1 photo — with a
+     single image/video the two columns match height anyway, so this
+     is a harmless no-op there, and it's the only way to get the
+     "stays put while a stack of photos scrolls past" behaviour Evy
+     asked for once a process card has more than 1 image
+     (.eod-project__process-media.is--stacked below). align-self:
+     start is required for sticky to do anything here — grid items
+     default to align-items: stretch, which would already make this
+     column exactly as tall as the row, leaving no scroll room for
+     "stuck" to ever be visible. top clears the fixed nav header
+     (~6.4em desktop) with a little extra room. */
+  align-self: start;
+  position: sticky;
+  top: 7em;
 }
 .eod-project__process-badge {
   display: inline-flex;
@@ -507,6 +531,25 @@
   max-width: 100%;
   max-height: 100%;
   display: block;
+}
+/* More than 1 photo in a process block (Evy: "if they add more then
+   one photo here that text at the left is sticky") — stack them
+   instead of just showing the first, each at its own natural
+   card-like size rather than all cramming into the single-media
+   height above. The container's own height then grows with however
+   many photos there are, which is what gives
+   .eod-project__process-text's position: sticky (above) something to
+   stick THROUGH as you scroll. */
+.eod-project__process-media.is--stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  background: none;
+}
+.eod-project__process-media.is--stacked img {
+  height: auto;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--eod-projects-radius);
 }
 .eod-project__nav {
   /* Site's own default page background (--eod-white), not the
@@ -671,13 +714,17 @@
        general mobile side-padding value. */
     padding-top: 5em;
   }
-  .eod-project__hero-img {
+  .eod-project__hero-img,
+  .eod-project__hero-video {
     aspect-ratio: 4 / 3;
   }
   .eod-project__hero-title-row {
     flex-direction: column;
     align-items: flex-start;
     gap: 1em;
+  }
+  .eod-project__hero-title {
+    max-width: none;
   }
   .eod-project__process {
     grid-template-columns: 1fr;
@@ -686,8 +733,14 @@
   }
   .eod-project__process-text {
     max-width: none;
+    /* Off on mobile — text and media are already stacked in the same
+       single column here (grid-template-columns: 1fr above), so
+       "sticky" would just pin the text over its own media as you
+       scroll past both, which reads as broken rather than useful on
+       a small screen. */
+    position: static;
   }
-  .eod-project__process-media {
+  .eod-project__process-media:not(.is--stacked) {
     height: 40svh;
   }
   /* Title/description goes from side-by-side to stacked — a 50/50
