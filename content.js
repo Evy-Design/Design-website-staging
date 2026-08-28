@@ -280,7 +280,7 @@ window.EOD_CONTENT = (function () {
           let media = "";
           let mediaModifier = "";
           if (block.video) {
-            media = '<video src="' + block.video + '" controls playsinline></video>';
+            media = '<video src="' + block.video + '" autoplay muted loop playsinline></video>';
           } else if (images.length > 1) {
             // More than 1 photo: stack them instead of showing just
             // the first, and the text column goes sticky (CSS) so it
