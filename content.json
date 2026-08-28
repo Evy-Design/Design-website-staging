@@ -304,6 +304,92 @@
       "websiteUrl": null
     },
     {
+      "alt": null,
+      "cover": "https://cdn.sanity.io/images/16akn05z/production/7167eea7a4d3db67084cf1aa6f9b8654ce3c2dde-1920x1198.jpg",
+      "deliverables": [
+        "Visual Identity",
+        "UI/UX design",
+        "Development"
+      ],
+      "description": null,
+      "gallery": [
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "heading": null,
+          "src": [
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/135a172b66e8e1d4785167a4dbf14448fdb02ba0-7538x4240.jpg"
+            }
+          ],
+          "type": "full",
+          "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "heading": null,
+          "src": [
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/70e71f93708b2f0e5492bfcadb97914b4354a2b7-1920x1080.jpg"
+            }
+          ],
+          "type": "full",
+          "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "heading": null,
+          "src": [
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/f27cebcf719218a084b225294513b383ce7cfd20-1920x1080.jpg"
+            }
+          ],
+          "type": "full",
+          "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "heading": null,
+          "src": [
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/9f47d40f43dce4133295f2b246d6c6faab170aef-1920x1080.png"
+            },
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/b322e3277fc7b48afc74b6b528a88d4ee43f941f-1920x1080.jpg"
+            }
+          ],
+          "type": "pair",
+          "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "heading": null,
+          "src": [
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/7ea6d25710541ef3de95d5f8fe0b82468931d071-4001x2251.png"
+            }
+          ],
+          "type": "full",
+          "video": null
+        }
+      ],
+      "hero": "https://cdn.sanity.io/images/16akn05z/production/7167eea7a4d3db67084cf1aa6f9b8654ce3c2dde-1920x1198.jpg",
+      "heroVideo": null,
+      "slug": "Weavr",
+      "title": "Weavr",
+      "websiteUrl": "https://weavr.nl"
+    },
+    {
       "alt": "The Girl, Woman, Other Penguin book cover design",
       "cover": "https://cdn.sanity.io/images/16akn05z/production/23c589b96b196d30e25746d630b338f150c6d2a5-1536x864.jpg",
       "deliverables": null,
@@ -526,92 +612,6 @@
       "slug": "narrow-vision-of-design",
       "title": "Dissertation: Narrow Vision of Design",
       "websiteUrl": null
-    },
-    {
-      "alt": null,
-      "cover": "https://cdn.sanity.io/images/16akn05z/production/7167eea7a4d3db67084cf1aa6f9b8654ce3c2dde-1920x1198.jpg",
-      "deliverables": [
-        "Visual Identity",
-        "UI/UX design",
-        "Development"
-      ],
-      "description": null,
-      "gallery": [
-        {
-          "badgeLabel": "The process",
-          "body": null,
-          "heading": null,
-          "src": [
-            {
-              "isVideo": false,
-              "url": "https://cdn.sanity.io/images/16akn05z/production/135a172b66e8e1d4785167a4dbf14448fdb02ba0-7538x4240.jpg"
-            }
-          ],
-          "type": "full",
-          "video": null
-        },
-        {
-          "badgeLabel": "The process",
-          "body": null,
-          "heading": null,
-          "src": [
-            {
-              "isVideo": false,
-              "url": "https://cdn.sanity.io/images/16akn05z/production/70e71f93708b2f0e5492bfcadb97914b4354a2b7-1920x1080.jpg"
-            }
-          ],
-          "type": "full",
-          "video": null
-        },
-        {
-          "badgeLabel": "The process",
-          "body": null,
-          "heading": null,
-          "src": [
-            {
-              "isVideo": false,
-              "url": "https://cdn.sanity.io/images/16akn05z/production/f27cebcf719218a084b225294513b383ce7cfd20-1920x1080.jpg"
-            }
-          ],
-          "type": "full",
-          "video": null
-        },
-        {
-          "badgeLabel": "The process",
-          "body": null,
-          "heading": null,
-          "src": [
-            {
-              "isVideo": false,
-              "url": "https://cdn.sanity.io/images/16akn05z/production/9f47d40f43dce4133295f2b246d6c6faab170aef-1920x1080.png"
-            },
-            {
-              "isVideo": false,
-              "url": "https://cdn.sanity.io/images/16akn05z/production/b322e3277fc7b48afc74b6b528a88d4ee43f941f-1920x1080.jpg"
-            }
-          ],
-          "type": "pair",
-          "video": null
-        },
-        {
-          "badgeLabel": "The process",
-          "body": null,
-          "heading": null,
-          "src": [
-            {
-              "isVideo": false,
-              "url": "https://cdn.sanity.io/images/16akn05z/production/7ea6d25710541ef3de95d5f8fe0b82468931d071-4001x2251.png"
-            }
-          ],
-          "type": "full",
-          "video": null
-        }
-      ],
-      "hero": "https://cdn.sanity.io/images/16akn05z/production/7167eea7a4d3db67084cf1aa6f9b8654ce3c2dde-1920x1198.jpg",
-      "heroVideo": null,
-      "slug": "Weavr",
-      "title": "Weavr",
-      "websiteUrl": "https://weavr.nl"
     }
   ]
 }
