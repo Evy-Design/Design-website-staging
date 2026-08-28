@@ -471,12 +471,15 @@
   /* The card itself is capped at max-height: 90svh (Evy: "de process
      section heeft een max height van 90svh") with overflow: hidden,
      so a long body or a tall stack of media no longer grows the card
-     past that — each column scrolls internally instead once its own
-     content outgrows the card. align-self: start keeps this column
-     from stretching to match the media column's height. */
-  align-self: start;
+     past that — this column scrolls internally instead once its own
+     content outgrows the card. Grid items default to align-items:
+     stretch (so this fills the row's — now bounded — height) AND
+     min-height: auto (so they refuse to shrink below their own
+     content, which would defeat that entirely) — min-height: 0
+     overrides the second part so the stretch + overflow-y actually
+     does something. */
+  min-height: 0;
   overflow-y: auto;
-  max-height: 100%;
 }
 .eod-project__process-badge {
   display: inline-flex;
@@ -508,6 +511,10 @@
   align-items: center;
   justify-content: center;
   background: var(--eod-black);
+  /* Same min-height: 0 override as .eod-project__process-text above —
+     otherwise this grid item won't shrink below its content's natural
+     height and the overflow-y above never actually engages. */
+  min-height: 0;
 }
 .eod-project__process-media img {
   width: 100%;
