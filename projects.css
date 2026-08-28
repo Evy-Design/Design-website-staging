@@ -146,9 +146,33 @@
   .eod-projects__grid {
     grid-template-columns: 1fr;
   }
+  /* On a touch device the caption is always visible (no :hover to
+     reveal it — see the (hover: hover) block above) — which used to
+     mean it sat absolutely positioned over the BOTTOM of the photo,
+     inside the same aspect-ratio box, covering part of the image
+     (Evy: "mag hier gewoon de image staan (met de goede radius
+     hoeken) en daar onder de link, title button"). Restructured to
+     plain flow instead: the aspect-ratio + rounded-corner clipping
+     moves onto .eod-projects__photo-wrap alone, and the caption
+     becomes a normal block sitting below it, not overlapping. */
   .eod-projects__card {
     --eod-projects-caption-h: 3.5em;
+    aspect-ratio: auto;
+    overflow: visible;
+    display: block;
+  }
+  .eod-projects__photo-wrap {
+    position: static;
     aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--eod-projects-radius);
+  }
+  .eod-projects__caption {
+    position: static;
+    height: auto;
+    padding: 1em 0 0;
+    background: none;
+    transform: none;
   }
 }
 
@@ -748,6 +772,21 @@
        ~3.5em tall, so this also needs to clear it, not just the
        general mobile side-padding value. */
     padding-top: 5em;
+  }
+  /* Less breathing room between sections on mobile (Evy: "in de
+     project page op mobiel mag er minder ruimte tussen de sections")
+     — the desktop 8em between hero/body/gallery/nav reads as an
+     oversized gap once everything's already stacked in 1 column on a
+     phone. */
+  .eod-project__body {
+    padding-top: 4em;
+    padding-bottom: 4em;
+  }
+  .eod-project__gallery-section {
+    padding-bottom: 4em;
+  }
+  .eod-project__nav-inner:first-child {
+    padding-top: 4em;
   }
   .eod-project__hero-img,
   .eod-project__hero-video {
