@@ -314,12 +314,29 @@
    image inline, not just the page's own top intro (Evy: "een sectie
    met left header en right body text... aboven this photo"), and also
    what the old standalone "process" section became (Evy: "Delete
-   this and add here a text explain section"). */
+   this and add here a text explain section"). Two Sanity block types
+   share this same heading/body markup (galleryBlock schema) — this
+   is the "Section text" one: a standalone block, even spacing above
+   and below. */
 .eod-project__gallery-row--text {
   grid-template-columns: 1fr 1fr;
   gap: 3em;
   align-items: start;
   padding: 1.5em 0;
+}
+/* "Intro text" — the other Sanity block type sharing the heading/body
+   markup above, for a block that leads straight into the media right
+   after it (Evy, showing her new Figma layout: "i sometimes put text
+   in between to explain the photos that come after it, thats why the
+   padding onder te text is shorter") — same column layout, but the
+   bottom padding is deliberately much smaller than the top, so the
+   text reads as bound to what follows rather than floating evenly
+   between two unrelated blocks. */
+.eod-project__gallery-row--intro-text {
+  grid-template-columns: 1fr 1fr;
+  gap: 3em;
+  align-items: start;
+  padding: 6em 0 1em;
 }
 .eod-project__gallery-text-heading {
   margin: 0;
@@ -574,6 +591,11 @@
     grid-template-columns: 1fr;
     gap: 0.75em;
     padding: 0;
+  }
+  .eod-project__gallery-row--intro-text {
+    grid-template-columns: 1fr;
+    gap: 0.75em;
+    padding: 1.5em 0 0;
   }
   .eod-project-slider {
     --slider-gap: 1em;

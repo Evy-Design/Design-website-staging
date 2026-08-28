@@ -58,16 +58,26 @@
     return `rgb(${Math.round(lerp(r1, r2, t))}, ${Math.round(lerp(g1, g2, t))}, ${Math.round(lerp(b1, b2, t))})`;
   }
 
+  // A plain <a>, not a div + click listener — the card's own inner
+  // content (.demo-card and everything in it) is pointer-events: none
+  // (style.css), specifically so hit-testing always resolves to this
+  // outer element regardless of which face/image is on top, so an
+  // anchor here is naturally clickable across the whole card with no
+  // extra plumbing. position: absolute (style.css) already forces its
+  // display to block, so swapping the tag from div doesn't change
+  // layout, and GSAP only ever targets it by class, never by tag.
+  // (Evy: "als je op een van de cards van de tornado klickt ga je
+  // naar de my work... project overview page toe".)
   function buildCardMarkup() {
     return EOD_DATA.cards
       .map(
         (card) => `
-      <div class="cards-tornado__item" data-3d-tornado-item>
+      <a href="projects" class="cards-tornado__item" data-3d-tornado-item aria-label="Go to my work">
         <div class="demo-card">
           <div class="demo-card__face demo-card__face--front"><img class="cover-image" src="${card.src}" alt="${card.alt}" /></div>
           <div class="demo-card__face demo-card__face--back"><img class="cover-image" src="${EOD_DATA.portrait}" alt="Evy Olivia Diepenbroek" /></div>
         </div>
-      </div>`
+      </a>`
       )
       .join("");
   }

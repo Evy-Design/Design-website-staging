@@ -195,18 +195,26 @@ window.EOD_CONTENT = (function () {
     // schema for why (the source design flows full/pair/pair/full/…,
     // not a uniform grid). A "pair" just renders its 2 images as
     // siblings inside one row div; CSS (projects.css) handles the
-    // 50/50 split. A "text" row is its own left-heading/right-body
-    // two-column block, for explaining a specific image (or anything
-    // else) inline rather than only up top. A "video" row is
-    // sized/rounded exactly like a "full" image but with a black
-    // backdrop and the video centred/contained inside it, not
-    // cropped — for a portrait/vertical recording that
-    // object-fit: cover would otherwise crop awkwardly.
+    // 50/50 split. "sectionText" and "introText" are both a left-
+    // heading/right-body two-column block (same markup, same
+    // heading/body fields in Sanity) but styled differently:
+    // sectionText is a standalone block with even spacing above and
+    // below; introText leads straight into the media block right
+    // after it, so its own bottom spacing is deliberately tighter —
+    // see projects.css's .eod-project__gallery-row--intro-text (Evy's
+    // new Figma layout: "i sometimes put text in between to explain
+    // the photos that come after it, thats why the padding onder te
+    // text is shorter"). A "video" row is sized/rounded exactly like
+    // a "full" image but with a black backdrop and the video
+    // centred/contained inside it, not cropped — for a
+    // portrait/vertical recording that object-fit: cover would
+    // otherwise crop awkwardly.
     const gallery = document.querySelector(".eod-project__gallery");
     if (gallery) {
       gallery.innerHTML = (item.gallery || []).map(function (block) {
-        if (block.type === "text") {
-          return '<div class="eod-project__gallery-row eod-project__gallery-row--text">' +
+        if (block.type === "sectionText" || block.type === "introText") {
+          const rowModifier = block.type === "introText" ? "intro-text" : "text";
+          return '<div class="eod-project__gallery-row eod-project__gallery-row--' + rowModifier + '">' +
             '<h2 class="eod-project__gallery-text-heading">' + block.heading + "</h2>" +
             '<p class="eod-project__gallery-text-body">' + block.body + "</p>" +
           "</div>";
