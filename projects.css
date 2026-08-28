@@ -206,12 +206,6 @@
 .eod-project__website-btn[hidden] {
   display: none;
 }
-.eod-project__hero-divider {
-  max-width: var(--eod-content-max);
-  margin: 0 auto;
-  height: 1px;
-  background: var(--eod-border);
-}
 .eod-project__hero-img,
 .eod-project__hero-video {
   max-width: var(--eod-content-max);
