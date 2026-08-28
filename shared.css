@@ -1016,15 +1016,21 @@ body.eod-is-scrolling .eod-btn {
    verandert die naar de nieuwe hero-afbeelding terwijl deze van plek
    verandert") — the browser already crossfades the old/new photo
    automatically whenever they differ; this blur pulse rides along on
-   top of that crossfade so the swap itself reads as a deliberate
-   effect instead of a plain dissolve. Excluded from root (below) so
-   the rest of the page doesn't blur along with it. */
+   top of that crossfade. Deliberately much SHORTER than the group's
+   own 0.6s move/resize above (Evy, correcting a first pass that used
+   the same 0.6s here: "de shape zelf wordt nu ook geblurd... de shape
+   moet wel echt die shape blijven en transformeren... alleen de
+   afbeelding die verandert") — a quick, subtle blur pulse that clears
+   within the slow first stretch of the group's own ease-in-out move
+   reads as "the photo swapped" without ever reading as "the shape is
+   blurry while it resizes". Excluded from root (below) so the rest
+   of the page doesn't blur along with it. */
 @keyframes eod-hero-swap-blur {
   0% {
     filter: blur(0);
   }
-  45% {
-    filter: blur(16px);
+  40% {
+    filter: blur(8px);
   }
   100% {
     filter: blur(0);
@@ -1032,8 +1038,8 @@ body.eod-is-scrolling .eod-btn {
 }
 ::view-transition-image-pair(*) {
   animation-name: eod-hero-swap-blur;
-  animation-duration: 0.6s;
-  animation-timing-function: ease;
+  animation-duration: 0.22s;
+  animation-timing-function: ease-out;
 }
 ::view-transition-image-pair(root) {
   animation-name: none;
