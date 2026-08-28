@@ -254,13 +254,18 @@
    ever applied to the img (content.js guards this on !hasHeroVideo) —
    a video hero always shows at full size right away. */
 .eod-project__hero-img.is--compact {
-  /* A % (not a calc against --eod-content-max, which is a huge
-     ultra-wide ceiling most viewports never reach) so this actually
-     lands at roughly one grid-card's width — a fixed calc against
-     that token only came out smaller than the viewport itself on an
-     ultra-wide screen; everywhere below that it was simply larger
-     than the available space and did nothing. */
-  max-width: 47%;
+  /* Exactly one grid card's own width formula, not an approximation
+     — .eod-projects__grid is repeat(2, 1fr) with a 1.5em gap inside
+     a --eod-content-max-capped container, so each card is
+     (that width - 1.5em) / 2. Approximating this with a flat 47%
+     landed close but not pixel-exact, which showed up as the shape
+     still visibly resizing (not just moving) during the page
+     transition (Evy: "ik zie dat de shape zelf nog steeds veranderd
+     tijdens de transformatie, het mag alleen van positie
+     veranderen") — the browser's view-transition morph is a pure
+     translate with zero scaling only when the old and new element's
+     actual rendered size match exactly. */
+  max-width: calc((min(100%, var(--eod-content-max)) - 1.5em) / 2);
   aspect-ratio: 4 / 3;
 }
 /* "Go back" arrow, top of the hero (Evy: "een 'go back'-pijl
