@@ -178,6 +178,23 @@ window.EOD_CONTENT = (function () {
   // project actually provides them — see Cense above for a project
   // that currently has neither (a placeholder awaiting real content
   // from Evy).
+  // Gallery/process media items come from Sanity as either a plain
+  // image or a video sitting in the same "images" array slot (Evy:
+  // "deze videos mogen ook gewoon lopen en automatisch afspelen
+  // zonder afspeel balk er bij" — pair/full/process blocks all reuse
+  // this one field, so it doubles as the video field too). Handles a
+  // plain URL string too, for a content.json fetched before this
+  // shape existed.
+  function mediaSrc(item) {
+    return typeof item === "string" ? {url: item, isVideo: false} : item;
+  }
+  function mediaTag(item, className) {
+    const m = mediaSrc(item);
+    const cls = className ? ' class="' + className + '"' : "";
+    return m.isVideo
+      ? '<video' + cls + ' src="' + m.url + '" autoplay muted loop playsinline></video>'
+      : '<img' + cls + ' src="' + m.url + '" alt="" />';
+  }
   function renderProjectDetail() {
     const root = document.querySelector("[data-eod-project-detail]");
     if (!root) return;
@@ -272,11 +289,11 @@ window.EOD_CONTENT = (function () {
             // (Evy: "als ze meer dan 1 foto toevoegen... dat de tekst
             // links sticky is").
             mediaModifier = " is--stacked";
-            media = images.map(function (src) {
-              return '<img src="' + src + '" alt="" />';
+            media = images.map(function (item) {
+              return mediaTag(item);
             }).join("");
           } else if (images[0]) {
-            media = '<img src="' + images[0] + '" alt="" />';
+            media = mediaTag(images[0]);
           }
           return '<div class="eod-project__process">' +
             '<div class="eod-project__process-text">' +
@@ -287,8 +304,8 @@ window.EOD_CONTENT = (function () {
             (media ? '<div class="eod-project__process-media' + mediaModifier + '">' + media + '</div>' : '') +
           '</div>';
         }
-        const imgs = (block.src || []).map(function (src) {
-          return '<img class="eod-project__gallery-img" src="' + src + '" alt="" />';
+        const imgs = (block.src || []).map(function (item) {
+          return mediaTag(item, "eod-project__gallery-img");
         }).join("");
         return '<div class="eod-project__gallery-row eod-project__gallery-row--' + block.type + '">' + imgs + "</div>";
       }).join("");
