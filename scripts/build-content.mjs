@@ -33,7 +33,7 @@ const PROJECTS_QUERY = `*[_type == "project"] | order(order asc){
   "hero": coalesce(hero.asset->url, cover.asset->url),
   "heroVideo": heroVideo.asset->url,
   alt, description, deliverables, websiteUrl,
-  gallery[]{type, "src": images[].asset->url, heading, body, badgeLabel, "video": video.asset->url}
+  gallery[]{type, "src": images[]{"url": asset->url, "isVideo": _type == "video"}, heading, body, badgeLabel, "video": video.asset->url}
 }`;
 
 function queryUrl(groq) {
