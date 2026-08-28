@@ -985,6 +985,107 @@
 })();
 
 /* ===========================================================
+   Footer letters reveal — each letter rises up INTO view from below
+   the frame, not just a fade+nudge (Evy, after seeing the first pass:
+   "de letters komen 1 voor 1 van beneden [uit het frame] naar
+   boven"). That needs an actual mask, not opacity: a plain translateY
+   still paints the letter the whole time, just moved — nothing
+   stops you seeing it early, low in the footer, before it "arrives".
+   So each <path> gets its own SVG <clipPath> sized to exactly that
+   letter's own bounding box (computed via getBBox() — the paths are
+   arbitrary compound shapes, not uniform grid cells, so this can't be
+   hand-guessed); the path then starts translated down by its own
+   height (also from getBBox(), as a CSS custom property so shared.css
+   doesn't need one offset value to fit every letter), fully behind
+   its clip window, and animates up through it — genuinely emerging
+   from the bottom edge as it crosses into the clipped area, the same
+   mechanic as a mask-reveal, not a fade standing in for one.
+
+   Same fires-once IntersectionObserver pattern as data-eod-reveal
+   above for the actual scroll trigger, kept as its own block rather
+   than merged in — that one also sets up transition-delay from a
+   dataset attribute, which doesn't apply here (delay comes from --i
+   per path, set inline in chrome.js, not one delay per element).
+   =========================================================== */
+(function () {
+  const SVG_NS = "http://www.w3.org/2000/svg";
+
+  // One-time per element: give every path inside it its own clip
+  // window + starting offset. Guarded by a dataset flag same as the
+  // observe step below, so a duplicate script tag can't double-run
+  // this and stack duplicate <clipPath> defs.
+  function setupClipMasks(svg) {
+    if (svg.dataset.eodLettersSetup) return;
+    svg.dataset.eodLettersSetup = "true";
+
+    let defs = svg.querySelector("defs");
+    if (!defs) {
+      defs = document.createElementNS(SVG_NS, "defs");
+      svg.insertBefore(defs, svg.firstChild);
+    }
+
+    svg.querySelectorAll("path").forEach((path, i) => {
+      let bbox;
+      try {
+        bbox = path.getBBox();
+      } catch (e) {
+        return; // not laid out (e.g. a hidden ancestor) — leave this one alone rather than clip it into permanent invisibility
+      }
+      if (!bbox || !bbox.height) return;
+
+      const clipId = "eod-letter-clip-" + i + "-" + Math.random().toString(36).slice(2, 8);
+      const rect = document.createElementNS(SVG_NS, "rect");
+      rect.setAttribute("x", bbox.x);
+      rect.setAttribute("y", bbox.y);
+      rect.setAttribute("width", bbox.width);
+      rect.setAttribute("height", bbox.height);
+
+      const clipPath = document.createElementNS(SVG_NS, "clipPath");
+      clipPath.setAttribute("id", clipId);
+      clipPath.appendChild(rect);
+      defs.appendChild(clipPath);
+
+      path.setAttribute("clip-path", "url(#" + clipId + ")");
+      // Its own height (+ a hair of margin) as the starting offset —
+      // CSS px on a path inside its own (unscaled-relative-to-itself)
+      // SVG coordinate space maps 1:1 to SVG user units, so this
+      // lines up with the clip rect above without unit conversion.
+      path.style.setProperty("--letter-offset", (bbox.height + 4) + "px");
+    });
+  }
+
+  function initLettersReveal() {
+    const els = document.querySelectorAll("[data-eod-letters-reveal]");
+    if (!els.length) return;
+
+    els.forEach(setupClipMasks);
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-inview");
+          io.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -8% 0px" }
+    );
+
+    els.forEach((el) => {
+      if (el.dataset.eodLettersObserved) return;
+      el.dataset.eodLettersObserved = "true";
+      io.observe(el);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initLettersReveal);
+  } else {
+    initLettersReveal();
+  }
+})();
+
+/* ===========================================================
    CTA cyclers — swaps which child of a data-eod-cycle wrapper
    carries .is-active on a timer; style.css stacks every candidate
    (word or badge image) in the same CSS grid cell, so the wrapper's

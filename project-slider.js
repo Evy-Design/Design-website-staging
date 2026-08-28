@@ -36,7 +36,7 @@
     list.innerHTML = others.map(function (p, i) {
       return (
         '<div data-spatial-slider-item-status="' + (i === 0 ? "active" : "inview") + '" data-spatial-slider-item class="eod-project-slider__item">' +
-          '<a href="project.html?slug=' + p.slug + '" class="eod-projects__card eod-project-slider__card">' +
+          '<a href="/project?slug=' + p.slug + '" class="eod-projects__card eod-project-slider__card">' +
             '<span class="eod-projects__photo-wrap">' +
               '<img class="eod-projects__photo" src="' + p.cover + '" alt="' + (p.alt || "") + '" />' +
             "</span>" +

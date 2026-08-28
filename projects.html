@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Evy Diepenbroek — Projects</title>
-  <link rel="stylesheet" href="shared.css?v=12" />
-  <link rel="stylesheet" href="test-navigation.css?v=5" />
-  <link rel="stylesheet" href="projects.css?v=24" />
+  <link rel="stylesheet" href="shared.css?v=14" />
+  <link rel="stylesheet" href="test-navigation.css?v=6" />
+  <link rel="stylesheet" href="projects.css?v=25" />
   <style>body { margin: 0; }</style>
   <!-- Must load before the nav/footer injector scripts below, which
        call window.EOD_CHROME synchronously as the HTML is parsed. -->
-  <script src="chrome.js?v=2"></script>
+  <script src="chrome.js?v=3"></script>
 </head>
 <body>
 
@@ -29,30 +29,6 @@
       </div>
     </section>
 
-    <!-- Cycling word/badge, suffix and body copy are rendered by
-         content.js from window.EOD_CONTENT.cta — identical to the
-         Home/About page section, edit the text there to update all. -->
-    <section class="eod-cta">
-      <div class="eod-cta__group">
-        <div class="eod-cta__lede" data-eod-reveal="left">
-          I am a
-          <span class="eod-cta__badge" aria-hidden="true" data-eod-cycle="cta-role"></span>
-        </div>
-        <h2 class="eod-cta__title" data-eod-reveal="right">
-          <span class="eod-cta__word" data-eod-cycle="cta-role"></span>
-          <span class="eod-cta__suffix"></span>
-        </h2>
-        <div class="eod-cta__row" data-eod-reveal="right" data-eod-reveal-delay="1">
-          <p class="eod-cta__body"></p>
-          <a href="/contact" class="eod-btn eod-btn--dark">
-            <span class="eod-btn__label">Contact me</span>
-            <span class="eod-btn__circle eod-btn__circle--accent" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
-            <span class="eod-btn__circle eod-btn__circle--white" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
-          </a>
-        </div>
-      </div>
-    </section>
-
   <!-- Footer — single source of truth is chrome.js (EOD_CHROME.footer()). -->
   <script>document.currentScript.insertAdjacentHTML("beforebegin", EOD_CHROME.footer());</script>
   </main>
@@ -61,9 +37,9 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/CustomEase.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/Observer.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
-  <script src="test-navigation.js?v=10"></script>
+  <script src="test-navigation.js?v=11"></script>
   <script src="sanity-client.js?v=2"></script>
-  <script src="content.js?v=20"></script>
-  <script src="script.js?v=29"></script>
+  <script src="content.js?v=21"></script>
+  <script src="script.js?v=31"></script>
 </body>
 </html>

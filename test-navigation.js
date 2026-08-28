@@ -30,6 +30,64 @@
     highlightCurrentPage();
     initBackgroundDetection();
     initFixedUnderlayNavigation(mainEl);
+    initAutoHideNav();
+  }
+
+  // Well-known pattern (Evy: "als je naar onder scrolt dat het logo
+  // naar boven verdwijnt... dit is best een bekende interactie
+  // animation") — hide the fixed header on scroll DOWN, bring it
+  // back on scroll UP, site-wide (every page loads this file). Own
+  // rAF-throttled scroll listener, same pattern as
+  // initBackgroundDetection's above, rather than piggybacking on that
+  // one — the two are unrelated concerns (colour sampling vs a scroll
+  // direction compare) and each is already cheap enough alone.
+  function initAutoHideNav() {
+    var header = document.querySelector('.underlay-nav__header');
+    if (!header) return;
+
+    // Sub-pixel/momentum-scroll noise on mobile fires many tiny scroll
+    // events in one gesture — without a minimum delta the header would
+    // flicker on every one of them instead of reading as one clean
+    // hide/reveal per real scroll gesture.
+    var DELTA_THRESHOLD = 8;
+    // Never hidden this close to the top — hiding it on the very
+    // first nudge down the page, before you've gone anywhere, would
+    // just read as the header randomly vanishing.
+    var TOP_REVEAL_PX = 80;
+
+    var lastY = window.scrollY;
+    var ticking = false;
+
+    function update() {
+      ticking = false;
+      var y = window.scrollY;
+      var delta = y - lastY;
+
+      // Also covers the slide-out menu's own open animation, which
+      // moves <main> (not the page) via transform and doesn't change
+      // window.scrollY — but skipping while it's open means the
+      // header can't slide away out from under someone navigating it.
+      if (document.body.getAttribute('data-menu-status') === 'open') {
+        lastY = y;
+        return;
+      }
+
+      if (y <= TOP_REVEAL_PX) {
+        header.classList.remove('is--nav-hidden');
+      } else if (delta > DELTA_THRESHOLD) {
+        header.classList.add('is--nav-hidden');
+      } else if (delta < -DELTA_THRESHOLD) {
+        header.classList.remove('is--nav-hidden');
+      }
+      lastY = y;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }, { passive: true });
   }
 
   function highlightCurrentPage() {

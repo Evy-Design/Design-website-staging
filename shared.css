@@ -923,6 +923,27 @@ body.eod-is-scrolling .eod-btn {
   margin-left: auto;
   margin-right: auto;
 }
+/* Per-letter reveal when the footer scrolls into view (Evy, after
+   yourwave.nl: "de letters komen 1 voor 1 van beneden uit het frame
+   naar boven") — each <path> in the wordmark rises up from below its
+   OWN clip window (script.js's setupClipMasks gives every path a
+   <clipPath> sized to its own getBBox(), plus a --letter-offset equal
+   to its own height), so it's genuinely hidden behind the frame's
+   bottom edge at rest, not just faded out, and visibly emerges as it
+   crosses back into the clipped area — not a fade standing in for a
+   mask. Each letter staggered via its own --i (set inline per path,
+   see chrome.js). Triggered by script.js adding .is-inview the first
+   time [data-eod-letters-reveal] enters the viewport (same
+   IntersectionObserver-driven, fires-once pattern as the site's plain
+   [data-eod-reveal], just per-path instead of per-element). */
+.eod-footer__logo path {
+  transform: translateY(var(--letter-offset, 20px));
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 0.06s);
+}
+[data-eod-letters-reveal].is-inview path {
+  transform: translateY(0);
+}
 @media (max-width: 767px) {
   .eod-footer__top {
     padding-bottom: 3em;

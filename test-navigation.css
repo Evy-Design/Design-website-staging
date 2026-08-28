@@ -22,11 +22,20 @@
   position: fixed;
   inset: 0% 0% auto;
   pointer-events: none;
-  transition: color .3s ease;
+  transition: color .3s ease, transform .35s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .underlay-nav__header.is--dark {
   color: #1a1a1a;
+}
+
+/* Auto-hide on scroll down, reveal on scroll up — site-wide (see
+   test-navigation.js's initAutoHideNav()). pointer-events is already
+   none on the header itself; .underlay-nav__logo/__toggle re-enable
+   it individually, so those become unreachable while slid off-screen
+   too, not just visually gone. */
+.underlay-nav__header.is--nav-hidden {
+  transform: translateY(-100%);
 }
 
 .underlay-nav__header.is--dark .underlay-nav__toggle {
