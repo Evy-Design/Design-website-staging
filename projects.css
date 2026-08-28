@@ -230,7 +230,13 @@
    ever applied to the img (content.js guards this on !hasHeroVideo) —
    a video hero always shows at full size right away. */
 .eod-project__hero-img.is--compact {
-  max-width: calc((var(--eod-content-max) - 1.5em) / 2);
+  /* A % (not a calc against --eod-content-max, which is a huge
+     ultra-wide ceiling most viewports never reach) so this actually
+     lands at roughly one grid-card's width — a fixed calc against
+     that token only came out smaller than the viewport itself on an
+     ultra-wide screen; everywhere below that it was simply larger
+     than the available space and did nothing. */
+  max-width: 47%;
   aspect-ratio: 4 / 3;
 }
 /* "Go back" arrow, top of the hero (Evy: "een 'go back'-pijl
