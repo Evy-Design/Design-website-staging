@@ -215,10 +215,23 @@
   object-fit: cover;
   border-radius: var(--eod-projects-radius);
   display: block;
+  transition: max-width 0.7s cubic-bezier(0.65, 0, 0.35, 1),
+    aspect-ratio 0.7s cubic-bezier(0.65, 0, 0.35, 1);
 }
 .eod-project__hero-img[hidden],
 .eod-project__hero-video[hidden] {
   display: none;
+}
+/* Lands here first — same size/ratio as one grid card on
+   projects.html (Evy: "de afbeelding dezelfde maat blijft") — then
+   content.js removes this class on the first scroll, which the
+   transition above eases into the full hero size (Evy: "vanaf het
+   moment dat je gaat scrollen wordt die volledig weergegeven"). Only
+   ever applied to the img (content.js guards this on !hasHeroVideo) —
+   a video hero always shows at full size right away. */
+.eod-project__hero-img.is--compact {
+  max-width: calc((var(--eod-content-max) - 1.5em) / 2);
+  aspect-ratio: 4 / 3;
 }
 /* "Go back" arrow, top of the hero (Evy: "een 'go back'-pijl
    helemaal bovenaan") — same capped width + auto margins as the hero
@@ -733,6 +746,14 @@
   .eod-project__hero-img,
   .eod-project__hero-video {
     aspect-ratio: 4 / 3;
+  }
+  /* The desktop compact size is deliberately narrower than the full
+     hero (half a 2-column grid row) — on mobile the grid is already
+     1 column full-width, so there's no smaller "card size" to start
+     from; keep it at full width and let the aspect-ratio above do
+     the (smaller) job instead. */
+  .eod-project__hero-img.is--compact {
+    max-width: 100%;
   }
   .eod-project__hero-title-row {
     flex-direction: column;
