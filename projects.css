@@ -459,6 +459,8 @@
   gap: 3em;
   padding: 3em;
   min-height: 40svh;
+  max-height: 90svh;
+  overflow: hidden;
 }
 .eod-project__process-text {
   display: flex;
@@ -466,20 +468,15 @@
   align-items: flex-start;
   gap: 2em;
   max-width: 28em;
-  /* Sticky always, not just when there's more than 1 photo — with a
-     single image/video the two columns match height anyway, so this
-     is a harmless no-op there, and it's the only way to get the
-     "stays put while a stack of photos scrolls past" behaviour Evy
-     asked for once a process card has more than 1 image
-     (.eod-project__process-media.is--stacked below). align-self:
-     start is required for sticky to do anything here — grid items
-     default to align-items: stretch, which would already make this
-     column exactly as tall as the row, leaving no scroll room for
-     "stuck" to ever be visible. top clears the fixed nav header
-     (~6.4em desktop) with a little extra room. */
+  /* The card itself is capped at max-height: 90svh (Evy: "de process
+     section heeft een max height van 90svh") with overflow: hidden,
+     so a long body or a tall stack of media no longer grows the card
+     past that — each column scrolls internally instead once its own
+     content outgrows the card. align-self: start keeps this column
+     from stretching to match the media column's height. */
   align-self: start;
-  position: sticky;
-  top: 7em;
+  overflow-y: auto;
+  max-height: 100%;
 }
 .eod-project__process-badge {
   display: inline-flex;
@@ -505,7 +502,8 @@
 }
 .eod-project__process-media {
   border-radius: var(--eod-projects-radius);
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -724,15 +722,22 @@
     grid-template-columns: 1fr;
     padding: 1.5em;
     min-height: 0;
+    /* The desktop max-height: 90svh + overflow: hidden is for the
+       side-by-side layout (text scrolls in its own column, media in
+       its own column). On mobile the two are stacked in a single
+       column instead, so the same cap would just chop off the
+       bottom of the card rather than let anything scroll — off here,
+       same as min-height above. */
+    max-height: none;
+    overflow: visible;
   }
   .eod-project__process-text {
     max-width: none;
-    /* Off on mobile — text and media are already stacked in the same
-       single column here (grid-template-columns: 1fr above), so
-       "sticky" would just pin the text over its own media as you
-       scroll past both, which reads as broken rather than useful on
-       a small screen. */
-    position: static;
+    /* Desktop's internal scroll (overflow-y: auto, see base rule)
+       would be redundant/confusing once text and media are stacked
+       into one naturally-flowing column here. */
+    overflow-y: visible;
+    max-height: none;
   }
   .eod-project__process-media:not(.is--stacked) {
     height: 40svh;
