@@ -127,7 +127,10 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/96ff0efae4feada66c21cb4d60c6b5beab17c141-4769x2683.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/96ff0efae4feada66c21cb4d60c6b5beab17c141-4769x2683.jpg"
+            }
           ],
           "type": "full",
           "video": null
@@ -137,8 +140,14 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/9e5551e70ff0a9052c266a5c68c12c6a57584f42-1536x1536.jpg",
-            "https://cdn.sanity.io/images/16akn05z/production/2505c09dad2afe1770875521f5a903cfbbaad68f-1536x1017.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/9e5551e70ff0a9052c266a5c68c12c6a57584f42-1536x1536.jpg"
+            },
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/2505c09dad2afe1770875521f5a903cfbbaad68f-1536x1017.jpg"
+            }
           ],
           "type": "pair",
           "video": null
@@ -148,7 +157,10 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/257897e59a6196a7756ee2ffcb06c4c527b0a0c8-1536x1017.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/257897e59a6196a7756ee2ffcb06c4c527b0a0c8-1536x1017.jpg"
+            }
           ],
           "type": "full",
           "video": null
@@ -158,8 +170,14 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/6cd220372c77708d7d631dd4a0eb4aa9d540419e-1536x1177.jpg",
-            "https://cdn.sanity.io/images/16akn05z/production/257897e59a6196a7756ee2ffcb06c4c527b0a0c8-1536x1017.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/6cd220372c77708d7d631dd4a0eb4aa9d540419e-1536x1177.jpg"
+            },
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/257897e59a6196a7756ee2ffcb06c4c527b0a0c8-1536x1017.jpg"
+            }
           ],
           "type": "pair",
           "video": null
@@ -185,8 +203,14 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/233703f48e159538236b862d22e031c1e8dd1ff4-1536x1017.jpg",
-            "https://cdn.sanity.io/images/16akn05z/production/8236e7f0e920eb5d4768bec6ce28968eeedc7575-1536x1017.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/233703f48e159538236b862d22e031c1e8dd1ff4-1536x1017.jpg"
+            },
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/8236e7f0e920eb5d4768bec6ce28968eeedc7575-1536x1017.jpg"
+            }
           ],
           "type": "pair",
           "video": null
@@ -196,7 +220,10 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/6bcc74a4d7f0878183709dfed563bbcd6d037f02-1536x1017.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/6bcc74a4d7f0878183709dfed563bbcd6d037f02-1536x1017.jpg"
+            }
           ],
           "type": "full",
           "video": null
@@ -227,8 +254,14 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/26f7901661400b5a17904973f884e1501f524ad4-1536x1516.jpg",
-            "https://cdn.sanity.io/images/16akn05z/production/4c0b8c263cb556caccff67e2f49bc6a5e7ff3d15-1290x1258.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/26f7901661400b5a17904973f884e1501f524ad4-1536x1516.jpg"
+            },
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/4c0b8c263cb556caccff67e2f49bc6a5e7ff3d15-1290x1258.jpg"
+            }
           ],
           "type": "pair",
           "video": null
@@ -238,7 +271,10 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/3a98183a14ad71bdd7403016fd10a86fdb80c9fd-1536x864.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/3a98183a14ad71bdd7403016fd10a86fdb80c9fd-1536x864.jpg"
+            }
           ],
           "type": "full",
           "video": null
@@ -248,8 +284,14 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/d27ae6f7c54a24f0f355131babd05ce504445860-1536x1513.jpg",
-            "https://cdn.sanity.io/images/16akn05z/production/96eb719d0a861d39022d3e56706cb1bd56eaa4c1-1536x1512.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/d27ae6f7c54a24f0f355131babd05ce504445860-1536x1513.jpg"
+            },
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/96eb719d0a861d39022d3e56706cb1bd56eaa4c1-1536x1512.jpg"
+            }
           ],
           "type": "pair",
           "video": null
@@ -272,7 +314,10 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/60533c46378b913db23995703ffe2c74fbb017c5-500x455.png"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/60533c46378b913db23995703ffe2c74fbb017c5-500x455.png"
+            }
           ],
           "type": "full",
           "video": null
@@ -282,9 +327,18 @@
           "body": "I find it difficult to illustrate something that reflects all these subjects at once. So, I took a break from my sketchbook and started reading the first chapter. When I started reading the book, it began with a scene where they mentioned the theatre. I did some theatre myself, and I remembered there were always saying “ don’t forget the red thread of the story”, so the thought of doing something with thread was already in my mind. \n\nI tried to stop illustrating the situations too literally and was focusing more on what it made the characters feel. The several topics made me feel stuck. And then the red thread comes in handy. I tried many things like making the letters stuck or one person, but I feel like it didn’t bring out all the stories of the book. I remember that I both thread to take photos for the book cover, and I was playing with the thread in my hand when I realized you can express so much with hands. We do things with our hands. Then everything was falling together fast. Subjects I have linked with hands and rope. All these hands visualize a topic; some are pulling, some are stuck, some are being played and some pick up the paces. I like that it doesn’t immediately give away what it is about but does connect well with the subjects.",
           "heading": "I first let loose on paper and sketches and visual illustrations dealing with women, class, race, and sexuality.",
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/ce93b34d561006c72097ea8f7158168452c79bd7-1600x579.png",
-            "https://cdn.sanity.io/images/16akn05z/production/c1a83ab474b7a0624857692fae67d1e5f6ab9b00-1536x621.jpg",
-            null
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/ce93b34d561006c72097ea8f7158168452c79bd7-1600x579.png"
+            },
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/c1a83ab474b7a0624857692fae67d1e5f6ab9b00-1536x621.jpg"
+            },
+            {
+              "isVideo": false,
+              "url": null
+            }
           ],
           "type": "process",
           "video": null
@@ -309,7 +363,10 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/acf568fb222fe9617c402b3b89fd56caa1bfbf55-1910x1181.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/acf568fb222fe9617c402b3b89fd56caa1bfbf55-1910x1181.jpg"
+            }
           ],
           "type": "full",
           "video": null
@@ -319,8 +376,14 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/65215712861a54a81af1beea2fef67fa7a8af9db-1920x1080.jpg",
-            "https://cdn.sanity.io/images/16akn05z/production/c4584649a4bacb041ba9839425a83003ba11d264-1502x845.png"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/65215712861a54a81af1beea2fef67fa7a8af9db-1920x1080.jpg"
+            },
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/c4584649a4bacb041ba9839425a83003ba11d264-1502x845.png"
+            }
           ],
           "type": "pair",
           "video": null
@@ -330,7 +393,10 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/3df2d6c26a235cc8c4dedb2ff5fd81f8357f1698-1672x941.png"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/3df2d6c26a235cc8c4dedb2ff5fd81f8357f1698-1672x941.png"
+            }
           ],
           "type": "full",
           "video": null
@@ -340,8 +406,14 @@
           "body": null,
           "heading": null,
           "src": [
-            null,
-            null
+            {
+              "isVideo": false,
+              "url": null
+            },
+            {
+              "isVideo": false,
+              "url": null
+            }
           ],
           "type": "pair",
           "video": null
@@ -351,7 +423,10 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/53b81d8ccd2bb29e4c70fe9ad4b5255d1ba1c03f-3840x2160.png"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/53b81d8ccd2bb29e4c70fe9ad4b5255d1ba1c03f-3840x2160.png"
+            }
           ],
           "type": "full",
           "video": null
@@ -361,7 +436,10 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/659403d4e1a64c63b0ff47c066dd8a7ad23ad040-5906x2594.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/659403d4e1a64c63b0ff47c066dd8a7ad23ad040-5906x2594.jpg"
+            }
           ],
           "type": "full",
           "video": null
@@ -404,7 +482,10 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/196a4692bca2219aad4c9dc8166f25aec655ced6-6000x4500.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/196a4692bca2219aad4c9dc8166f25aec655ced6-6000x4500.jpg"
+            }
           ],
           "type": "full",
           "video": null
@@ -414,8 +495,14 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/bf2de31f4c56f4e93bdaad7e46ca52a984e4e0f2-2000x2000.jpg",
-            "https://cdn.sanity.io/images/16akn05z/production/34384f45f89b31a258e9cd0fcc032301fad2fc88-2000x2000.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/bf2de31f4c56f4e93bdaad7e46ca52a984e4e0f2-2000x2000.jpg"
+            },
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/34384f45f89b31a258e9cd0fcc032301fad2fc88-2000x2000.jpg"
+            }
           ],
           "type": "pair",
           "video": null
@@ -425,7 +512,10 @@
           "body": null,
           "heading": null,
           "src": [
-            "https://cdn.sanity.io/images/16akn05z/production/e036e664c319f5a4372760192d5f2f9f132f364c-2000x2000.jpg"
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/e036e664c319f5a4372760192d5f2f9f132f364c-2000x2000.jpg"
+            }
           ],
           "type": "full",
           "video": null
