@@ -54,6 +54,11 @@
 .underlay-nav__bar {
   width: 100%;
   padding: 2.5em;
+  /* Without this, width: 100% + padding together render WIDER than
+     the header itself (content-box adds padding on top of the 100%
+     instead of eating into it) — the same box-sizing gap that broke
+     the max-width match in the first place, just one level out. */
+  box-sizing: border-box;
 }
 
 .underlay-nav__container {
