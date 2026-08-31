@@ -138,6 +138,62 @@
 .eod-projects__caption-btn .eod-btn__label {
   font-size: 1.05em;
 }
+/* Staggered exit for each grid card's caption as this page
+   leaves during the projects-grid -> case-study transition (Evy:
+   "ook 1 voor 1 uit laten animeren") — see shared.css for the
+   eod-list-out keyframe itself and eod-out-heading (which always
+   goes first, delay 0). Index/name assigned in content.js's
+   renderProjectsGrid, capped at 11 — a fixed, generated block
+   rather than open-ended since view-transition names cannot be
+   matched by a CSS pattern/selector the way a class can. */
+::view-transition-old(eod-out-card-0) {
+  animation: eod-list-out 0.35s ease both;
+  animation-delay: 0.05s;
+}
+::view-transition-old(eod-out-card-1) {
+  animation: eod-list-out 0.35s ease both;
+  animation-delay: 0.09s;
+}
+::view-transition-old(eod-out-card-2) {
+  animation: eod-list-out 0.35s ease both;
+  animation-delay: 0.13s;
+}
+::view-transition-old(eod-out-card-3) {
+  animation: eod-list-out 0.35s ease both;
+  animation-delay: 0.17s;
+}
+::view-transition-old(eod-out-card-4) {
+  animation: eod-list-out 0.35s ease both;
+  animation-delay: 0.21s;
+}
+::view-transition-old(eod-out-card-5) {
+  animation: eod-list-out 0.35s ease both;
+  animation-delay: 0.25s;
+}
+::view-transition-old(eod-out-card-6) {
+  animation: eod-list-out 0.35s ease both;
+  animation-delay: 0.29s;
+}
+::view-transition-old(eod-out-card-7) {
+  animation: eod-list-out 0.35s ease both;
+  animation-delay: 0.33s;
+}
+::view-transition-old(eod-out-card-8) {
+  animation: eod-list-out 0.35s ease both;
+  animation-delay: 0.37s;
+}
+::view-transition-old(eod-out-card-9) {
+  animation: eod-list-out 0.35s ease both;
+  animation-delay: 0.41s;
+}
+::view-transition-old(eod-out-card-10) {
+  animation: eod-list-out 0.35s ease both;
+  animation-delay: 0.45s;
+}
+::view-transition-old(eod-out-card-11) {
+  animation: eod-list-out 0.35s ease both;
+  animation-delay: 0.49s;
+}
 @media (max-width: 767px) {
   .eod-projects {
     padding-top: 5em;
