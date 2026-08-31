@@ -243,7 +243,14 @@ window.EOD_CONTENT = (function () {
       // .is--compact rule in projects.css for the actual sizing.
       heroImgEl.classList.add("is--compact");
       const expandHero = function () {
-        heroImgEl.classList.remove("is--compact");
+        // .is--expanding carries the transition (projects.css) — has
+        // to land in its own frame BEFORE .is--compact comes off, or
+        // the browser has nothing to transition FROM yet and just
+        // snaps straight to the full size instead of easing into it.
+        heroImgEl.classList.add("is--expanding");
+        requestAnimationFrame(function () {
+          heroImgEl.classList.remove("is--compact");
+        });
         window.removeEventListener("scroll", expandHero);
       };
       if (window.scrollY > 0) {
