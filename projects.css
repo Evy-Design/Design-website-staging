@@ -239,8 +239,18 @@
   object-fit: cover;
   border-radius: var(--eod-projects-radius);
   display: block;
-  transition: max-width 0.7s cubic-bezier(0.65, 0, 0.35, 1),
-    aspect-ratio 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+  /* No transition here on purpose (a real bug this one had: putting
+     it here meant EVERY page load — even a plain direct visit, not
+     just one that arrives via the projects-grid transition — briefly
+     animated FROM this full size DOWN to .is--compact below, since
+     that class gets added a beat after this base rule has already
+     painted. That's the exact glitch Evy flagged in every browser,
+     including ones that don't even run the view-transition below at
+     all: "de size van eod-projects__photo moet hetzelfde blijven...
+     niet opeens in de hoek verdwijnen" — object-fit: cover
+     recropping mid-shrink reads as the photo lurching into a corner.
+     content.js adds .is--expanding (below) right before removing
+     .is--compact, which is the ONLY moment this should animate. */
 }
 .eod-project__hero-img[hidden],
 .eod-project__hero-video[hidden] {
@@ -267,6 +277,15 @@
      actual rendered size match exactly. */
   max-width: calc((min(100%, var(--eod-content-max)) - 1.5em) / 2);
   aspect-ratio: 4 / 3;
+}
+/* content.js adds this right before removing .is--compact on the
+   first scroll — carries the transition that used to sit on the base
+   rule above (see the comment there for why it moved), so the ONLY
+   moment this animates is that scroll-triggered expand, never on
+   initial load. */
+.eod-project__hero-img.is--expanding {
+  transition: max-width 0.7s cubic-bezier(0.65, 0, 0.35, 1),
+    aspect-ratio 0.7s cubic-bezier(0.65, 0, 0.35, 1);
 }
 /* "Go back" arrow, top of the hero (Evy: "een 'go back'-pijl
    helemaal bovenaan") — same capped width + auto margins as the hero
