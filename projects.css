@@ -65,66 +65,47 @@
    in een vak staat, wanneer je erover hovert komt de tekst onderaan
    te voorschijn maar duwt de foto omhoog, foto zelf blijft hetzelfde"
    — the photo's own size/crop never changes, only its position). */
+/* The image keeps ONE height always — the same height it used to
+   only reach on hover, once the caption pushed it up (Evy: "hou de
+   hoogte van de image aan van wanneer je er overheen hoovert" — she
+   didn't want the photo to resize/shrink into view on hover, she
+   wanted that smaller size to just BE its resting size). So the
+   caption isn't an overlay that gets pushed into view any more — it
+   sits in normal flow right below the photo, in its own reserved
+   space, always visible. The card itself no longer needs a fixed
+   aspect-ratio/overflow-hidden box; that clipping moves onto
+   .eod-projects__photo-wrap alone, sized by ITS OWN aspect-ratio. */
 .eod-projects__card {
-  --eod-projects-caption-h: 4em;
-  position: relative;
   display: block;
-  overflow: hidden;
-  border-radius: var(--eod-projects-radius);
-  aspect-ratio: 4 / 3;
   color: inherit;
   text-decoration: none;
 }
 .eod-projects__photo-wrap {
-  position: absolute;
-  inset: 0;
   display: block;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--eod-projects-radius);
 }
 .eod-projects__photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  /* Explicit, not just inherited from .eod-projects__card's own
-     overflow: hidden clip — the slider (.eod-project-slider__card)
-     puts this same element inside a 3D-rotated ancestor, and relying
-     solely on a clip from an unrotated parent read as inconsistent
-     corner rounding there vs. the plain grid on projects.html (Evy:
-     "dezelfde hoekradius op de afbeelding ... dit geldt ook voor de
-     overzichtspagina"). Same var either way, so the two can't drift. */
   border-radius: var(--eod-projects-radius);
-}
-.eod-projects__caption {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: var(--eod-projects-caption-h);
-  display: flex;
-  align-items: center;
-  padding: 0 1.25em;
-  background: var(--eod-white);
-  /* Default (and permanent, on a touch device — see below): sitting
-     in view, not pushed out. Only devices that can genuinely hover
-     get the "hidden until hover" treatment; without that gate, touch
-     visitors could never trigger :hover at all, leaving every card
-     with no visible title anywhere — no call to action, nothing
-     telling you it's even clickable (Evy's own "no call to action"
-     flag was exactly this, on mobile). */
-  transform: translateY(0);
+  /* A subtle zoom is the only hover feedback left now that the old
+     push-up-to-reveal-the-caption motion is gone — cards still need
+     SOME reaction to a hover so they still read as clickable. */
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 @media (hover: hover) and (pointer: fine) {
-  .eod-projects__caption {
-    transform: translateY(100%);
+  .eod-projects__card:hover .eod-projects__photo {
+    transform: scale(1.04);
   }
-  .eod-projects__card:hover .eod-projects__photo-wrap {
-    transform: translateY(calc(-1 * var(--eod-projects-caption-h)));
-  }
-  .eod-projects__card:hover .eod-projects__caption {
-    transform: translateY(0);
-  }
+}
+.eod-projects__caption {
+  display: flex;
+  align-items: center;
+  padding: 1em 0 0;
 }
 /* The caption's own label — same component as the Timeline's CTAs
    (Evy: "de tekst is het zelfde als de secondary button"), just
@@ -202,34 +183,7 @@
   .eod-projects__grid {
     grid-template-columns: 1fr;
   }
-  /* On a touch device the caption is always visible (no :hover to
-     reveal it — see the (hover: hover) block above) — which used to
-     mean it sat absolutely positioned over the BOTTOM of the photo,
-     inside the same aspect-ratio box, covering part of the image
-     (Evy: "mag hier gewoon de image staan (met de goede radius
-     hoeken) en daar onder de link, title button"). Restructured to
-     plain flow instead: the aspect-ratio + rounded-corner clipping
-     moves onto .eod-projects__photo-wrap alone, and the caption
-     becomes a normal block sitting below it, not overlapping. */
-  .eod-projects__card {
-    --eod-projects-caption-h: 3.5em;
-    aspect-ratio: auto;
-    overflow: visible;
-    display: block;
-  }
-  .eod-projects__photo-wrap {
-    position: static;
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    border-radius: var(--eod-projects-radius);
-  }
-  .eod-projects__caption {
-    position: static;
-    height: auto;
-    padding: 1em 0 0;
-    background: none;
-    transform: none;
-  }
+
 }
 
 /* ---- Detail (project.html, one shared template per case study) ----
