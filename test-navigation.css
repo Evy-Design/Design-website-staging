@@ -51,6 +51,14 @@
   align-items: center;
   padding: 2.5em;
   display: flex;
+  /* Same content cap as the rest of the site (Evy: "de navigation
+     container inhoud mag de zelfde max width als de rest van de
+     website hebben") — without this the logo/menu sat flush against
+     the raw viewport edges while every section's own content stayed
+     capped at --eod-content-max and centered, so the two drifted out
+     of alignment on anything wider than that cap. */
+  max-width: var(--eod-content-max);
+  margin: 0 auto;
 }
 
 .underlay-nav__logo {
