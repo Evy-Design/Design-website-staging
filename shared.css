@@ -993,13 +993,46 @@ body.eod-is-scrolling .eod-btn {
 @view-transition {
   navigation: auto;
 }
-/* Everything WITHOUT its own view-transition-name (i.e. the whole
-   rest of both pages) is the "root" group — a plain crossfade is the
-   browser default, just slowed down slightly to read as a deliberate
-   fade rather than a flicker. */
-::view-transition-old(root),
+/* Everything WITHOUT its own view-transition-name (i.e. whatever's
+   left of both pages once the heading/cards/hero-text below have all
+   claimed their own names) is the "root" group. A touch more than a
+   plain crossfade (Evy: "de overige elementen iets meer visuele out
+   transformation") — a slight rise-and-fade in each direction, same
+   motion language as [data-eod-reveal] elsewhere on the site rather
+   than a flat dissolve. */
+@keyframes eod-root-out {
+  to {
+    opacity: 0;
+    transform: translateY(-1.2em);
+  }
+}
+@keyframes eod-root-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.2em);
+  }
+}
+::view-transition-old(root) {
+  animation: eod-root-out 0.4s cubic-bezier(0.4, 0, 1, 1) both;
+}
 ::view-transition-new(root) {
-  animation-duration: 0.35s;
+  animation: eod-root-in 0.45s cubic-bezier(0, 0, 0.2, 1) both;
+}
+/* The projects-grid heading and each card's caption leave in their
+   own staggered cascade rather than as part of that flat root group
+   (Evy: "ook 1 voor 1 uit laten animeren") — exit-only, no matching
+   name on project.html, so these just lift-and-fade away instead of
+   morphing into anything. See projects.css for the actual per-card
+   stagger delays (indices are generated in content.js's
+   renderProjectsGrid, capped at 11). */
+@keyframes eod-list-out {
+  to {
+    opacity: 0;
+    transform: translateY(-0.8em);
+  }
+}
+::view-transition-old(eod-out-heading) {
+  animation: eod-list-out 0.35s ease both;
 }
 /* The named hero image's own move+resize between its two pages.
    "*" is every non-root named group — in practice only the hero
