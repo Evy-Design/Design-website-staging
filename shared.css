@@ -1016,7 +1016,13 @@ body.eod-is-scrolling .eod-btn {
   animation: eod-root-out 0.4s cubic-bezier(0.4, 0, 1, 1) both;
 }
 ::view-transition-new(root) {
+  /* Delayed until the hero image's own 0.6s move (below) has actually
+     finished landing (Evy: "pas wanneer de hero image op zijn nieuwe
+     plek staat mogen de andere elementen in animeren") — everything
+     else on the new page arrives only once that's done, not
+     alongside it. */
   animation: eod-root-in 0.45s cubic-bezier(0, 0, 0.2, 1) both;
+  animation-delay: 0.6s;
 }
 /* The projects-grid heading and each card's caption leave in their
    own staggered cascade rather than as part of that flat root group
