@@ -33,8 +33,15 @@
          THEN the big title paired with an optional "Go to website"
          button, THEN a divider, THEN the image — not just the image
          straight after "Go back" like before. -->
+    <!-- data-eod-reveal on the back link + title row (below): staggered
+         fade+rise as this page arrives, same system used elsewhere on
+         the site (Evy: "de nieuwe elementen 1 voor 1 in laten
+         animeren") — the hero image itself isn't tagged with this,
+         it has its own dedicated view-transition morph instead
+         (content.js), so between the two, everything in the hero
+         arrives in its own beat rather than all at once. -->
     <section class="eod-project__hero">
-      <div class="eod-project__hero-top">
+      <div class="eod-project__hero-top" data-eod-reveal>
         <a href="projects" class="eod-btn eod-btn--secondary eod-btn--icon-lead eod-project__back">
           <span class="eod-btn__secondary-viewport">
             <span class="eod-btn__secondary-track">
@@ -45,7 +52,7 @@
           </span>
         </a>
       </div>
-      <div class="eod-project__hero-title-row">
+      <div class="eod-project__hero-title-row" data-eod-reveal data-eod-reveal-delay="1">
         <h1 class="eod-project__hero-title"></h1>
         <!-- Hidden by default, shown by content.js only when the
              project has a websiteUrl set in Sanity (Evy's "Go to
