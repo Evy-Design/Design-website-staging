@@ -42,21 +42,24 @@
   color: #1a1a1a;
 }
 
+/* Padding lives here, on the OUTER full-width bar — same two-level
+   split as every section on the site (section: padding: 2.5em, then
+   an inner div: max-width + margin: auto, no padding of its own).
+   Splitting it this way (rather than combining padding + max-width
+   on one element, content-box's default) is what makes the logo's
+   own left edge land exactly on the page content's left edge instead
+   of --eod-content-max plus this padding on top of it (Evy: "de
+   navigation container inhoud mag de zelfde max width als de rest
+   van de website hebben"). */
 .underlay-nav__bar {
   width: 100%;
+  padding: 2.5em;
 }
 
 .underlay-nav__container {
   justify-content: space-between;
   align-items: center;
-  padding: 2.5em;
   display: flex;
-  /* Same content cap as the rest of the site (Evy: "de navigation
-     container inhoud mag de zelfde max width als de rest van de
-     website hebben") — without this the logo/menu sat flush against
-     the raw viewport edges while every section's own content stayed
-     capped at --eod-content-max and centered, so the two drifted out
-     of alignment on anything wider than that cap. */
   max-width: var(--eod-content-max);
   margin: 0 auto;
 }
@@ -323,7 +326,7 @@
 
 /* Responsive */
 @media screen and (max-width: 767px) {
-  .underlay-nav__container {
+  .underlay-nav__bar {
     padding: 1.25em;
   }
 
