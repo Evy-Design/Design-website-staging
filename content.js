@@ -170,7 +170,16 @@ window.EOD_CONTENT = (function () {
             // all — otherwise this is just an inert style property.
             '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" style="view-transition-name: eod-hero-' + item.slug + '" />' +
           "</span>" +
-          '<span class="eod-projects__caption">' +
+          // Own view-transition-name too (index-based, capped —
+          // projects.css only defines staggered exit delays up to
+          // index 11), separate from the photo's own slug-based one
+          // above — this is what lets every card's caption leave the
+          // page in its own little cascade instead of one flat
+          // crossfade (Evy: "de overige elementen... ook 1 voor 1 uit
+          // laten animeren"). Exit-only: there's no matching name on
+          // project.html, so the browser just fades/lifts this away
+          // rather than trying to morph it into anything.
+          '<span class="eod-projects__caption" style="view-transition-name: eod-out-card-' + Math.min(i, 11) + '">' +
             '<span class="eod-btn eod-btn--secondary eod-projects__caption-btn">' + secondaryButtonInner(item.title) + "</span>" +
           "</span>" +
         "</a>"
