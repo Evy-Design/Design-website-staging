@@ -37,16 +37,18 @@
          as this page arrives, same system used elsewhere on the site.
          transition-delay is hardcoded here (not the usual
          data-eod-reveal-delay, which is too small a scale for this) —
-         0.6s / 0.7s, matching the hero image's own 0.6s
-         view-transition move duration exactly, so these only start
-         once the hero has actually landed in its new spot, not
-         alongside it (Evy: "pas wanneer de hero image op zijn nieuwe
-         plek staat mogen de andere elementen in animeren"). Applies
-         on a plain direct visit too, not just one that arrives via
-         the transition — simpler and identical in every browser
-         rather than conditioning it on transition support. -->
+         three beats in sequence (Evy: "pas wanneer de hero image op
+         zijn nieuwe plek staat mogen de andere elementen in
+         animeren", then "ook andersom... pas wanneer de andere
+         elementen zijn uitgeanimeerd... mag de image gaan
+         verplaatsen"): the projects-grid heading/cards finish leaving
+         by ~0.85s (shared.css), THEN the hero image moves for 0.6s
+         (0.85s -> 1.45s), THEN these two arrive from 1.45s / 1.55s.
+         Applies on a plain direct visit too, not just one that
+         arrives via the transition — simpler and identical in every
+         browser rather than conditioning it on transition support. -->
     <section class="eod-project__hero">
-      <div class="eod-project__hero-top" data-eod-reveal style="transition-delay: 0.6s">
+      <div class="eod-project__hero-top" data-eod-reveal style="transition-delay: 1.45s">
         <a href="projects" class="eod-btn eod-btn--secondary eod-btn--icon-lead eod-project__back">
           <span class="eod-btn__secondary-viewport">
             <span class="eod-btn__secondary-track">
@@ -57,7 +59,7 @@
           </span>
         </a>
       </div>
-      <div class="eod-project__hero-title-row" data-eod-reveal style="transition-delay: 0.7s">
+      <div class="eod-project__hero-title-row" data-eod-reveal style="transition-delay: 1.55s">
         <h1 class="eod-project__hero-title"></h1>
         <!-- Hidden by default, shown by content.js only when the
              project has a websiteUrl set in Sanity (Evy's "Go to
