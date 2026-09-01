@@ -126,30 +126,16 @@ window.EOD_CONTENT = (function () {
     }
   }
 
-  // Shared by both project render functions below — the exact same
-  // markup as the Timeline's own secondary-button CTAs above, just
-  // factored out since it's now used in three places instead of one.
-  function secondaryButtonInner(label) {
-    return (
-      '<span class="eod-btn__secondary-viewport">' +
-        '<span class="eod-btn__secondary-track">' +
-          '<span class="eod-btn__arrow-slot eod-btn__arrow-slot--lead" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>' +
-          '<span class="eod-btn__label">' + label + "</span>" +
-          '<span class="eod-btn__arrow-slot eod-btn__arrow-slot--trail" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>' +
-        "</span>" +
-      "</span>"
-    );
-  }
-
   // Projects grid (projects.html, "My work") — each card is its own
-  // fixed-frame link: the cover photo fills it, and the title sits
-  // just below the frame's bottom edge as a secondary-button-styled
-  // caption (Evy: "de tekst is het zelfde als de secondary button").
-  // On hover the photo slides up by exactly the caption's own height
-  // (--eod-projects-caption-h, see projects.css) while the caption
-  // slides up into the gap that opens up beneath it — a push, not an
-  // overlay, per Evy's own description of the effect. Pure CSS
-  // (:hover), nothing here drives the motion itself.
+  // fixed-frame link. The title used to sit permanently below the
+  // photo as a secondary-button-styled caption; now it ONLY appears
+  // ON the photo itself, in white, as part of the glass/water hover
+  // (Evy: "remove the text/button now and... replace [it with] the
+  // text that is now on top of the image when you hover... but then
+  // in white" — see .eod-projects__hover-title below and its CSS).
+  // aria-label carries the accessible name instead, since the visible
+  // title text is aria-hidden (a11y detail below) and, on a
+  // hover-capable device, invisible until you're already hovering.
   function renderProjectsGrid() {
     const grid = document.querySelector(".eod-projects__grid");
     if (!grid) return;
@@ -157,7 +143,7 @@ window.EOD_CONTENT = (function () {
 
     grid.innerHTML = items.map(function (item, i) {
       return (
-        '<a href="project?slug=' + item.slug + '" class="eod-projects__card" data-eod-reveal data-eod-reveal-delay="' + (i % 4) + '">' +
+        '<a href="project?slug=' + item.slug + '" class="eod-projects__card" aria-label="' + item.title + '" data-eod-reveal data-eod-reveal-delay="' + (i % 4) + '">' +
           '<span class="eod-projects__photo-wrap">' +
             // view-transition-name ties this photo to the matching
             // one in .eod-project__hero-img on the destination page
@@ -178,29 +164,18 @@ window.EOD_CONTENT = (function () {
             // 11, same reasoning/cap as the view-transition indices
             // below.
             '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" data-glass-index="' + Math.min(i, 11) + '" style="view-transition-name: eod-hero-' + item.slug + '; filter: url(#eod-glass-water-' + Math.min(i, 11) + ')" />' +
-            // Hover-only glass/water overlay + the title again, in
-            // white, sitting on TOP of the photo this time (Evy: "a
-            // cool glass water effect... that it reacts on the mouse
-            // movements... dark enough so the title can appear in
-            // white on top of it"). Both start invisible — see
-            // projects.css's :hover rules. The mousemove listener that
-            // drives --eod-glass-x/-y lives in script.js, delegated on
-            // the grid itself rather than per-card, since this markup
-            // gets rebuilt wholesale on every render.
             '<span class="eod-projects__glass" aria-hidden="true"></span>' +
-            '<span class="eod-projects__hover-title" aria-hidden="true">' + item.title + "</span>" +
-          "</span>" +
-          // Own view-transition-name too (index-based, capped —
-          // projects.css only defines staggered exit delays up to
-          // index 11), separate from the photo's own slug-based one
-          // above — this is what lets every card's caption leave the
-          // page in its own little cascade instead of one flat
-          // crossfade (Evy: "de overige elementen... ook 1 voor 1 uit
-          // laten animeren"). Exit-only: there's no matching name on
-          // project.html, so the browser just fades/lifts this away
-          // rather than trying to morph it into anything.
-          '<span class="eod-projects__caption" style="view-transition-name: eod-out-card-' + Math.min(i, 11) + '">' +
-            '<span class="eod-btn eod-btn--secondary eod-projects__caption-btn">' + secondaryButtonInner(item.title) + "</span>" +
+            // The card's only title text now (see the render function's
+            // own comment above for why) — aria-hidden because the
+            // <a>'s own aria-label already carries this for assistive
+            // tech; this is purely the visual, hover-revealed copy.
+            // Keeps its own view-transition-name (index-based, capped —
+            // projects.css only defines staggered exit delays up to
+            // index 11) so it still leaves the page in its own little
+            // cascade rather than one flat crossfade (Evy: "de overige
+            // elementen... ook 1 voor 1 uit laten animeren") — inherited
+            // from the caption this replaced.
+            '<span class="eod-projects__hover-title" aria-hidden="true" style="view-transition-name: eod-out-card-' + Math.min(i, 11) + '">' + item.title + "</span>" +
           "</span>" +
         "</a>"
       );
