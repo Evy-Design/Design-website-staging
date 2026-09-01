@@ -538,15 +538,19 @@
       ejectedFace = card.querySelector(".demo-card");
       hero.appendChild(card); // escape the tornado's clipped/3D stacking context
 
-      // position:sticky does the actual work here: `top: 50vh` (a
+      // position:sticky does the actual work here: `top: <anchor>` (a
       // VIEWPORT unit, not a % of the container) means "stick once
-      // you'd otherwise scroll within 50vh of the top of the screen" —
-      // combined with translate(-50%,-50%) below, that keeps the card
-      // dead-centered on screen for as long as you're still scrolling
-      // through .eod-hero, then it releases on its own once you scroll
-      // past the bottom of that container. No manual position math.
+      // you'd otherwise scroll within that much of the top of the
+      // screen" — combined with translate(-50%,-50%) below, that keeps
+      // the card pinned at that screen height for as long as you're
+      // still scrolling through .eod-hero, then it releases on its own
+      // once you scroll past the bottom of that container. No manual
+      // position math. Reads --eod-eject-anchor-y (style.css) rather
+      // than a hardcoded 50vh so the mobile media query there can move
+      // the landing point lower, off dead-center, without this needing
+      // its own breakpoint check.
       card.style.position = "sticky";
-      card.style.top = "50vh";
+      card.style.top = "var(--eod-eject-anchor-y, 50vh)";
       card.style.left = "50%";
       card.style.width = cardWidth + "px";
       card.style.height = cardHeight + "px";
@@ -709,10 +713,14 @@
     // animating), the card would stay glued to screen-centre for the
     // entire remaining scroll and only pop free at the last possible
     // moment, leaving no breathing room before whatever comes next.
-    // Kept small — this is literally empty scroll distance (blank
-    // .eod-hero background) between the card landing and Awards
-    // starting, so more than a small buffer just reads as dead space.
-    const TAIL_BUFFER_VH = 8;
+    // This is literally empty scroll distance (blank .eod-hero
+    // background) between the card landing and Awards starting, so too
+    // much reads as dead space — but too little meant the intro text
+    // scrolled straight past before you'd even finished reading it
+    // (Evy: "dat je misschien net wat langer op dit moment stil staat
+    // zodat je niet meteen de tekst uit het frame scrolt"). Raised from
+    // 8 to 14, a middle ground between those two.
+    const TAIL_BUFFER_VH = 14;
 
     // Once landed, stop tracking the viewport (position:sticky) and pin
     // the card to the exact document spot it's already sitting at — it
@@ -843,7 +851,7 @@
       isLanded = false;
       const card = ejectedItem;
       card.style.position = "sticky";
-      card.style.top = "50vh";
+      card.style.top = "var(--eod-eject-anchor-y, 50vh)";
       card.style.left = "50%";
       hero.classList.remove("is-landed");
       clearTimeout(hugResizeTimer);
