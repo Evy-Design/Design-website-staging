@@ -168,7 +168,16 @@ window.EOD_CONTENT = (function () {
             // afbeelding mee... de rest verdwijnt"). Needs "navigation:
             // auto" opted into on both pages (shared.css) to fire at
             // all — otherwise this is just an inert style property.
-            '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" style="view-transition-name: eod-hero-' + item.slug + '" />' +
+            // data-glass-index: which of projects.html's own
+            // <filter id="eod-glass-water-N"> defs this card's actual
+            // pixel-warp (not just the CSS tint/highlight below) uses
+            // — script.js finds it by this index on hover and eases
+            // its feDisplacementMap scale up/down, rather than every
+            // card sharing one filter instance (which would make
+            // hovering one card ripple all of them at once). Capped at
+            // 11, same reasoning/cap as the view-transition indices
+            // below.
+            '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" data-glass-index="' + Math.min(i, 11) + '" style="view-transition-name: eod-hero-' + item.slug + '; filter: url(#eod-glass-water-' + Math.min(i, 11) + ')" />' +
             // Hover-only glass/water overlay + the title again, in
             // white, sitting on TOP of the photo this time (Evy: "a
             // cool glass water effect... that it reacts on the mouse

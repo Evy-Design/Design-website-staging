@@ -1444,4 +1444,53 @@
     wrap.style.setProperty("--eod-glass-x", x + "%");
     wrap.style.setProperty("--eod-glass-y", y + "%");
   });
+
+  // The actual pixel-warp (Evy, after seeing the first pass: "more
+  // glassy and watery... like your touching water but the shine of
+  // glass") — a CSS gradient can only ever fake light, not genuine
+  // distortion, so this drives each card's own
+  // <feDisplacementMap scale> (projects.html) instead. SVG element
+  // attributes don't support CSS transitions, so easing the ripple in
+  // and out is a small hand-rolled rAF tween rather than a CSS one —
+  // wrapPos.animId tracks the in-flight tween per wrap so a fast
+  // in/out/in doesn't leave two competing loops fighting over the
+  // same attribute.
+  const RIPPLE_SCALE = 26;
+  const RIPPLE_MS = 650;
+  function easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+  function animateRippleScale(wrap, to) {
+    const img = wrap.querySelector(".eod-projects__photo");
+    const index = img && img.dataset.glassIndex;
+    if (index == null) return;
+    const map = document.querySelector("#eod-glass-water-" + index + " feDisplacementMap");
+    if (!map) return;
+
+    if (wrap._eodRippleFrame) cancelAnimationFrame(wrap._eodRippleFrame);
+    const from = parseFloat(map.getAttribute("scale")) || 0;
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min((now - start) / RIPPLE_MS, 1);
+      const value = from + (to - from) * easeOutCubic(t);
+      map.setAttribute("scale", value.toFixed(2));
+      if (t < 1) {
+        wrap._eodRippleFrame = requestAnimationFrame(tick);
+      } else {
+        wrap._eodRippleFrame = null;
+      }
+    }
+    wrap._eodRippleFrame = requestAnimationFrame(tick);
+  }
+
+  grid.addEventListener("mouseover", (e) => {
+    const wrap = e.target.closest(".eod-projects__photo-wrap");
+    if (!wrap || wrap.contains(e.relatedTarget)) return;
+    animateRippleScale(wrap, RIPPLE_SCALE);
+  });
+  grid.addEventListener("mouseout", (e) => {
+    const wrap = e.target.closest(".eod-projects__photo-wrap");
+    if (!wrap || wrap.contains(e.relatedTarget)) return;
+    animateRippleScale(wrap, 0);
+  });
 })();
