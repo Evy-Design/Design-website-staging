@@ -1016,13 +1016,17 @@ body.eod-is-scrolling .eod-btn {
   animation: eod-root-out 0.4s cubic-bezier(0.4, 0, 1, 1) both;
 }
 ::view-transition-new(root) {
-  /* Delayed until the hero image's own 0.6s move (below) has actually
-     finished landing (Evy: "pas wanneer de hero image op zijn nieuwe
-     plek staat mogen de andere elementen in animeren") — everything
-     else on the new page arrives only once that's done, not
-     alongside it. */
+  /* Delayed until the hero image has actually finished landing —
+     which itself now only starts once every OUT element below has
+     finished leaving (Evy: "pas wanneer de hero image op zijn nieuwe
+     plek staat mogen de andere elementen in animeren", then "ook
+     andersom... pas wanneer de andere elementen zijn uitgeanimeerd...
+     mag de image gaan verplaatsen"). Three beats in sequence: OUT
+     (0 to ~0.85s, see eod-out-heading/eod-out-card-N) -> hero move
+     (0.85s to 1.45s, see ::view-transition-group(*) below) -> IN
+     (from 1.45s, here and project.html's hero-top/title-row). */
   animation: eod-root-in 0.45s cubic-bezier(0, 0, 0.2, 1) both;
-  animation-delay: 0.6s;
+  animation-delay: 1.45s;
 }
 /* The projects-grid heading and each card's caption leave in their
    own staggered cascade rather than as part of that flat root group
@@ -1048,6 +1052,16 @@ body.eod-is-scrolling .eod-btn {
 ::view-transition-group(*) {
   animation-duration: 0.6s;
   animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  /* Waits for the OUT cascade below to actually finish first (last
+     card caption finishes at 0.49s delay + 0.35s duration = 0.84s;
+     0.85s gives it a hair of breathing room) — Evy: "pas wanneer de
+     andere elementen zijn uitgeanimeerd... mag de image gaan
+     verplaatsen". Applies to every non-root named group, but in
+     practice only the clicked hero photo actually MOVES — an
+     unmatched (exit-only) card image has no new-page position to
+     interpolate toward, so this delay is a no-op for those; they're
+     already handled by their own image-pair blur/crossfade instead. */
+  animation-delay: 0.85s;
 }
 /* A project's hero image isn't always the same photo as its grid
    cover (Evy: "sommige hero-afbeeldingen zijn anders dan de overview
