@@ -320,6 +320,28 @@
     window.addEventListener('resize', function () {
       requestAnimationFrame(checkBackground);
     });
+    // The very first checkBackground() call above runs at
+    // DOMContentLoaded — content.js has set real src attributes on
+    // hero images/videos by then (it's a blocking script that runs
+    // earlier in document order), but the browser hasn't necessarily
+    // finished DOWNLOADING/decoding those pixels yet. sampleLightStats
+    // silently fails on a not-yet-loaded image (falls back to an
+    // ancestor's plain background-color, which is often just the
+    // page's own white), and nothing re-checked afterward — so the
+    // nav could get stuck reading a section as "light" (logo stays
+    // white per the header's own default) even once a genuinely dark
+    // photo had actually finished loading right underneath it (Evy:
+    // "soms staat het logo op wit terwijl de achtergrond licht is").
+    // 'load'/'loadeddata' don't bubble, so this has to listen on the
+    // capture phase to catch them site-wide instead of wiring a
+    // listener to every individual hero image/video by hand.
+    document.addEventListener('load', function (e) {
+      var tag = e.target && e.target.tagName;
+      if (tag === 'IMG' || tag === 'VIDEO') requestAnimationFrame(checkBackground);
+    }, true);
+    document.addEventListener('loadeddata', function (e) {
+      requestAnimationFrame(checkBackground);
+    }, true);
   }
 
   function initFixedUnderlayNavigation(mainEl) {
