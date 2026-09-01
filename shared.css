@@ -1089,11 +1089,37 @@ body.eod-is-scrolling .eod-btn {
     filter: blur(0);
   }
 }
+/* Bug: this used to run its own short 0.22s timeline starting at
+   t=0 — fine back when the group itself also started moving at t=0,
+   but once the group's move got pushed to start at 0.85s (above),
+   the photo crossfade (this blur, AND the browser's own default
+   old/new fade — see the wildcard rule below) kept firing at t=0
+   regardless, fully swapping to the new photo circa t=0.25s and then
+   just sitting there, static, for another 0.6s before the group
+   finally started moving. That's exactly what read as "2
+   verschillende images" / "even wit tussendoor" (Evy) — the swap
+   and the move need to happen in the SAME window, not one after the
+   other. Now matches the group's own 0.85s delay + 0.6s duration
+   exactly. */
 ::view-transition-image-pair(*) {
   animation-name: eod-hero-swap-blur;
-  animation-duration: 0.22s;
+  animation-duration: 0.6s;
+  animation-delay: 0.85s;
   animation-timing-function: ease-out;
 }
 ::view-transition-image-pair(root) {
   animation-name: none;
+}
+/* The actual old-photo-fades-out/new-photo-fades-in crossfade is a
+   browser default animation on these two (not something with its
+   own @keyframes here) — same fix, same reasoning: without an
+   explicit duration/delay it runs on the UA's own short default
+   timeline starting at t=0, out of sync with the group's move. The
+   exact-name ::view-transition-old(root)/new(root) rules elsewhere
+   in this file are more specific than this wildcard and keep their
+   own timing untouched. */
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 0.6s;
+  animation-delay: 0.85s;
 }
