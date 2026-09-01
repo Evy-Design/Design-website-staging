@@ -165,6 +165,25 @@ window.EOD_CONTENT = (function () {
             // below.
             '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" data-glass-index="' + Math.min(i, 11) + '" style="view-transition-name: eod-hero-' + item.slug + '; filter: url(#eod-glass-water-' + Math.min(i, 11) + ')" />' +
             '<span class="eod-projects__glass" aria-hidden="true"></span>' +
+            // Three expanding glass rings, staggered (projects.css) —
+            // grown from the static ring pattern that used to live in
+            // .eod-projects__glass's own background (Evy: "make the
+            // rings move from the inside to the outside like they
+            // become bigger"). Each one is its own backdrop-filter
+            // blur clipped to a ring shape via mask-image, not just a
+            // flat-coloured line — that's what makes the band itself
+            // read as glass, and what makes it visibly bend/brighten
+            // whatever part of the photo it's currently sweeping over
+            // as it expands (Evy: "let the glass effect interact with
+            // the image because it moves").
+            // Inline animation-delay per ring (not e.g. a :nth-of-type
+            // CSS selector) so the stagger doesn't silently break if
+            // another span ever gets added/reordered among these —
+            // it's explicit right here instead of implied by sibling
+            // position.
+            '<span class="eod-projects__ring" style="animation-delay: 0s" aria-hidden="true"></span>' +
+            '<span class="eod-projects__ring" style="animation-delay: 0.7s" aria-hidden="true"></span>' +
+            '<span class="eod-projects__ring" style="animation-delay: 1.4s" aria-hidden="true"></span>' +
             // The card's only title text now (see the render function's
             // own comment above for why) — aria-hidden because the
             // <a>'s own aria-label already carries this for assistive

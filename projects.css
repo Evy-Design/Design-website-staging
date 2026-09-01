@@ -179,15 +179,51 @@
   z-index: 2;
   opacity: 0;
   pointer-events: none;
+  /* The concentric-ring layer that used to live here moved out into
+     its own .eod-projects__ring elements below — a static
+     repeating-gradient can't "become bigger", an actually-expanding
+     element can (Evy: "make the rings move from the inside to the
+     outside like they become bigger"). This is just the glint + cool
+     water glow + dark base tint now. */
   background:
     radial-gradient(circle at var(--eod-glass-x) var(--eod-glass-y), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 18%),
-    repeating-radial-gradient(circle at var(--eod-glass-x) var(--eod-glass-y), rgba(255, 255, 255, 0.32) 0px, rgba(255, 255, 255, 0.32) 1.5px, rgba(255, 255, 255, 0) 1.5px, rgba(255, 255, 255, 0) 15px),
     radial-gradient(circle at var(--eod-glass-x) var(--eod-glass-y), rgba(190, 225, 255, 0.55), rgba(190, 225, 255, 0) 55%),
     linear-gradient(rgba(6, 10, 14, 0.35), rgba(6, 10, 14, 0.68));
-  background-blend-mode: screen, overlay, soft-light, normal;
+  background-blend-mode: screen, soft-light, normal;
   backdrop-filter: blur(7px) saturate(1.4) contrast(1.08);
   -webkit-backdrop-filter: blur(7px) saturate(1.4) contrast(1.08);
   transition: opacity 0.4s ease, --eod-glass-x 0.5s cubic-bezier(0.16, 1, 0.3, 1), --eod-glass-y 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Expanding glass rings (Evy: "make the rings fill and give those
+   fill rings a glass effect. Then make the rings move from the
+   inside to the outside like they become bigger. and let the glas
+   effect this interact with the image because it moves"). Each is a
+   plain circle, but mask-image cuts out its centre so only a filled
+   BAND remains — that band carries its own backdrop-filter, so as it
+   expands across the photo it visibly brightens/blurs whatever it's
+   currently passing over, which is what makes it read as glass
+   actually moving through the image rather than a flat ring drawn on
+   top of it. Positioned at the same --eod-glass-x/-y as everything
+   else, so it originates from wherever the cursor is. Three copies,
+   staggered (below), so a new ring starts as the previous one is
+   partway through expanding, instead of one ring pulsing in isolation. */
+.eod-projects__ring {
+  position: absolute;
+  left: var(--eod-glass-x);
+  top: var(--eod-glass-y);
+  width: 6em;
+  height: 6em;
+  z-index: 3;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset, 0 0 1.2em rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(3px) brightness(1.35) saturate(1.5);
+  -webkit-backdrop-filter: blur(3px) brightness(1.35) saturate(1.5);
+  mask-image: radial-gradient(circle, transparent 62%, black 68%, black 100%);
+  -webkit-mask-image: radial-gradient(circle, transparent 62%, black 68%, black 100%);
 }
 /* A faint, constantly-drifting caustic texture (the rippling light
    pattern you see on a surface under moving water) so the effect
@@ -224,7 +260,7 @@
 .eod-projects__hover-title {
   position: absolute;
   inset: auto 1.25em 1.25em 1.25em;
-  z-index: 3;
+  z-index: 4;
   color: var(--eod-white);
   font-size: 1.2em;
   font-weight: 500;
@@ -246,6 +282,27 @@
   }
   .eod-projects__card:hover .eod-projects__hover-title {
     transform: translateY(0);
+  }
+  /* Only runs while actually hovered — the three rings otherwise just
+     sit at scale(0)/opacity: 0 (their own base rule), not animating
+     in the background on every card at once. animation-delay for each
+     of the three comes from its own inline style (content.js), not
+     from this rule. */
+  .eod-projects__card:hover .eod-projects__ring {
+    animation: eod-ring-expand 2.1s ease-out infinite;
+  }
+}
+@keyframes eod-ring-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0.15);
+    opacity: 0.9;
+  }
+  65% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3.4);
+    opacity: 0;
   }
 }
 .eod-projects__caption {
