@@ -478,6 +478,9 @@
     let ejectedFace = null;
     let glideTimer = null;
     let returnGlideTimer = null;
+    // True for the GLIDE_MS window right after a card is picked — see
+    // the guard on updateEject's call site below for why this exists.
+    let isGliding = false;
 
     function pickCenterCard() {
       let best = null;
@@ -495,13 +498,6 @@
 
     function beginEject() {
       const card = pickCenterCard();
-      console.log("[EOD-DEBUG] beginEject", {
-        t: Math.round(performance.now()),
-        scrollY: window.scrollY,
-        cardsLength: state.cards.length,
-        amount: state.amount,
-        foundCard: !!card,
-      });
       if (!card) return;
 
       // In case this exact card is caught mid glide-back (a fast
@@ -567,9 +563,11 @@
       card.style.transition = `transform ${GLIDE_MS}ms cubic-bezier(0.16, 1, 0.3, 1)`;
       card.style.transform = "translate(-50%, -50%) scale(1)";
 
+      isGliding = true;
       clearTimeout(glideTimer);
       glideTimer = setTimeout(() => {
         if (ejectedItem === card) card.style.transition = "";
+        isGliding = false;
       }, GLIDE_MS);
     }
 
@@ -874,8 +872,18 @@
       // Skipped once landed — the card is position:absolute by then
       // (settle() already gave it its final transform/placement), so
       // this would just keep rewriting the exact same values on every
-      // remaining scroll tick for no visible effect.
-      if (ejectedItem && !isLanded) updateEject(progress);
+      // remaining scroll tick for no visible effect. ALSO skipped
+      // while isGliding — beginEject() just above arms a 600ms
+      // transition to glide the card in from its old orbit position;
+      // updateEject writes transform directly (transition: none, by
+      // design, so scroll tracking stays 1:1 later on) which used to
+      // fire on this exact same tick right after beginEject and kill
+      // that transition before the browser ever painted a single
+      // frame of it — the card just snapped straight to centre
+      // instead of gliding (Evy: "hij springt er best abrupt uit").
+      // Skipping updateEject for the glide's own short window lets it
+      // actually play before scroll-linked scale/rotation take over.
+      if (ejectedItem && !isLanded && !isGliding) updateEject(progress);
       if (ejectedItem && progress >= 1) settle();
       if (ejectedItem && progress < 1) unsettle();
       // Re-arms the idle-debounced hug-resize (see scheduleHugHeight)
