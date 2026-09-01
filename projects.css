@@ -81,6 +81,7 @@
   text-decoration: none;
 }
 .eod-projects__photo-wrap {
+  position: relative;
   display: block;
   aspect-ratio: 4 / 3;
   overflow: hidden;
@@ -97,9 +98,66 @@
      SOME reaction to a hover so they still read as clickable. */
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
+/* Registered so --eod-glass-x/-y can actually TRANSITION (plain custom
+   properties can't interpolate — they just snap) — that smoothed-out
+   catch-up is what makes the highlight read as something with a
+   little weight/viscosity to it chasing the cursor, rather than a
+   spotlight glued exactly to the pointer (Evy: "a cool glass water
+   effect... that it reacts on the mouse movements"). */
+@property --eod-glass-x {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 50%;
+}
+@property --eod-glass-y {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 50%;
+}
+/* Two radial gradients doing two different jobs, both centred on the
+   cursor (script.js's mousemove handler on .eod-projects__grid writes
+   --eod-glass-x/-y in real time): a small bright one for the
+   glass/water "glint" of light catching a curved surface, and a much
+   larger dark one underneath so the photo is genuinely dark enough
+   right where the title sits for white text to read clearly on top of
+   it (Evy: "the water and glass lays over the images but is dark
+   enough so that the title can appear in white on top of it") —
+   backdrop-filter is what gives the glassy blur/refraction quality
+   itself, not just a flat tint. */
+.eod-projects__glass {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at var(--eod-glass-x) var(--eod-glass-y), rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 40%),
+    radial-gradient(circle at var(--eod-glass-x) var(--eod-glass-y), rgba(10, 10, 10, 0.15), rgba(10, 10, 10, 0.65) 75%);
+  backdrop-filter: blur(6px) saturate(1.3);
+  -webkit-backdrop-filter: blur(6px) saturate(1.3);
+  transition: opacity 0.4s ease, --eod-glass-x 0.5s cubic-bezier(0.16, 1, 0.3, 1), --eod-glass-y 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.eod-projects__hover-title {
+  position: absolute;
+  inset: auto 1.25em 1.25em 1.25em;
+  color: var(--eod-white);
+  font-size: 1.2em;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  opacity: 0;
+  transform: translateY(0.6em);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
 @media (hover: hover) and (pointer: fine) {
   .eod-projects__card:hover .eod-projects__photo {
     transform: scale(1.04);
+  }
+  .eod-projects__card:hover .eod-projects__glass,
+  .eod-projects__card:hover .eod-projects__hover-title {
+    opacity: 1;
+  }
+  .eod-projects__card:hover .eod-projects__hover-title {
+    transform: translateY(0);
   }
 }
 .eod-projects__caption {

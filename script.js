@@ -1413,3 +1413,35 @@
     { passive: true }
   );
 })();
+
+/* ===========================================================
+   Projects grid — mouse-reactive glass/water hover (Evy: "a cool
+   glass water effect on the image when you hover over, also that it
+   reacts on the mouse movements"). The actual look (highlight +
+   dark tint + backdrop-filter blur) is CSS (projects.css,
+   .eod-projects__glass) — this just tracks the cursor and writes its
+   position as --eod-glass-x/-y on whichever card it's currently over,
+   as a % of THAT card's own photo, so the highlight is correctly
+   positioned regardless of where the card sits in the grid.
+
+   Delegated on .eod-projects__grid itself, not one listener per card:
+   content.js's renderProjectsGrid() replaces the grid's innerHTML
+   wholesale on every render (e.g. after a Sanity content refresh), so
+   per-card listeners would silently pile up as orphaned duplicates —
+   this survives that because the grid element itself is never
+   replaced, only what's inside it. mousemove (not mouseenter) is what
+   makes it feel reactive rather than just "on/off". */
+(function () {
+  const grid = document.querySelector(".eod-projects__grid");
+  if (!grid) return;
+
+  grid.addEventListener("mousemove", (e) => {
+    const wrap = e.target.closest(".eod-projects__photo-wrap");
+    if (!wrap) return;
+    const rect = wrap.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    wrap.style.setProperty("--eod-glass-x", x + "%");
+    wrap.style.setProperty("--eod-glass-y", y + "%");
+  });
+})();

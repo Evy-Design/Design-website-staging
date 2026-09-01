@@ -169,6 +169,17 @@ window.EOD_CONTENT = (function () {
             // auto" opted into on both pages (shared.css) to fire at
             // all — otherwise this is just an inert style property.
             '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" style="view-transition-name: eod-hero-' + item.slug + '" />' +
+            // Hover-only glass/water overlay + the title again, in
+            // white, sitting on TOP of the photo this time (Evy: "a
+            // cool glass water effect... that it reacts on the mouse
+            // movements... dark enough so the title can appear in
+            // white on top of it"). Both start invisible — see
+            // projects.css's :hover rules. The mousemove listener that
+            // drives --eod-glass-x/-y lives in script.js, delegated on
+            // the grid itself rather than per-card, since this markup
+            // gets rebuilt wholesale on every render.
+            '<span class="eod-projects__glass" aria-hidden="true"></span>' +
+            '<span class="eod-projects__hover-title" aria-hidden="true">' + item.title + "</span>" +
           "</span>" +
           // Own view-transition-name too (index-based, capped —
           // projects.css only defines staggered exit delays up to
