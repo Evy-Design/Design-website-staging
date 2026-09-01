@@ -47,7 +47,14 @@ window.EOD_CONTENT = (function () {
           '<button class="eod-awards__item-header" data-eod-award-toggle aria-expanded="false">' +
             '<span class="eod-awards__item-title">' + award.title + "</span>" +
             '<span class="eod-awards__item-year">' + award.year + "</span>" +
-            '<span class="eod-awards__item-chevron" aria-hidden="true">&#8964;</span>' +
+            // Same glyph as the site's own arrow buttons (e.g. "Go
+            // back" — M26 16H6M26 16L14 8M6 16L14 24), just the two
+            // diagonal strokes rotated to point down instead of left,
+            // with the horizontal shaft dropped (Evy: "take the same
+            // arrow that i use in the button but then only the top so
+            // not the horizontal line in the middle") — a plain
+            // chevron/caret instead of the ⌄ character this replaced.
+            '<span class="eod-awards__item-chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M8 12L16 20L24 12" stroke-width="2" stroke-miterlimit="10"/></svg></span>' +
           "</button>" +
           '<div class="eod-awards__item-body"><p>' + award.body + "</p></div>" +
         "</li>"
