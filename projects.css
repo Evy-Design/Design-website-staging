@@ -122,10 +122,19 @@
   object-fit: cover;
   display: block;
   border-radius: var(--eod-projects-radius);
-  /* A subtle zoom is the only hover feedback left now that the old
-     push-up-to-reveal-the-caption motion is gone — cards still need
-     SOME reaction to a hover so they still read as clickable. */
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  /* The flat scale(1.04)-on-hover this used to have is gone (Evy:
+     "there are some other interactive motion on the image you can
+     remove those") — replaced below by a scale + shift that's driven
+     by --eod-glass-x/-y instead, the same cursor position the rings
+     themselves track, so the photo now reacts to the glass
+     specifically rather than just to "is this card hovered at all"
+     (Evy: "I do want the Image to interact with the circle glass
+     interaction. So that it scales or moves as well"). transition
+     here (not just on .eod-projects__glass) is what makes THIS
+     element's own read of --eod-glass-x/-y ease smoothly too, instead
+     of jumping — each element has to declare it separately for a
+     custom property transition to apply to that element specifically. */
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), --eod-glass-x 0.5s cubic-bezier(0.16, 1, 0.3, 1), --eod-glass-y 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 /* Registered so --eod-glass-x/-y can actually TRANSITION (plain custom
    properties can't interpolate — they just snap) — that smoothed-out
@@ -268,8 +277,20 @@
   pointer-events: none;
 }
 @media (hover: hover) and (pointer: fine) {
+  /* Scales up a touch, AND shifts opposite the cursor's offset from
+     centre (the -0.18 factor) — like the photo is bulging slightly
+     toward whichever side the glass is currently sitting on, a
+     magnifying-glass feel rather than a flat uniform zoom. Percentage
+     translate() is relative to the photo's OWN box, not the cursor
+     position directly, which is why this needs to be centred (- 50%)
+     and scaled down first rather than using --eod-glass-x/-y as-is. */
   .eod-projects__card:hover .eod-projects__photo {
-    transform: scale(1.04);
+    transform:
+      scale(1.06)
+      translate(
+        calc((var(--eod-glass-x, 50%) - 50%) * -0.18),
+        calc((var(--eod-glass-y, 50%) - 50%) * -0.18)
+      );
   }
   .eod-projects__hover-title {
     opacity: 0;
