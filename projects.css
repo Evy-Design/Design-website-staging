@@ -164,6 +164,15 @@
    plain dark tint at the bottom of the stack so the title stays
    readable in white regardless of where the glint currently is.
    background-blend-mode pairs with this list 1:1, top to bottom. */
+/* Concentric rings radiating from the cursor (Evy, referencing
+   https://kool-collective-mast-fw.webflow.io's hero: "you see the
+   circle movements... i miss the glass interactiveness") — that
+   reference is a WebGL shader, out of scope to actually replicate,
+   but the concentric-rings-tracking-the-cursor QUALITY of it is very
+   doable as one more repeating-radial-gradient layer, centred on the
+   same --eod-glass-x/-y as everything else here so the rings genuinely
+   move with the mouse rather than just sitting static under the
+   glint. */
 .eod-projects__glass {
   position: absolute;
   inset: 0;
@@ -172,9 +181,10 @@
   pointer-events: none;
   background:
     radial-gradient(circle at var(--eod-glass-x) var(--eod-glass-y), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 18%),
+    repeating-radial-gradient(circle at var(--eod-glass-x) var(--eod-glass-y), rgba(255, 255, 255, 0.32) 0px, rgba(255, 255, 255, 0.32) 1.5px, rgba(255, 255, 255, 0) 1.5px, rgba(255, 255, 255, 0) 15px),
     radial-gradient(circle at var(--eod-glass-x) var(--eod-glass-y), rgba(190, 225, 255, 0.55), rgba(190, 225, 255, 0) 55%),
     linear-gradient(rgba(6, 10, 14, 0.35), rgba(6, 10, 14, 0.68));
-  background-blend-mode: screen, soft-light, normal;
+  background-blend-mode: screen, overlay, soft-light, normal;
   backdrop-filter: blur(7px) saturate(1.4) contrast(1.08);
   -webkit-backdrop-filter: blur(7px) saturate(1.4) contrast(1.08);
   transition: opacity 0.4s ease, --eod-glass-x 0.5s cubic-bezier(0.16, 1, 0.3, 1), --eod-glass-y 0.5s cubic-bezier(0.16, 1, 0.3, 1);
