@@ -190,8 +190,13 @@
     radial-gradient(circle at var(--eod-glass-x) var(--eod-glass-y), rgba(190, 225, 255, 0.55), rgba(190, 225, 255, 0) 55%),
     linear-gradient(rgba(6, 10, 14, 0.35), rgba(6, 10, 14, 0.68));
   background-blend-mode: screen, soft-light, normal;
-  backdrop-filter: blur(7px) saturate(1.4) contrast(1.08);
-  -webkit-backdrop-filter: blur(7px) saturate(1.4) contrast(1.08);
+  /* backdrop-filter lives in the :hover rule below, not here — with
+     7 cards on the grid, an always-on backdrop-filter across all of
+     them (even at opacity: 0) keeps 28 blur layers permanently
+     composited, which is expensive enough to cause real GPU
+     paint/tiling glitches (blank cards until a forced repaint) on
+     some machines. Scoping it to :hover means only the one card
+     actually being interacted with ever pays that cost. */
   transition: opacity 0.4s ease, --eod-glass-x 0.5s cubic-bezier(0.16, 1, 0.3, 1), --eod-glass-y 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 /* Expanding glass rings (Evy: "make the rings fill and give those
@@ -220,8 +225,9 @@
   opacity: 0;
   background: rgba(255, 255, 255, 0.14);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset, 0 0 1.2em rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(3px) brightness(1.35) saturate(1.5);
-  -webkit-backdrop-filter: blur(3px) brightness(1.35) saturate(1.5);
+  /* backdrop-filter lives in the :hover rule below, same reasoning
+     as .eod-projects__glass above — with 3 rings per card × 7 cards,
+     keeping it here would composite 21 more blur layers at all times. */
   mask-image: radial-gradient(circle, transparent 62%, black 68%, black 100%);
   -webkit-mask-image: radial-gradient(circle, transparent 62%, black 68%, black 100%);
 }
@@ -286,6 +292,10 @@
   .eod-projects__card:hover .eod-projects__hover-title {
     opacity: 1;
   }
+  .eod-projects__card:hover .eod-projects__glass {
+    backdrop-filter: blur(7px) saturate(1.4) contrast(1.08);
+    -webkit-backdrop-filter: blur(7px) saturate(1.4) contrast(1.08);
+  }
   .eod-projects__card:hover .eod-projects__hover-title {
     transform: translateY(0);
   }
@@ -296,6 +306,8 @@
      from this rule. */
   .eod-projects__card:hover .eod-projects__ring {
     animation: eod-ring-expand 2.1s ease-out infinite;
+    backdrop-filter: blur(3px) brightness(1.35) saturate(1.5);
+    -webkit-backdrop-filter: blur(3px) brightness(1.35) saturate(1.5);
   }
 }
 @keyframes eod-ring-expand {
