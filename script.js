@@ -1450,30 +1450,58 @@
   // glass") — a CSS gradient can only ever fake light, not genuine
   // distortion, so this drives each card's own
   // <feDisplacementMap scale> (projects.html) instead. SVG element
-  // attributes don't support CSS transitions, so easing the ripple in
-  // and out is a small hand-rolled rAF tween rather than a CSS one —
-  // wrapPos.animId tracks the in-flight tween per wrap so a fast
-  // in/out/in doesn't leave two competing loops fighting over the
-  // same attribute.
-  const RIPPLE_SCALE = 26;
-  const RIPPLE_MS = 650;
+  // attributes don't support CSS transitions, so this is a small
+  // hand-rolled rAF loop rather than a CSS one.
+  //
+  // Pulses continuously while hovered (not just eased-in-and-held)
+  // — a one-time ease-to-a-constant made the warp read as a static
+  // "hover" state disconnected from the rings, rather than something
+  // the rings themselves were doing (Evy: "ik zie nog niet dat de
+  // image interactive beweegt door de circle glass effect"). Same
+  // period as .eod-projects__ring's own eod-ring-expand animation
+  // (2.1s, projects.css) so the photo's warp visibly breathes in time
+  // with the rings passing through it, instead of two effects running
+  // on unrelated clocks. The separate cursor-position scale/shift this
+  // used to also have is gone — Evy asked for it specifically because
+  // it didn't read as caused by the rings either.
+  const RIPPLE_MIN = 6;
+  const RIPPLE_MAX = 26;
+  const RIPPLE_PERIOD_MS = 2100;
+  const RIPPLE_EXIT_MS = 500;
   function easeOutCubic(t) {
     return 1 - Math.pow(1 - t, 3);
   }
-  function animateRippleScale(wrap, to) {
+  function getDisplacementMap(wrap) {
     const img = wrap.querySelector(".eod-projects__photo");
     const index = img && img.dataset.glassIndex;
-    if (index == null) return;
-    const map = document.querySelector("#eod-glass-water-" + index + " feDisplacementMap");
+    if (index == null) return null;
+    return document.querySelector("#eod-glass-water-" + index + " feDisplacementMap");
+  }
+  function startRipplePulse(wrap) {
+    const map = getDisplacementMap(wrap);
     if (!map) return;
-
     if (wrap._eodRippleFrame) cancelAnimationFrame(wrap._eodRippleFrame);
+    const start = performance.now();
+    function tick(now) {
+      const phase = ((now - start) % RIPPLE_PERIOD_MS) / RIPPLE_PERIOD_MS;
+      const wave = 0.5 - 0.5 * Math.cos(phase * Math.PI * 2);
+      map.setAttribute("scale", (RIPPLE_MIN + (RIPPLE_MAX - RIPPLE_MIN) * wave).toFixed(2));
+      wrap._eodRippleFrame = requestAnimationFrame(tick);
+    }
+    wrap._eodRippleFrame = requestAnimationFrame(tick);
+  }
+  function stopRipplePulse(wrap) {
+    const map = getDisplacementMap(wrap);
+    if (!map) return;
+    if (wrap._eodRippleFrame) {
+      cancelAnimationFrame(wrap._eodRippleFrame);
+      wrap._eodRippleFrame = null;
+    }
     const from = parseFloat(map.getAttribute("scale")) || 0;
     const start = performance.now();
     function tick(now) {
-      const t = Math.min((now - start) / RIPPLE_MS, 1);
-      const value = from + (to - from) * easeOutCubic(t);
-      map.setAttribute("scale", value.toFixed(2));
+      const t = Math.min((now - start) / RIPPLE_EXIT_MS, 1);
+      map.setAttribute("scale", (from * (1 - easeOutCubic(t))).toFixed(2));
       if (t < 1) {
         wrap._eodRippleFrame = requestAnimationFrame(tick);
       } else {
@@ -1486,11 +1514,11 @@
   grid.addEventListener("mouseover", (e) => {
     const wrap = e.target.closest(".eod-projects__photo-wrap");
     if (!wrap || wrap.contains(e.relatedTarget)) return;
-    animateRippleScale(wrap, RIPPLE_SCALE);
+    startRipplePulse(wrap);
   });
   grid.addEventListener("mouseout", (e) => {
     const wrap = e.target.closest(".eod-projects__photo-wrap");
     if (!wrap || wrap.contains(e.relatedTarget)) return;
-    animateRippleScale(wrap, 0);
+    stopRipplePulse(wrap);
   });
 })();

@@ -122,19 +122,10 @@
   object-fit: cover;
   display: block;
   border-radius: var(--eod-projects-radius);
-  /* The flat scale(1.04)-on-hover this used to have is gone (Evy:
-     "there are some other interactive motion on the image you can
-     remove those") — replaced below by a scale + shift that's driven
-     by --eod-glass-x/-y instead, the same cursor position the rings
-     themselves track, so the photo now reacts to the glass
-     specifically rather than just to "is this card hovered at all"
-     (Evy: "I do want the Image to interact with the circle glass
-     interaction. So that it scales or moves as well"). transition
-     here (not just on .eod-projects__glass) is what makes THIS
-     element's own read of --eod-glass-x/-y ease smoothly too, instead
-     of jumping — each element has to declare it separately for a
-     custom property transition to apply to that element specifically. */
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), --eod-glass-x 0.5s cubic-bezier(0.16, 1, 0.3, 1), --eod-glass-y 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  /* No hover transform on the photo itself (see the media query
+     below for why — it went through a couple of iterations). Its own
+     movement now is entirely the feDisplacementMap warp, driven by
+     script.js. */
 }
 /* Registered so --eod-glass-x/-y can actually TRANSITION (plain custom
    properties can't interpolate — they just snap) — that smoothed-out
@@ -277,21 +268,15 @@
   pointer-events: none;
 }
 @media (hover: hover) and (pointer: fine) {
-  /* Scales up a touch, AND shifts opposite the cursor's offset from
-     centre (the -0.18 factor) — like the photo is bulging slightly
-     toward whichever side the glass is currently sitting on, a
-     magnifying-glass feel rather than a flat uniform zoom. Percentage
-     translate() is relative to the photo's OWN box, not the cursor
-     position directly, which is why this needs to be centred (- 50%)
-     and scaled down first rather than using --eod-glass-x/-y as-is. */
-  .eod-projects__card:hover .eod-projects__photo {
-    transform:
-      scale(1.06)
-      translate(
-        calc((var(--eod-glass-x, 50%) - 50%) * -0.18),
-        calc((var(--eod-glass-y, 50%) - 50%) * -0.18)
-      );
-  }
+  /* No transform here on purpose — this used to also scale/shift the
+     photo based on cursor position, but that ran on its own clock
+     (static once the cursor stopped moving) and didn't visibly relate
+     to the rings themselves (Evy: "deze mag er af... ik zie nog niet
+     dat de image interactive beweegt door de circle glass effect").
+     The photo's only movement now is the pixel-warp itself
+     (feDisplacementMap, driven by script.js) pulsing in time with the
+     rings — genuinely caused by the same animation, not a second
+     effect layered alongside it. */
   .eod-projects__hover-title {
     opacity: 0;
     transform: translateY(0.6em);
