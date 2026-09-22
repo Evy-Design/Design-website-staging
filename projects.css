@@ -86,6 +86,19 @@
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: var(--eod-projects-radius);
+  /* Every hover effect (backdrop-filter blur, the SVG pixel-warp
+     filter, the mask-imaged rings, --eod-glass-x/-y written on every
+     mousemove) lives inside this element. Without paint containment,
+     a heavy repaint triggered by one card's hover state can corrupt
+     the browser's tile cache for OTHER cards too — Evy: "this
+     stubborn blank came as soon as we made the hover-over effects" —
+     cards rendering blank until a hard reload, even though their own
+     DOM/CSS state is completely correct. contain: paint scopes each
+     card's own repainting to its own box, so one card's effects can't
+     leak into a sibling's tile. Both of contain: paint's prerequisites
+     (a non-visible overflow, a non-static position) are already true
+     here regardless. */
+  contain: paint;
 }
 /* A permanent (not hover-gated) scrim behind the title's own corner —
    .eod-projects__hover-title is visible by default now (see its own
