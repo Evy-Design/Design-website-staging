@@ -86,33 +86,16 @@
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: var(--eod-projects-radius);
-  /* Every hover effect (backdrop-filter blur, the SVG pixel-warp
-     filter, the mask-imaged rings, --eod-glass-x/-y written on every
-     mousemove) lives inside this element. Without paint containment,
-     a heavy repaint triggered by one card's hover state can corrupt
-     the browser's tile cache for OTHER cards too — Evy: "this
-     stubborn blank came as soon as we made the hover-over effects" —
-     cards rendering blank until a hard reload, even though their own
-     DOM/CSS state is completely correct. contain: paint scopes each
-     card's own repainting to its own box, so one card's effects can't
-     leak into a sibling's tile. Both of contain: paint's prerequisites
-     (a non-visible overflow, a non-static position) are already true
-     here regardless. */
-  contain: paint;
 }
-/* A permanent (not hover-gated) scrim behind the title's own corner —
-   .eod-projects__hover-title is visible by default now (see its own
-   comment), including on touch, where .eod-projects__glass never
-   shows at all (it's hover-only). Without this, white text would sit
-   directly on whatever the photo's own colour happens to be there —
-   fine on the dark example that prompted this change, illegible on a
-   bright one (e.g. the neon-green cover elsewhere in this grid). The
-   full glass effect still layers on top of this additionally on
-   hover, on devices that can. Scoped to the plain grid specifically
+/* A scrim behind the title's own corner — .eod-projects__hover-title
+   is always visible now. Without this, white text would sit directly
+   on whatever the photo's own colour happens to be there — fine on a
+   dark photo, illegible on a bright one (e.g. the neon-green cover
+   elsewhere in this grid). Scoped to the plain grid specifically
    (.eod-projects__grid), not .eod-projects__photo-wrap generally —
    .eod-project-slider__card reuses that same class for its OWN cards,
-   which still use the always-visible caption below the photo instead
-   of an on-image title, so they have nothing here that needs a scrim
+   which use the always-visible caption below the photo instead of an
+   on-image title, so they have nothing here that needs a scrim
    behind it. */
 .eod-projects__grid .eod-projects__photo-wrap::after {
   content: "";
@@ -124,9 +107,9 @@
   /* A ::after paints after (on top of) its own element's real DOM
      children by default, which would otherwise bury the title text
      under this scrim instead of sitting behind it — explicit
-     stacking order below (this / .eod-projects__glass / the title,
-     lowest to highest) makes the paint order match the visual intent
-     regardless of DOM position. */
+     stacking order below (this / the title, lowest to highest) makes
+     the paint order match the visual intent regardless of DOM
+     position. */
   z-index: 1;
 }
 .eod-projects__photo {
@@ -135,147 +118,18 @@
   object-fit: cover;
   display: block;
   border-radius: var(--eod-projects-radius);
-  /* No hover transform on the photo itself (see the media query
-     below for why — it went through a couple of iterations). Its own
-     movement now is entirely the feDisplacementMap warp, driven by
-     script.js. */
 }
-/* Registered so --eod-glass-x/-y can actually TRANSITION (plain custom
-   properties can't interpolate — they just snap) — that smoothed-out
-   catch-up is what makes the highlight read as something with a
-   little weight/viscosity to it chasing the cursor, rather than a
-   spotlight glued exactly to the pointer (Evy: "a cool glass water
-   effect... that it reacts on the mouse movements"). */
-@property --eod-glass-x {
-  syntax: "<percentage>";
-  inherits: true;
-  initial-value: 50%;
-}
-@property --eod-glass-y {
-  syntax: "<percentage>";
-  inherits: true;
-  initial-value: 50%;
-}
-/* Two radial gradients doing two different jobs, both centred on the
-   cursor (script.js's mousemove handler on .eod-projects__grid writes
-   --eod-glass-x/-y in real time): a small bright one for the
-   glass/water "glint" of light catching a curved surface, and a much
-   larger dark one underneath so the photo is genuinely dark enough
-   right where the title sits for white text to read clearly on top of
-   it (Evy: "the water and glass lays over the images but is dark
-   enough so that the title can appear in white on top of it") —
-   backdrop-filter is what gives the glassy blur/refraction quality
-   itself, not just a flat tint. */
-/* Three background layers, each doing a different part of the
-   "glassy and watery... like you're touching water but the shine of
-   glass" look Evy asked for on a second pass (the actual pixel warp
-   underneath this, in the photo itself, is the SVG filter set up in
-   projects.html + eased by script.js — this overlay is the light/
-   shine half a filter can't fake): a small, sharp, screen-blended
-   glint for the glass reflection; a much softer, cool-tinted,
-   soft-light-blended glow underneath it for a watery diffusion; and a
-   plain dark tint at the bottom of the stack so the title stays
-   readable in white regardless of where the glint currently is.
-   background-blend-mode pairs with this list 1:1, top to bottom. */
-/* Concentric rings radiating from the cursor (Evy, referencing
-   https://kool-collective-mast-fw.webflow.io's hero: "you see the
-   circle movements... i miss the glass interactiveness") — that
-   reference is a WebGL shader, out of scope to actually replicate,
-   but the concentric-rings-tracking-the-cursor QUALITY of it is very
-   doable as one more repeating-radial-gradient layer, centred on the
-   same --eod-glass-x/-y as everything else here so the rings genuinely
-   move with the mouse rather than just sitting static under the
-   glint. */
-.eod-projects__glass {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  opacity: 0;
-  pointer-events: none;
-  /* The concentric-ring layer that used to live here moved out into
-     its own .eod-projects__ring elements below — a static
-     repeating-gradient can't "become bigger", an actually-expanding
-     element can (Evy: "make the rings move from the inside to the
-     outside like they become bigger"). This is just the glint + cool
-     water glow + dark base tint now. */
-  background:
-    radial-gradient(circle at var(--eod-glass-x) var(--eod-glass-y), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 18%),
-    radial-gradient(circle at var(--eod-glass-x) var(--eod-glass-y), rgba(190, 225, 255, 0.55), rgba(190, 225, 255, 0) 55%),
-    linear-gradient(rgba(6, 10, 14, 0.35), rgba(6, 10, 14, 0.68));
-  background-blend-mode: screen, soft-light, normal;
-  /* backdrop-filter lives in the :hover rule below, not here — with
-     7 cards on the grid, an always-on backdrop-filter across all of
-     them (even at opacity: 0) keeps 28 blur layers permanently
-     composited, which is expensive enough to cause real GPU
-     paint/tiling glitches (blank cards until a forced repaint) on
-     some machines. Scoping it to :hover means only the one card
-     actually being interacted with ever pays that cost. */
-  transition: opacity 0.4s ease, --eod-glass-x 0.5s cubic-bezier(0.16, 1, 0.3, 1), --eod-glass-y 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-/* Expanding glass rings (Evy: "make the rings fill and give those
-   fill rings a glass effect. Then make the rings move from the
-   inside to the outside like they become bigger. and let the glas
-   effect this interact with the image because it moves"). Each is a
-   plain circle, but mask-image cuts out its centre so only a filled
-   BAND remains — that band carries its own backdrop-filter, so as it
-   expands across the photo it visibly brightens/blurs whatever it's
-   currently passing over, which is what makes it read as glass
-   actually moving through the image rather than a flat ring drawn on
-   top of it. Positioned at the same --eod-glass-x/-y as everything
-   else, so it originates from wherever the cursor is. Three copies,
-   staggered (below), so a new ring starts as the previous one is
-   partway through expanding, instead of one ring pulsing in isolation. */
-.eod-projects__ring {
-  position: absolute;
-  left: var(--eod-glass-x);
-  top: var(--eod-glass-y);
-  width: 6em;
-  height: 6em;
-  z-index: 3;
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(0);
-  opacity: 0;
-  background: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset, 0 0 1.2em rgba(255, 255, 255, 0.35);
-  /* backdrop-filter lives in the :hover rule below, same reasoning
-     as .eod-projects__glass above — with 3 rings per card × 7 cards,
-     keeping it here would composite 21 more blur layers at all times. */
-  mask-image: radial-gradient(circle, transparent 62%, black 68%, black 100%);
-  -webkit-mask-image: radial-gradient(circle, transparent 62%, black 68%, black 100%);
-}
-/* A faint, constantly-drifting caustic texture (the rippling light
-   pattern you see on a surface under moving water) so the effect
-   still reads as "water" even while the cursor holds still — a
-   repeating gradient slowly panning underneath the cursor-tracked
-   layers above it. */
-.eod-projects__glass::before {
-  content: "";
-  position: absolute;
-  inset: -20%;
-  opacity: 0.35;
-  mix-blend-mode: soft-light;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 60%);
-  background-size: 18% 18%;
-  animation: eod-glass-caustics 7s linear infinite;
-}
-@keyframes eod-glass-caustics {
-  0% {
-    background-position: 0% 0%;
-  }
-  100% {
-    background-position: 22% 34%;
-  }
-}
-/* The card's only title text now (Evy: "remove the text/button now
-   and... replace [it with] the text that is now on top of the
-   image when you hover... but then in white") — visible by default
-   here so touch devices (no :hover to reveal it) still show a title
-   and get a real call-to-action, same reasoning the old always-shown
-   caption existed for in the first place. Only hidden-until-hover on
-   devices that can genuinely hover (media query below) — pointer-
-   events: none throughout either way, since the whole photo/card is
-   already the click target. */
+/* Always-visible title on the photo, in white (Evy: "remove the
+   text/button now and... replace [it with] the text that is now on
+   top of the image... but then in white"). This used to also carry a
+   mouse-reactive "glass water" hover effect — cursor-tracked
+   blur/glint overlay, expanding masked rings, an SVG pixel-warp
+   filter on the photo itself — removed entirely at Evy's request
+   ("you can delete this hover effect because i dont like it
+   anyways"), after it also turned out to be causing real paint-
+   corruption glitches on the grid (cards rendering blank until a
+   reload). The scrim above (.eod-projects__photo-wrap::after) still
+   does the job of keeping this legible against a bright photo. */
 .eod-projects__hover-title {
   position: absolute;
   inset: auto 1.25em 1.25em 1.25em;
@@ -285,56 +139,6 @@
   font-weight: 500;
   letter-spacing: -0.01em;
   pointer-events: none;
-}
-@media (hover: hover) and (pointer: fine) {
-  /* No transform here on purpose — this used to also scale/shift the
-     photo based on cursor position, but that ran on its own clock
-     (static once the cursor stopped moving) and didn't visibly relate
-     to the rings themselves (Evy: "deze mag er af... ik zie nog niet
-     dat de image interactive beweegt door de circle glass effect").
-     The photo's only movement now is the pixel-warp itself
-     (feDisplacementMap, driven by script.js) pulsing in time with the
-     rings — genuinely caused by the same animation, not a second
-     effect layered alongside it. */
-  .eod-projects__hover-title {
-    opacity: 0;
-    transform: translateY(0.6em);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-  .eod-projects__card:hover .eod-projects__glass,
-  .eod-projects__card:hover .eod-projects__hover-title {
-    opacity: 1;
-  }
-  .eod-projects__card:hover .eod-projects__glass {
-    backdrop-filter: blur(7px) saturate(1.4) contrast(1.08);
-    -webkit-backdrop-filter: blur(7px) saturate(1.4) contrast(1.08);
-  }
-  .eod-projects__card:hover .eod-projects__hover-title {
-    transform: translateY(0);
-  }
-  /* Only runs while actually hovered — the three rings otherwise just
-     sit at scale(0)/opacity: 0 (their own base rule), not animating
-     in the background on every card at once. animation-delay for each
-     of the three comes from its own inline style (content.js), not
-     from this rule. */
-  .eod-projects__card:hover .eod-projects__ring {
-    animation: eod-ring-expand 2.1s ease-out infinite;
-    backdrop-filter: blur(3px) brightness(1.35) saturate(1.5);
-    -webkit-backdrop-filter: blur(3px) brightness(1.35) saturate(1.5);
-  }
-}
-@keyframes eod-ring-expand {
-  0% {
-    transform: translate(-50%, -50%) scale(0.15);
-    opacity: 0.9;
-  }
-  65% {
-    opacity: 0.45;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(3.4);
-    opacity: 0;
-  }
 }
 .eod-projects__caption {
   display: flex;

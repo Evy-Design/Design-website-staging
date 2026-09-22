@@ -134,15 +134,16 @@ window.EOD_CONTENT = (function () {
   }
 
   // Projects grid (projects.html, "My work") — each card is its own
-  // fixed-frame link. The title used to sit permanently below the
-  // photo as a secondary-button-styled caption; now it ONLY appears
-  // ON the photo itself, in white, as part of the glass/water hover
-  // (Evy: "remove the text/button now and... replace [it with] the
-  // text that is now on top of the image when you hover... but then
-  // in white" — see .eod-projects__hover-title below and its CSS).
-  // aria-label carries the accessible name instead, since the visible
-  // title text is aria-hidden (a11y detail below) and, on a
-  // hover-capable device, invisible until you're already hovering.
+  // fixed-frame link, title shown on the photo itself in white. This
+  // used to also carry a "glass water" hover effect (cursor-tracked
+  // blur/glint overlay, expanding masked rings, an SVG pixel-warp
+  // filter on the photo) — removed at Evy's request ("you can delete
+  // this hover effect because i dont like it anyways") after it also
+  // turned out to be causing real paint-corruption glitches on the
+  // grid (cards rendering blank until a reload). The title is now
+  // always visible rather than hover-revealed, same as it already was
+  // on touch devices. aria-label still carries the accessible name
+  // since the visible title text stays aria-hidden.
   function renderProjectsGrid() {
     const grid = document.querySelector(".eod-projects__grid");
     if (!grid) return;
@@ -161,50 +162,14 @@ window.EOD_CONTENT = (function () {
             // afbeelding mee... de rest verdwijnt"). Needs "navigation:
             // auto" opted into on both pages (shared.css) to fire at
             // all — otherwise this is just an inert style property.
-            // data-glass-index: which of projects.html's own
-            // <filter id="eod-glass-water-N"> defs this card's actual
-            // pixel-warp (not just the CSS tint/highlight below) uses
-            // — script.js finds it by this index on hover and eases
-            // its feDisplacementMap scale up/down, rather than every
-            // card sharing one filter instance (which would make
-            // hovering one card ripple all of them at once). Capped at
-            // 11, same reasoning/cap as the view-transition indices
-            // below. The actual `filter: url(...)` CSS is applied by
-            // script.js only while hovered, not here — SVG filters like
-            // this one are software-rasterized, so leaving it on every
-            // card's <img> permanently (even at scale 0) was expensive
-            // enough to cause real paint/tiling glitches on the grid.
-            '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" data-glass-index="' + Math.min(i, 11) + '" style="view-transition-name: eod-hero-' + item.slug + '" />' +
-            '<span class="eod-projects__glass" aria-hidden="true"></span>' +
-            // Three expanding glass rings, staggered (projects.css) —
-            // grown from the static ring pattern that used to live in
-            // .eod-projects__glass's own background (Evy: "make the
-            // rings move from the inside to the outside like they
-            // become bigger"). Each one is its own backdrop-filter
-            // blur clipped to a ring shape via mask-image, not just a
-            // flat-coloured line — that's what makes the band itself
-            // read as glass, and what makes it visibly bend/brighten
-            // whatever part of the photo it's currently sweeping over
-            // as it expands (Evy: "let the glass effect interact with
-            // the image because it moves").
-            // Inline animation-delay per ring (not e.g. a :nth-of-type
-            // CSS selector) so the stagger doesn't silently break if
-            // another span ever gets added/reordered among these —
-            // it's explicit right here instead of implied by sibling
-            // position.
-            '<span class="eod-projects__ring" style="animation-delay: 0s" aria-hidden="true"></span>' +
-            '<span class="eod-projects__ring" style="animation-delay: 0.7s" aria-hidden="true"></span>' +
-            '<span class="eod-projects__ring" style="animation-delay: 1.4s" aria-hidden="true"></span>' +
-            // The card's only title text now (see the render function's
-            // own comment above for why) — aria-hidden because the
-            // <a>'s own aria-label already carries this for assistive
-            // tech; this is purely the visual, hover-revealed copy.
-            // Keeps its own view-transition-name (index-based, capped —
-            // projects.css only defines staggered exit delays up to
-            // index 11) so it still leaves the page in its own little
-            // cascade rather than one flat crossfade (Evy: "de overige
-            // elementen... ook 1 voor 1 uit laten animeren") — inherited
-            // from the caption this replaced.
+            '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" style="view-transition-name: eod-hero-' + item.slug + '" />' +
+            // aria-hidden because the <a>'s own aria-label already
+            // carries this for assistive tech. Keeps its own
+            // view-transition-name (index-based, capped — projects.css
+            // only defines staggered exit delays up to index 11) so it
+            // still leaves the page in its own little cascade rather
+            // than one flat crossfade (Evy: "de overige elementen...
+            // ook 1 voor 1 uit laten animeren").
             '<span class="eod-projects__hover-title" aria-hidden="true" style="view-transition-name: eod-out-card-' + Math.min(i, 11) + '">' + item.title + "</span>" +
           "</span>" +
         "</a>"
