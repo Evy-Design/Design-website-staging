@@ -169,8 +169,12 @@ window.EOD_CONTENT = (function () {
             // card sharing one filter instance (which would make
             // hovering one card ripple all of them at once). Capped at
             // 11, same reasoning/cap as the view-transition indices
-            // below.
-            '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" data-glass-index="' + Math.min(i, 11) + '" style="view-transition-name: eod-hero-' + item.slug + '; filter: url(#eod-glass-water-' + Math.min(i, 11) + ')" />' +
+            // below. The actual `filter: url(...)` CSS is applied by
+            // script.js only while hovered, not here — SVG filters like
+            // this one are software-rasterized, so leaving it on every
+            // card's <img> permanently (even at scale 0) was expensive
+            // enough to cause real paint/tiling glitches on the grid.
+            '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" data-glass-index="' + Math.min(i, 11) + '" style="view-transition-name: eod-hero-' + item.slug + '" />' +
             '<span class="eod-projects__glass" aria-hidden="true"></span>' +
             // Three expanding glass rings, staggered (projects.css) —
             // grown from the static ring pattern that used to live in

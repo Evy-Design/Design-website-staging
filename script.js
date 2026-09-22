@@ -1477,9 +1477,16 @@
     if (index == null) return null;
     return document.querySelector("#eod-glass-water-" + index + " feDisplacementMap");
   }
+  function setPhotoFilter(wrap, on) {
+    const img = wrap.querySelector(".eod-projects__photo");
+    const index = img && img.dataset.glassIndex;
+    if (index == null) return;
+    img.style.filter = on ? "url(#eod-glass-water-" + index + ")" : "";
+  }
   function startRipplePulse(wrap) {
     const map = getDisplacementMap(wrap);
     if (!map) return;
+    setPhotoFilter(wrap, true);
     if (wrap._eodRippleFrame) cancelAnimationFrame(wrap._eodRippleFrame);
     const start = performance.now();
     function tick(now) {
@@ -1506,6 +1513,7 @@
         wrap._eodRippleFrame = requestAnimationFrame(tick);
       } else {
         wrap._eodRippleFrame = null;
+        setPhotoFilter(wrap, false);
       }
     }
     wrap._eodRippleFrame = requestAnimationFrame(tick);
