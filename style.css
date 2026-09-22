@@ -202,14 +202,17 @@
   color: var(--eod-muted);
 }
 @media (max-width: 767px) {
-  /* The stacked title-above/body-below layout below needs more room
-     ABOVE the card than dead-center (50vh) leaves it — the title was
-     landing partly above the top of the screen, cut off (Evy: "op
-     mobile valt deze tekst buiten het frame"). Lower, not higher, so
-     the title gets the extra headroom while the body (which had
-     spare room below it already) gives some up. */
+  /* Card + title + body's shared vertical anchor. 62vh was chosen so
+     the stacked title-above/body-below layout had room above the
+     card — dead-center (50vh) was cutting the title off above the
+     top of the screen (Evy: "op mobile valt deze tekst buiten het
+     frame"). Since then Evy asked to move the card itself higher
+     (Evy: "de card blijft eigenlijk altijd in het midden van het
+     scherm... ik had het alleen over de positie van de card") — 44vh
+     measured out to still leave the title fully on-screen (~35px of
+     margin above it in testing) without reintroducing that cutoff. */
   .eod-hero {
-    --eod-eject-anchor-y: 62vh;
+    --eod-eject-anchor-y: 44vh;
   }
   /* Desktop lays "Have a look" / "at all my work" side by side,
      bookending the card stack. On mobile it crowded the cards for
