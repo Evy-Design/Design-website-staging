@@ -97,6 +97,41 @@
       .join("");
   }
 
+  // Evy: "Er is een laad probleem met de fotos in safari. zorg dat
+  // alles op de homepage al geladen is wanneer je op de homepage
+  // terecht komt" — the tornado's 10 cards (some from a totally
+  // different, cross-origin host, figma.site's own asset CDN — see
+  // EOD_DATA above) used to just start downloading the moment
+  // buildCardMarkup() ran, with nothing hiding them meanwhile: each
+  // photo popped in individually, already mid-spin, whenever its own
+  // bytes happened to arrive — most visible/glitchy in Safari, which
+  // handles a still-decoding image inside a 3D-transformed ancestor
+  // differently than Chrome does. This preloads every unique URL
+  // (browsers dedupe by URL, so this doesn't double-fetch what the
+  // <img> tags already requested) and resolves once they've all
+  // either loaded or failed — one bad URL shouldn't hold up the rest
+  // forever, and neither should a slow connection: a hard timeout
+  // below guarantees the cards reveal eventually either way. See the
+  // .cards-tornado / .is-ready rule (style.css) for the actual
+  // fade-in this gates.
+  const TORNADO_PRELOAD_TIMEOUT_MS = 4000;
+  function preloadTornadoImages() {
+    const urls = [EOD_DATA.portrait, ...EOD_DATA.cards.map((card) => card.src)];
+    const perImage = urls.map(
+      (url) =>
+        new Promise((resolve) => {
+          const img = new Image();
+          img.onload = resolve;
+          img.onerror = resolve;
+          img.src = url;
+        })
+    );
+    return Promise.race([
+      Promise.all(perImage),
+      new Promise((resolve) => setTimeout(resolve, TORNADO_PRELOAD_TIMEOUT_MS)),
+    ]);
+  }
+
   function initHero(hero) {
     // Figma Sites keeps every breakpoint variant of a page in the DOM at
     // once (just toggling visibility with CSS), so this embed can appear
@@ -119,6 +154,10 @@
     const list = tornado.querySelector("[data-3d-tornado-list]");
     const introRow = hero.querySelector(".eod-hero__intro");
     list.innerHTML = buildCardMarkup();
+    // Fires the actual fetches immediately (same tick the <img> tags
+    // above go into the DOM) — .eod-hero.is-ready (style.css) is what
+    // the cards stay invisible behind until this resolves.
+    preloadTornadoImages().then(() => hero.classList.add("is-ready"));
 
     if (typeof gsap === "undefined" || typeof Observer === "undefined") {
       console.error(
