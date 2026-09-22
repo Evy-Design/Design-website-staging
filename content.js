@@ -140,10 +140,16 @@ window.EOD_CONTENT = (function () {
   // filter on the photo) — removed at Evy's request ("you can delete
   // this hover effect because i dont like it anyways") after it also
   // turned out to be causing real paint-corruption glitches on the
-  // grid (cards rendering blank until a reload). The title is now
-  // always visible rather than hover-revealed, same as it already was
-  // on touch devices. aria-label still carries the accessible name
-  // since the visible title text stays aria-hidden.
+  // grid (cards rendering blank until a reload). Replaced with a
+  // deliberately simple hover (Evy: "de hover over bij werk mag best
+  // wel simpel zijn... een donker blure glas gevoel over de image"):
+  // a plain dark blur revealed together with the title on :hover, all
+  // in CSS (projects.css) — no JS driving any of it this time, since
+  // this same photo also animates into the next page on click (the
+  // view-transition to the case study). The title stays always
+  // visible on touch devices (no :hover to reveal it there). aria-
+  // label still carries the accessible name since the visible title
+  // text stays aria-hidden.
   function renderProjectsGrid() {
     const grid = document.querySelector(".eod-projects__grid");
     if (!grid) return;
