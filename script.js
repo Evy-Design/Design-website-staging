@@ -690,9 +690,31 @@
 
     // Only the flip and the grow are still driven by hand — the actual
     // "moves down with the scroll, then stops" part is native CSS
-    // sticky behaviour on the card itself now, not JS. Both are linear
-    // in `progress`, so they run the whole time you're scrolling
-    // through the frame, in step with the scroll — no separate phases.
+    // sticky behaviour on the card itself now, not JS. Both run off
+    // an EASED reading of `progress` (see ejectEase below) the whole
+    // time you're scrolling through the frame, in step with the
+    // scroll — no separate phases, just a curved rather than flat
+    // mapping from how far you've scrolled to how flipped/grown the
+    // card is.
+    //
+    // Evy: "de card die er uit komt... gaat in het begin erg snel
+    // naar zijn plek dit mag veel langzamer en smoother de easing mag
+    // beter" — this used to map progress straight through (scale =
+    // lerp(1, landedScale, progress), rotateY = progress * EJECT_TURNS),
+    // so the very first pixel of scroll produced exactly as much
+    // visible flip/grow as any other — on a trackpad, where a single
+    // flick can cover a big chunk of `progress` in one input, that
+    // read as the card lurching almost fully into place immediately.
+    // power2.in starts near-flat (small scroll = barely any visible
+    // change) and accelerates into the rest of the gesture — same
+    // ease already used for this scroll frame's background colour
+    // crossfade just above, so this isn't a new curve to the codebase,
+    // just applied here too. f(0)=0 and f(1)=1 either way, so
+    // settle()/unsettle()/returnToOrbit()'s own progress<=0/>=1
+    // triggers and the identity/landed transforms they expect at
+    // those exact endpoints are untouched — only the shape in between
+    // changes.
+    const ejectEase = gsap.parseEase("power2.in");
     function updateEject(progress) {
       // beginEject() arms a one-time 600ms transition on `transform`
       // for the pop-in glide (old orbit position -> centred), then
@@ -710,10 +732,11 @@
       // land instantly, matching this function's own original intent
       // (see the comment on the transition line in beginEject).
       ejectedItem.style.transition = "none";
+      const eased = ejectEase(progress);
       const landedScale = 1.2;
-      const scale = lerp(1, landedScale, progress);
+      const scale = lerp(1, landedScale, eased);
       ejectedItem.style.transform = `translate(-50%, -50%) scale(${scale})`;
-      ejectedFace.style.transform = `rotateY(${progress * EJECT_TURNS}deg)`;
+      ejectedFace.style.transform = `rotateY(${eased * EJECT_TURNS}deg)`;
     }
 
     // Scrolling back to the very top drops the card back into the
