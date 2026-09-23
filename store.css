@@ -125,6 +125,7 @@
   align-items: start;
 }
 .eod-store-item__media {
+  position: relative;
   border-radius: var(--eod-projects-radius);
   overflow: hidden;
   background: var(--eod-surface, #f4f4f2);
@@ -144,8 +145,18 @@
   position: sticky;
   top: 8em;
 }
+/* Evy: "Deze button mag verplaatst worden naar links boven de image"
+   — floats over the photo's top-left corner instead of sitting in
+   the text panel, so it needs its own solid backing to stay legible
+   regardless of what's in the photo underneath it. */
 .eod-store-item__back {
-  margin-bottom: 1em;
+  position: absolute;
+  top: 1.25em;
+  left: 1.25em;
+  z-index: 1;
+  padding: 0.6em 1em;
+  background: var(--eod-white);
+  border-radius: 999px;
 }
 .eod-store-item__title {
   margin: 0;

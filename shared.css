@@ -139,11 +139,27 @@ body.eod-is-scrolling .eod-btn {
   display: inline-block;
   isolation: isolate;
   font-size: 0.95em;
+  font-family: inherit;
+  color: inherit;
   text-decoration: none;
+  /* This component was only ever an <a> until the store's "Add to
+     cart" button — a real <button> element pulls in the browser's
+     own default chrome (grey background, outset border, its own
+     padding) unless reset explicitly, which .eod-btn__label's own
+     pill was never meant to sit inside of. Confirmed live: computed
+     style showed "border: 2px outset", "background: rgb(239,239,239)"
+     around the pill — this is that fix. */
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
   /* Reserves room for the white circle beyond the label's own
      content width — without this, the container's auto-width would
      just be the label's width and the right:0 circle below would
-     have nowhere of its own to sit. */
+     have nowhere of its own to sit. padding: 0 first zeroes every
+     side (undoing a <button>'s own default padding), then
+     padding-right below re-adds just this one. */
+  padding: 0;
   padding-right: var(--eod-btn-circle);
 }
 .eod-btn__circle {

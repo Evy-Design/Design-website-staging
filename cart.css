@@ -91,25 +91,31 @@
 .eod-cart__panel * {
   box-sizing: border-box;
 }
+/* No fixed `bottom` — this card sizes to its own content (Evy: "zorg
+   dat er geen scrol balk in zit, als het niet past gaat de tekst naar
+   de volgende regels"), it doesn't stretch to fill the viewport like
+   before. max-height + overflow-y are only a safety net for a cart
+   with enough items to exceed the screen — in ordinary use (a
+   handful of digital products) no scrollbar ever appears. */
 .eod-cart__panel {
   position: fixed;
   top: 1.5em;
   right: 1.5em;
-  bottom: 1.5em;
   z-index: 10001;
   width: var(--menu-width);
   max-width: calc(100vw - 3em);
+  max-height: calc(100vh - 3em);
   background: var(--eod-white);
   color: var(--eod-ink);
   border-radius: var(--eod-radius);
   box-shadow: 0 1.5em 3em rgba(0, 0, 0, 0.3);
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   transform: translateX(calc(100% + 3em));
 }
 .eod-cart__panel-inner {
   display: flex;
   flex-direction: column;
-  height: 100%;
   padding: 2em;
 }
 .eod-cart__panel-header {
@@ -122,19 +128,29 @@
   font-size: 1.4em;
   font-weight: 500;
 }
+/* width/padding sized so the content box is never zero under
+   box-sizing: border-box (see the .eod-cart__panel * rule above) —
+   this used to be 1.5em/0.75em, which under border-box makes the
+   content box exactly 1.5em - 1.5em = 0, collapsing the svg inside
+   to nothing. Same fix as .eod-cart__item-remove below. */
 .eod-cart__close {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1.5em;
-  height: 1.5em;
-  margin: -0.75em;
-  padding: 0.75em;
+  width: 2em;
+  height: 2em;
+  margin: -0.5em;
+  padding: 0.5em;
+  border-radius: 50%;
   background: none;
   border: none;
   outline: none;
   color: inherit;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.eod-cart__close:hover {
+  background: var(--eod-border);
 }
 .eod-cart__close svg {
   width: 100%;
@@ -142,13 +158,11 @@
   stroke: currentColor;
 }
 
-/* ---- Items — this list is the ONLY thing that scrolls (overflow-y +
-   min-height: 0, the actual fix for the bug Evy hit: without
-   min-height: 0 a flex child refuses to shrink below its content's
-   natural height, so a long cart pushed the footer/checkout button
-   below the fold instead of staying pinned — "je niet de button
-   helemaal aan het einden ziet"). Header stays pinned at top, footer
-   pinned at bottom, always fully visible regardless of item count. ---- */
+/* ---- Items — the card sizes to fit this list naturally (see
+   .eod-cart__panel above), no separate inner scroll region anymore.
+   A long title just wraps to another line (min-width: 0 on
+   .eod-cart__item-info below is what lets that flex child shrink
+   enough to wrap instead of forcing the row wider). ---- */
 .eod-cart__items {
   list-style: none;
   margin: 0 0 1.5em;
@@ -156,9 +170,6 @@
   display: flex;
   flex-direction: column;
   gap: 1.25em;
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
 }
 .eod-cart__item {
   display: flex;
@@ -220,16 +231,12 @@
 }
 
 .eod-cart__empty {
-  flex: 1;
-  min-height: 0;
   color: var(--eod-muted);
   font-size: 0.95em;
 }
 
-/* ---- Footer (total + checkout) — pinned below the scrollable items
-   list, never pushed off-panel (see .eod-cart__items above). ---- */
+/* ---- Footer (total + checkout) ---- */
 .eod-cart__footer {
-  flex: none;
   border-top: 1px solid var(--eod-border);
   padding-top: 1.5em;
   display: flex;
@@ -276,7 +283,7 @@
   .eod-cart__panel {
     top: 1em;
     right: 1em;
-    bottom: 1em;
+    max-height: calc(100vh - 2em);
     width: calc(100vw - 2em);
   }
   .eod-cart__panel-inner {
