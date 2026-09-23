@@ -57,26 +57,29 @@
   line-height: 1;
 }
 
-/* ---- Overlay ---- */
+/* ---- Overlay — dark backdrop + the SAME border/corner accent frame
+   as the nav menu's own overlay (underlay-nav__borders, reused as
+   literal classes in chrome.js's markup; the visual rules for those
+   already live in test-navigation.css, loaded on every page, so
+   nothing to redeclare here). Opacity/visibility below are just the
+   pre-JS fallback state — cart.js's GSAP timeline drives the real
+   open/close (Evy: "de card mag uitklappen net zoals de
+   navigation"). ---- */
 .eod-cart__overlay {
   position: fixed;
   inset: 0;
   z-index: 10000;
   background: rgba(10, 10, 10, 0.4);
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-.eod-cart__overlay.is-open {
-  opacity: 1;
-  pointer-events: auto;
 }
 
 /* ---- Panel — same slide-from-the-side language as the nav menu
    (test-navigation.css's .underlay-nav__menu: fixed, right: 0, same
-   --menu-width), just its own plain CSS transition instead of being
-   wired into the nav's own GSAP timeline (Evy: "this can be very
-   simple"). ---- */
+   --menu-width). transform below is just the pre-JS fallback closed
+   position — cart.js's GSAP timeline (same custom "energy" ease the
+   nav registers) drives the real slide. ---- */
 .eod-cart__panel {
   position: fixed;
   top: 0;
@@ -88,10 +91,6 @@
   background: var(--eod-white);
   color: var(--eod-ink);
   transform: translateX(100%);
-  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
-}
-.eod-cart__panel.is-open {
-  transform: translateX(0);
 }
 .eod-cart__panel-inner {
   display: flex;

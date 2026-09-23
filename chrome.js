@@ -153,11 +153,16 @@ window.EOD_CHROME = (function () {
         // wired into the nav menu's own GSAP timeline above (Evy:
         // "this can be very simple it will open the same as the
         // navigation so from the side but then you see your card item
-        // en a check out button and a crose to close it" — same
-        // VISUAL language, simpler mechanism: cart.js just toggles
-        // .is-open and a plain CSS transform transition does the
-        // rest, see cart.css). Markup/content itself (items, total)
-        // is filled in by cart.js, not here.
+        // en a check out button and a crose to close it" — Evy's
+        // later feedback: "de card mag uitklappen net zoals de
+        // navigation", so cart.js now drives this panel with its own
+        // GSAP timeline (same "energy" custom ease test-navigation.js
+        // registers, same corner/border accent frame it uses, reused
+        // literally via those same underlay-nav__* classes below —
+        // no need to redeclare that CSS, test-navigation.css already
+        // applies it everywhere) instead of a plain CSS transition.
+        // Markup/content itself (items, total) is filled in by
+        // cart.js, not here.
         '<div data-eod-cart-panel class="eod-cart__panel" aria-hidden="true">' +
           '<div class="eod-cart__panel-inner">' +
             '<div class="eod-cart__panel-header">' +
@@ -181,7 +186,18 @@ window.EOD_CHROME = (function () {
             "</div>" +
           "</div>" +
         "</div>" +
-        '<div data-eod-cart-overlay class="eod-cart__overlay"></div>' +
+        '<div data-eod-cart-overlay class="eod-cart__overlay">' +
+          '<div class="underlay-nav__borders">' +
+            '<div class="underlay-nav__border-row">' +
+              '<div class="underlay-nav__border"></div>' +
+              '<div class="underlay-nav__corner"></div>' +
+            "</div>" +
+            '<div class="underlay-nav__border-row">' +
+              '<div class="underlay-nav__corner is--bottom"></div>' +
+              '<div class="underlay-nav__border"></div>' +
+            "</div>" +
+          "</div>" +
+        "</div>" +
       "</div>"
     );
   }

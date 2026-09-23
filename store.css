@@ -106,17 +106,79 @@
   }
 }
 
-/* ---- Product detail (store-item.html) ----
-   .eod-project__body-right (projects.css) already lays out a
-   description + one more block below it (deliverables, there) — this
-   is that same slot, just with price + Add to cart instead. */
-.eod-store-item__buy {
+/* ---- Product detail (store-item.html) — own two-column hero
+   (image left, buy panel right), matching benditomockup.com's product
+   page (Evy: "De layout van wanneer je op een item heb geklikt mag
+   zijn zoals https://benditomockup.com/store/..."). Below this,
+   store-item.html goes back to reusing projects.css's own
+   .eod-project__gallery-section/.eod-project__nav wholesale — only
+   this hero is store-specific. */
+.eod-store-item__hero {
+  padding: 8em 2em 0;
+}
+.eod-store-item__hero-inner {
+  max-width: var(--eod-content-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 4em;
+  align-items: start;
+}
+.eod-store-item__media {
+  border-radius: var(--eod-projects-radius);
+  overflow: hidden;
+  background: var(--eod-surface, #f4f4f2);
+}
+.eod-store-item__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.eod-store-item__panel {
   display: flex;
-  align-items: center;
-  gap: 1.5em;
-  margin-top: 1.5em;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25em;
+  padding-top: 0.5em;
+  position: sticky;
+  top: 8em;
+}
+.eod-store-item__back {
+  margin-bottom: 1em;
+}
+.eod-store-item__title {
+  margin: 0;
+  font-size: clamp(1.8em, 2.4vw, 2.4em);
+  font-weight: 400;
+  letter-spacing: -0.02em;
 }
 .eod-store-item__price {
   font-size: 1.3em;
   font-weight: 500;
+  color: var(--eod-muted);
+}
+.eod-store-item__description {
+  margin: 0;
+  color: var(--eod-muted);
+  line-height: 1.5;
+}
+.eod-store-item__add {
+  margin-top: 0.75em;
+}
+
+@media (max-width: 900px) {
+  .eod-store-item__hero-inner {
+    grid-template-columns: 1fr;
+    gap: 2em;
+  }
+  .eod-store-item__panel {
+    position: static;
+  }
+}
+
+@media (max-width: 767px) {
+  .eod-store-item__hero {
+    padding: 6em 1.25em 0;
+  }
 }

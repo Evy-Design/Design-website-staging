@@ -478,11 +478,11 @@ window.EOD_CONTENT = (function () {
     const item = items.find(function (p) { return p.slug === slug; }) || items[0];
     if (!item) return;
 
-    const heroImgEl = document.querySelector(".eod-project__hero-img");
-    if (heroImgEl) heroImgEl.src = item.cover;
-
-    const heroTitleEl = document.querySelector(".eod-project__hero-title");
-    if (heroTitleEl) heroTitleEl.textContent = item.title;
+    const heroImgEl = document.querySelector(".eod-store-item__image");
+    if (heroImgEl) {
+      heroImgEl.src = item.cover;
+      heroImgEl.alt = item.alt || item.title;
+    }
 
     const gallery = document.querySelector(".eod-project__gallery");
     if (gallery) {
@@ -490,11 +490,11 @@ window.EOD_CONTENT = (function () {
       gallery.hidden = !item.gallery || !item.gallery.length;
     }
 
-    const titleEl = document.querySelector(".eod-project__title");
+    const titleEl = document.querySelector(".eod-store-item__title");
     if (titleEl) titleEl.textContent = item.title;
     document.title = "Evy Diepenbroek — " + item.title;
 
-    const descEl = document.querySelector(".eod-project__description");
+    const descEl = document.querySelector(".eod-store-item__description");
     if (descEl) descEl.textContent = item.shortDescription || "";
 
     const priceEl = document.querySelector(".eod-store-item__price");

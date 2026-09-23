@@ -79,24 +79,106 @@ window.EOD_CART = (function () {
     return "€" + (Math.round(n * 100) / 100).toString().replace(".", ",");
   }
 
-  function openPanel() {
+  // Cart "unfold" — Evy: "de card mag uitklappen net zoals de
+  // navigation". Built the same way test-navigation.js builds the nav
+  // menu's own timeline (enter segment, addPause(), then an appended
+  // exit segment played forward instead of a separate reverse
+  // timeline) — see that file's initFixedUnderlayNavigation() for the
+  // original this is modeled on. Reuses the SAME custom "energy" ease
+  // test-navigation.js registers (it always runs first, see cart.js's
+  // own header) and the SAME border/corner accent markup (chrome.js),
+  // just applied to the cart's own overlay + panel instead of pushing
+  // the page like the nav does — a checkout panel shouldn't shove the
+  // rest of the page sideways regardless of scroll position.
+  var cartTl = null;
+  var cartEnterEndTime = 0;
+  var cartIsOpen = false;
+
+  function buildCartTimeline() {
     var panel = document.querySelector("[data-eod-cart-panel]");
     var overlay = document.querySelector("[data-eod-cart-overlay]");
+    if (!panel || !overlay || typeof gsap === "undefined") return null;
+
+    var corners = overlay.querySelectorAll(".underlay-nav__corner");
+    var borderRows = overlay.querySelectorAll(".underlay-nav__border-row");
+    var getPanelOffset = function () { return panel.offsetWidth; };
+    var hasEnergyEase = typeof CustomEase !== "undefined" && CustomEase.get("energy");
+
+    gsap.set(overlay, { visibility: "hidden", pointerEvents: "none", opacity: 0 });
+    gsap.set(panel, { x: getPanelOffset });
+    gsap.set(corners, { scale: 0 });
+    if (borderRows[0]) gsap.set(borderRows[0], { yPercent: -100 });
+    if (borderRows[1]) gsap.set(borderRows[1], { yPercent: 100 });
+
+    var tl = gsap.timeline({
+      paused: true,
+      defaults: { ease: hasEnergyEase ? "energy" : "power3.inOut" },
+    });
+
+    tl.set(overlay, { visibility: "visible", pointerEvents: "auto" }, 0)
+      .to(overlay, { opacity: 1, duration: 0.5 }, 0)
+      .to(panel, { x: 0, duration: 0.7 }, 0)
+      .to(corners, { scale: 1, duration: 0.5 }, 0);
+    if (borderRows.length) tl.to(borderRows, { yPercent: 0, duration: 0.5 }, 0);
+
+    cartEnterEndTime = tl.duration();
+    tl.addPause();
+
+    tl.to(panel, { x: getPanelOffset, duration: 0.6 }, "<")
+      .to(overlay, { opacity: 0, duration: 0.35, ease: "power2.inOut" }, "<")
+      .to(corners, { scale: 0, duration: 0.5 }, "<");
+    if (borderRows[0]) tl.to(borderRows[0], { yPercent: -100, duration: 0.5 }, "<");
+    if (borderRows[1]) tl.to(borderRows[1], { yPercent: 100, duration: 0.5 }, "<");
+    tl.set(overlay, { visibility: "hidden", pointerEvents: "none" });
+
+    return tl;
+  }
+
+  // Staggers in whatever .eod-cart__item rows are currently in the
+  // list — called after render() rebuilds that list's innerHTML
+  // while the panel is open (both right after opening, and when an
+  // item is added/removed while it's already open), so line items
+  // never just flash into place.
+  function revealItems() {
+    if (typeof gsap === "undefined") return;
+    var items = document.querySelectorAll(".eod-cart__item");
+    if (!items.length) return;
+    gsap.fromTo(
+      items,
+      { autoAlpha: 0, xPercent: 12 },
+      { autoAlpha: 1, xPercent: 0, duration: 0.5, stagger: 0.06, ease: "power3.out" }
+    );
+  }
+
+  function openPanel() {
+    var panel = document.querySelector("[data-eod-cart-panel]");
     if (!panel) return;
-    panel.classList.add("is-open");
+    if (!cartTl) cartTl = buildCartTimeline();
+    cartIsOpen = true;
     panel.setAttribute("aria-hidden", "false");
-    if (overlay) overlay.classList.add("is-open");
     document.body.classList.add("eod-cart-is-open");
+    if (cartTl) {
+      cartTl.invalidate();
+      if (cartTl.time() >= cartEnterEndTime) cartTl.timeScale(1).restart();
+      else cartTl.timeScale(1).play();
+    } else {
+      panel.style.transform = "translateX(0)";
+    }
+    revealItems();
   }
 
   function closePanel() {
     var panel = document.querySelector("[data-eod-cart-panel]");
-    var overlay = document.querySelector("[data-eod-cart-overlay]");
     if (!panel) return;
-    panel.classList.remove("is-open");
+    cartIsOpen = false;
     panel.setAttribute("aria-hidden", "true");
-    if (overlay) overlay.classList.remove("is-open");
     document.body.classList.remove("eod-cart-is-open");
+    if (cartTl) {
+      if (cartTl.time() < cartEnterEndTime) cartTl.timeScale(1).reverse();
+      else cartTl.timeScale(1).play();
+    } else {
+      panel.style.transform = "translateX(100%)";
+    }
   }
 
   function render() {
@@ -136,6 +218,11 @@ window.EOD_CART = (function () {
 
     var checkoutBtn = document.querySelector("[data-eod-cart-checkout]");
     if (checkoutBtn) checkoutBtn.setAttribute("aria-disabled", items.length === 0 ? "true" : "false");
+
+    // Adding an item while the panel is already open (e.g. from a
+    // product page) rebuilds this list too — reveal it the same way
+    // openPanel() does, instead of the new row just appearing flat.
+    if (cartIsOpen) revealItems();
   }
 
   function checkout() {
@@ -171,7 +258,27 @@ window.EOD_CART = (function () {
       var removeBtn = e.target.closest("[data-eod-cart-remove]");
       if (removeBtn) {
         e.preventDefault();
-        removeItem(removeBtn.getAttribute("data-eod-cart-remove"));
+        var slug = removeBtn.getAttribute("data-eod-cart-remove");
+        var row = removeBtn.closest(".eod-cart__item");
+        // Animate the row out before the list re-renders, so removing
+        // an item is obviously working (Evy: "Ook moet je items
+        // kunnen verwijderen") instead of an instant, easy-to-miss
+        // DOM swap.
+        if (row && typeof gsap !== "undefined") {
+          removeBtn.disabled = true;
+          gsap.to(row, {
+            autoAlpha: 0,
+            height: 0,
+            marginBottom: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
+            duration: 0.3,
+            ease: "power2.inOut",
+            onComplete: function () { removeItem(slug); },
+          });
+        } else {
+          removeItem(slug);
+        }
         return;
       }
       if (e.target.closest("[data-eod-cart-checkout]")) {
