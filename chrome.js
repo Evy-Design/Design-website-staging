@@ -149,20 +149,19 @@ window.EOD_CHROME = (function () {
             "</div>" +
           "</div>" +
         "</div>" +
-        // Cart side panel — deliberately its own small slide-in, not
-        // wired into the nav menu's own GSAP timeline above (Evy:
-        // "this can be very simple it will open the same as the
-        // navigation so from the side but then you see your card item
-        // en a check out button and a crose to close it" — Evy's
-        // later feedback: "de card mag uitklappen net zoals de
-        // navigation", so cart.js now drives this panel with its own
-        // GSAP timeline (same "energy" custom ease test-navigation.js
-        // registers, same corner/border accent frame it uses, reused
-        // literally via those same underlay-nav__* classes below —
-        // no need to redeclare that CSS, test-navigation.css already
-        // applies it everywhere) instead of a plain CSS transition.
-        // Markup/content itself (items, total) is filled in by
-        // cart.js, not here.
+        // Cart side panel — a floating card inset from every edge
+        // (Evy: "de layout graag willen zoals hier:
+        // osmo-product-hotspot-modal.webflow.io... met een padding
+        // tussen alle kanten"), no longer flush to the screen edge,
+        // so the nav menu's own border/corner accent frame (which
+        // only makes sense for a flush edge reveal) is gone — just a
+        // plain dark backdrop behind it now. Still opens with the
+        // nav's own "energy" GSAP ease (cart.js), just retargeted to
+        // this card's geometry. Checkout is a plain primary button
+        // now, not the circle-icon-swap .eod-btn--dark treatment
+        // (Evy: "deze gewoon een primary button mag zijn"). Markup/
+        // content itself (items, total) is filled in by cart.js, not
+        // here.
         '<div data-eod-cart-panel class="eod-cart__panel" aria-hidden="true">' +
           '<div class="eod-cart__panel-inner">' +
             '<div class="eod-cart__panel-header">' +
@@ -178,26 +177,11 @@ window.EOD_CHROME = (function () {
                 '<span>Total</span>' +
                 '<span data-eod-cart-total>€0</span>' +
               "</div>" +
-              '<a data-eod-cart-checkout href="#" class="eod-btn eod-btn--dark eod-cart__checkout">' +
-                '<span class="eod-btn__label">Check out</span>' +
-                '<span class="eod-btn__circle eod-btn__circle--accent" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>' +
-                '<span class="eod-btn__circle eod-btn__circle--white" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>' +
-              "</a>" +
+              '<a data-eod-cart-checkout href="#" class="eod-cart__checkout">Check out</a>' +
             "</div>" +
           "</div>" +
         "</div>" +
-        '<div data-eod-cart-overlay class="eod-cart__overlay">' +
-          '<div class="underlay-nav__borders">' +
-            '<div class="underlay-nav__border-row">' +
-              '<div class="underlay-nav__border"></div>' +
-              '<div class="underlay-nav__corner"></div>' +
-            "</div>" +
-            '<div class="underlay-nav__border-row">' +
-              '<div class="underlay-nav__corner is--bottom"></div>' +
-              '<div class="underlay-nav__border"></div>' +
-            "</div>" +
-          "</div>" +
-        "</div>" +
+        '<div data-eod-cart-overlay class="eod-cart__overlay"></div>' +
       "</div>"
     );
   }

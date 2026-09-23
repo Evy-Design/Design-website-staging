@@ -86,10 +86,13 @@ window.EOD_CART = (function () {
   // timeline) — see that file's initFixedUnderlayNavigation() for the
   // original this is modeled on. Reuses the SAME custom "energy" ease
   // test-navigation.js registers (it always runs first, see cart.js's
-  // own header) and the SAME border/corner accent markup (chrome.js),
-  // just applied to the cart's own overlay + panel instead of pushing
-  // the page like the nav does — a checkout panel shouldn't shove the
-  // rest of the page sideways regardless of scroll position.
+  // own header), just applied to the cart's own overlay + floating
+  // panel (see cart.css) instead of pushing the page like the nav
+  // does — a checkout panel shouldn't shove the rest of the page
+  // sideways regardless of scroll position. No border/corner accent
+  // frame here (that was built for a flush edge-to-edge reveal, which
+  // stopped applying once the panel became an inset floating card —
+  // Evy: "de layout... zoals... met een padding tussen alle kanten").
   var cartTl = null;
   var cartEnterEndTime = 0;
   var cartIsOpen = false;
@@ -99,16 +102,17 @@ window.EOD_CART = (function () {
     var overlay = document.querySelector("[data-eod-cart-overlay]");
     if (!panel || !overlay || typeof gsap === "undefined") return null;
 
-    var corners = overlay.querySelectorAll(".underlay-nav__corner");
-    var borderRows = overlay.querySelectorAll(".underlay-nav__border-row");
-    var getPanelOffset = function () { return panel.offsetWidth; };
+    // Panel no longer sits flush against the viewport edge (it has
+    // its own `right` inset now, see cart.css) — offsetWidth alone
+    // would only push it flush with the edge, not past it, so this
+    // adds that inset back plus a safety buffer.
+    var getPanelOffset = function () {
+      return panel.offsetWidth + (parseFloat(getComputedStyle(panel).right) || 0) + 40;
+    };
     var hasEnergyEase = typeof CustomEase !== "undefined" && CustomEase.get("energy");
 
     gsap.set(overlay, { visibility: "hidden", pointerEvents: "none", opacity: 0 });
     gsap.set(panel, { x: getPanelOffset });
-    gsap.set(corners, { scale: 0 });
-    if (borderRows[0]) gsap.set(borderRows[0], { yPercent: -100 });
-    if (borderRows[1]) gsap.set(borderRows[1], { yPercent: 100 });
 
     var tl = gsap.timeline({
       paused: true,
@@ -117,19 +121,14 @@ window.EOD_CART = (function () {
 
     tl.set(overlay, { visibility: "visible", pointerEvents: "auto" }, 0)
       .to(overlay, { opacity: 1, duration: 0.5 }, 0)
-      .to(panel, { x: 0, duration: 0.7 }, 0)
-      .to(corners, { scale: 1, duration: 0.5 }, 0);
-    if (borderRows.length) tl.to(borderRows, { yPercent: 0, duration: 0.5 }, 0);
+      .to(panel, { x: 0, duration: 0.7 }, 0);
 
     cartEnterEndTime = tl.duration();
     tl.addPause();
 
     tl.to(panel, { x: getPanelOffset, duration: 0.6 }, "<")
       .to(overlay, { opacity: 0, duration: 0.35, ease: "power2.inOut" }, "<")
-      .to(corners, { scale: 0, duration: 0.5 }, "<");
-    if (borderRows[0]) tl.to(borderRows[0], { yPercent: -100, duration: 0.5 }, "<");
-    if (borderRows[1]) tl.to(borderRows[1], { yPercent: 100, duration: 0.5 }, "<");
-    tl.set(overlay, { visibility: "hidden", pointerEvents: "none" });
+      .set(overlay, { visibility: "hidden", pointerEvents: "none" });
 
     return tl;
   }

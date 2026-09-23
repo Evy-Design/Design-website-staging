@@ -57,14 +57,10 @@
   line-height: 1;
 }
 
-/* ---- Overlay — dark backdrop + the SAME border/corner accent frame
-   as the nav menu's own overlay (underlay-nav__borders, reused as
-   literal classes in chrome.js's markup; the visual rules for those
-   already live in test-navigation.css, loaded on every page, so
-   nothing to redeclare here). Opacity/visibility below are just the
-   pre-JS fallback state — cart.js's GSAP timeline drives the real
-   open/close (Evy: "de card mag uitklappen net zoals de
-   navigation"). ---- */
+/* ---- Overlay — plain dark backdrop behind the floating card below.
+   Opacity/visibility here are just the pre-JS fallback state —
+   cart.js's GSAP timeline (same custom "energy" ease the nav
+   registers) drives the real fade. ---- */
 .eod-cart__overlay {
   position: fixed;
   inset: 0;
@@ -75,29 +71,46 @@
   pointer-events: none;
 }
 
-/* ---- Panel — same slide-from-the-side language as the nav menu
-   (test-navigation.css's .underlay-nav__menu: fixed, right: 0, same
-   --menu-width). transform below is just the pre-JS fallback closed
-   position — cart.js's GSAP timeline (same custom "energy" ease the
-   nav registers) drives the real slide. ---- */
+/* ---- Panel — a floating card inset from every edge of the viewport
+   (Evy: "de layout graag willen zoals hier:
+   osmo-product-hotspot-modal.webflow.io... met een padding tussen
+   alle kanten"), not a flush edge-to-edge drawer like before — hence
+   rounded on all four corners now (--eod-radius, same token every
+   other rounded element on the site uses) instead of just sliding
+   off the raw screen edge. transform below is just the pre-JS
+   fallback closed position — cart.js's GSAP timeline drives the real
+   slide (same "energy" ease as the nav menu). ---- */
+/* This panel/overlay subtree lives OUTSIDE .eod-page (chrome.js
+   injects it as a sibling of <main>, not inside it), so it misses
+   shared.css's ".eod-page * { box-sizing: border-box }" reset — found
+   the hard way: .eod-cart__panel-inner's height: 100% + padding: 2em
+   was adding that padding ON TOP of 100%, overflowing the panel's own
+   height by exactly the padding amount and clipping the footer/
+   checkout button below the fold. */
+.eod-cart__panel,
+.eod-cart__panel * {
+  box-sizing: border-box;
+}
 .eod-cart__panel {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  top: 1.5em;
+  right: 1.5em;
+  bottom: 1.5em;
   z-index: 10001;
   width: var(--menu-width);
-  max-width: 100vw;
+  max-width: calc(100vw - 3em);
   background: var(--eod-white);
   color: var(--eod-ink);
-  transform: translateX(100%);
+  border-radius: var(--eod-radius);
+  box-shadow: 0 1.5em 3em rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  transform: translateX(calc(100% + 3em));
 }
 .eod-cart__panel-inner {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 2.5em 2em 2em;
-  overflow: auto;
+  padding: 2em;
 }
 .eod-cart__panel-header {
   display: flex;
@@ -129,7 +142,13 @@
   stroke: currentColor;
 }
 
-/* ---- Items ---- */
+/* ---- Items — this list is the ONLY thing that scrolls (overflow-y +
+   min-height: 0, the actual fix for the bug Evy hit: without
+   min-height: 0 a flex child refuses to shrink below its content's
+   natural height, so a long cart pushed the footer/checkout button
+   below the fold instead of staying pinned — "je niet de button
+   helemaal aan het einden ziet"). Header stays pinned at top, footer
+   pinned at bottom, always fully visible regardless of item count. ---- */
 .eod-cart__items {
   list-style: none;
   margin: 0 0 1.5em;
@@ -138,6 +157,8 @@
   flex-direction: column;
   gap: 1.25em;
   flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 .eod-cart__item {
   display: flex;
@@ -166,20 +187,27 @@
   font-size: 0.85em;
   color: var(--eod-muted);
 }
+/* Evy: "hier wil ik dat je items ook kan verwijderen met een simple
+   kruisje aan de rechter kant" — a real circular tap target (2em, was
+   1.1em) with its own hover state, not a bare 16px icon squeezed
+   against the card's edge — that's what made it easy to miss/hard to
+   hit before. */
 .eod-cart__item-remove {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1.1em;
-  height: 1.1em;
-  margin: -0.6em;
-  padding: 0.6em;
+  width: 2em;
+  height: 2em;
+  padding: 0.55em;
+  margin: -0.5em -0.5em -0.5em 0;
+  border-radius: 50%;
   background: none;
   border: none;
   outline: none;
   color: var(--eod-muted);
   cursor: pointer;
   flex: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 .eod-cart__item-remove svg {
   width: 100%;
@@ -188,16 +216,20 @@
 }
 .eod-cart__item-remove:hover {
   color: var(--eod-ink);
+  background: var(--eod-border);
 }
 
 .eod-cart__empty {
   flex: 1;
+  min-height: 0;
   color: var(--eod-muted);
   font-size: 0.95em;
 }
 
-/* ---- Footer (total + checkout) ---- */
+/* ---- Footer (total + checkout) — pinned below the scrollable items
+   list, never pushed off-panel (see .eod-cart__items above). ---- */
 .eod-cart__footer {
+  flex: none;
   border-top: 1px solid var(--eod-border);
   padding-top: 1.5em;
   display: flex;
@@ -211,6 +243,30 @@
   font-size: 1.1em;
   font-weight: 500;
 }
+
+/* Evy: "deze gewoon een primary button mag zijn" — a plain solid
+   button, not the site's usual circle-icon-swap .eod-btn--dark
+   treatment (that's built for nav-style CTAs, overkill here). */
+.eod-cart__checkout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1em 1.5em;
+  background: var(--eod-ink);
+  color: var(--eod-white);
+  border: none;
+  border-radius: var(--eod-radius);
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.eod-cart__checkout:hover {
+  opacity: 0.85;
+}
 .eod-cart__checkout[aria-disabled="true"] {
   pointer-events: none;
   opacity: 0.4;
@@ -218,7 +274,10 @@
 
 @media (max-width: 767px) {
   .eod-cart__panel {
-    width: 80vw;
+    top: 1em;
+    right: 1em;
+    bottom: 1em;
+    width: calc(100vw - 2em);
   }
   .eod-cart__panel-inner {
     padding: 1.5em 1.25em;
