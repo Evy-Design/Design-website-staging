@@ -319,8 +319,20 @@
       state.cards = Array.from(list.querySelectorAll("[data-3d-tornado-item]"));
     }
 
-    function getEdgeScale(y) {
-      const containerHalfHeight = tornado.offsetHeight * 0.5;
+    // containerHalfHeight takes a param rather than reading
+    // tornado.offsetHeight itself (Evy: "Op safari loopt die soms een
+    // beetje vast en haapert die soms, op chrome niet") — this used to
+    // read it fresh on every call, and render() calls this once per
+    // card, up to 70 times a frame. tornado's own height never changes
+    // mid-render(), but each card's gsap.set() right after this call
+    // writes transform/filter styles that invalidate layout — so the
+    // NEXT card's offsetHeight read had to force a real synchronous
+    // layout recalculation to answer, then invalidated it again for
+    // the card after that: classic read/write layout thrashing, up to
+    // 70 forced reflows a frame. Chrome's pipeline is forgiving enough
+    // that this mostly went unnoticed; Safari's isn't. Callers now
+    // measure it ONCE (outside their own loop) and pass it in.
+    function getEdgeScale(y, containerHalfHeight) {
       const edgeOffsetDistance = state.cardHeight * edgeOffset;
       const fadeDistance = state.cardHeight * edgeScale;
       const distanceFromCenter = Math.abs(y);
@@ -337,6 +349,7 @@
 
     function render() {
       const radius = orbitDepth * state.em;
+      const containerHalfHeight = tornado.offsetHeight * 0.5; // measured once, not per-card — see getEdgeScale's own comment
 
       state.cards.forEach((card) => {
         if (card === ejectedItem || card === returningItem) return; // scroll (or the glide back) owns this one right now
@@ -347,7 +360,7 @@
         const center = 1 - Math.min(Math.abs(index) / (state.amount * 0.5), 1);
         const y = index * state.cardGap;
         const baseScale = minScale + center * (1 - minScale);
-        const scale = baseScale * getEdgeScale(y);
+        const scale = baseScale * getEdgeScale(y, containerHalfHeight);
         const backAmount = clamp((1 - Math.cos(angleRad)) * 0.5, 0, 1);
         const brightness = 1 - backAmount * backDarkness;
         const blur = backAmount * backBlur;
@@ -788,7 +801,7 @@
       const center = 1 - Math.min(Math.abs(index) / (state.amount * 0.5), 1);
       const y = index * state.cardGap;
       const baseScale = minScale + center * (1 - minScale);
-      const targetScale = baseScale * getEdgeScale(y);
+      const targetScale = baseScale * getEdgeScale(y, tornado.offsetHeight * 0.5);
       const backAmount = clamp((1 - Math.cos(angleRad)) * 0.5, 0, 1);
       const brightness = 1 - backAmount * backDarkness;
       const blur = backAmount * backBlur;
