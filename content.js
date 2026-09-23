@@ -23,6 +23,7 @@
 window.EOD_CONTENT = (function () {
   var settings = {};
   var projects = [];
+  var products = [];
   try {
     settings = window.EOD_SANITY.getSiteSettings() || {};
   } catch (err) {
@@ -33,7 +34,12 @@ window.EOD_CONTENT = (function () {
   } catch (err) {
     console.error("Failed to load projects from Sanity", err);
   }
-  return {settings: settings, projects: projects};
+  try {
+    products = window.EOD_SANITY.getProducts() || [];
+  } catch (err) {
+    console.error("Failed to load products from Sanity", err);
+  }
+  return {settings: settings, projects: projects, products: products};
 })();
 
 (function () {
@@ -209,6 +215,95 @@ window.EOD_CONTENT = (function () {
       ? '<video' + cls + ' src="' + m.url + '" autoplay muted loop playsinline></video>'
       : '<img' + cls + ' src="' + m.url + '" alt="" />';
   }
+
+  // Shared by both a project's AND a product's "view more" gallery —
+  // Evy: "use the same layout block that i use in the cases as a view
+  // more... make sure this is a block so if i change this layout
+  // somehwere it changes everywhere." One function, one set of CSS
+  // classes (.eod-project__gallery-row etc., defined in projects.css)
+  // used by both project.html and store-item.html — a class name
+  // change or new block type here applies to both automatically,
+  // nothing to keep in sync by hand. See renderProjectDetail's own
+  // gallery-rendering comment (now here) for what each block type is.
+  //
+  // Each gallery entry is { type: "full", src: [one] },
+  // { type: "pair", src: [two] }, { type: "text", heading, body },
+  // or { type: "video", video: one } — see Sanity's `galleryBlock`
+  // schema for why (the source design flows full/pair/pair/full/…,
+  // not a uniform grid). A "pair" just renders its 2 images as
+  // siblings inside one row div; CSS (projects.css) handles the
+  // 50/50 split. "sectionText" and "introText" are both a left-
+  // heading/right-body two-column block (same markup, same
+  // heading/body fields in Sanity) but styled differently:
+  // sectionText is a standalone block with even spacing above and
+  // below; introText leads straight into the media block right
+  // after it, so its own bottom spacing is deliberately tighter —
+  // see projects.css's .eod-project__gallery-row--intro-text (Evy's
+  // new Figma layout: "i sometimes put text in between to explain
+  // the photos that come after it, thats why the padding onder te
+  // text is shorter"). A "video" row is sized/rounded exactly like
+  // a "full" image but with a black backdrop and the video
+  // centred/contained inside it, not cropped — for a
+  // portrait/vertical recording that object-fit: cover would
+  // otherwise crop awkwardly.
+  function renderGalleryBlocks(blocks) {
+    return (blocks || []).map(function (block) {
+      if (block.type === "sectionText" || block.type === "introText") {
+        const rowModifier = block.type === "introText" ? "intro-text" : "text";
+        return '<div class="eod-project__gallery-row eod-project__gallery-row--' + rowModifier + '">' +
+          '<h2 class="eod-project__gallery-text-heading">' + block.heading + "</h2>" +
+          '<p class="eod-project__gallery-text-body">' + block.body + "</p>" +
+        "</div>";
+      }
+      if (block.type === "video") {
+        return '<div class="eod-project__gallery-row eod-project__gallery-row--video">' +
+          '<div class="eod-project__gallery-video">' +
+            '<video src="' + block.video + '" controls playsinline></video>' +
+          "</div>" +
+        "</div>";
+      }
+      if (block.type === "process") {
+        // Evy's new Figma layout (node …6871): a bordered card,
+        // badge + heading + body on the left, whatever media goes
+        // with it (images OR a video — Sanity's own galleryBlock
+        // schema keeps these mutually exclusive for this type) on
+        // the right. Media is optional; the card still works
+        // text-only if a project's process has none.
+        const images = block.src || [];
+        let media = "";
+        let mediaModifier = "";
+        if (block.video) {
+          media = '<video src="' + block.video + '" autoplay muted loop playsinline></video>';
+        } else if (images.length > 1) {
+          // More than 1 photo: stack them instead of showing just
+          // the first, and the text column goes sticky (CSS) so it
+          // stays in view while you scroll through the stack rather
+          // than scrolling away after the first photo's height
+          // (Evy: "als ze meer dan 1 foto toevoegen... dat de tekst
+          // links sticky is").
+          mediaModifier = " is--stacked";
+          media = images.map(function (item) {
+            return mediaTag(item);
+          }).join("");
+        } else if (images[0]) {
+          media = mediaTag(images[0]);
+        }
+        return '<div class="eod-project__process">' +
+          '<div class="eod-project__process-text">' +
+            (block.badgeLabel ? '<span class="eod-project__process-badge">' + block.badgeLabel + '</span>' : "") +
+            '<h2 class="eod-project__process-heading">' + block.heading + '</h2>' +
+            '<p class="eod-project__process-body">' + block.body + '</p>' +
+          '</div>' +
+          (media ? '<div class="eod-project__process-media' + mediaModifier + '">' + media + '</div>' : '') +
+        '</div>';
+      }
+      const imgs = (block.src || []).map(function (item) {
+        return mediaTag(item, "eod-project__gallery-img");
+      }).join("");
+      return '<div class="eod-project__gallery-row eod-project__gallery-row--' + block.type + '">' + imgs + "</div>";
+    }).join("");
+  }
+
   function renderProjectDetail() {
     const root = document.querySelector("[data-eod-project-detail]");
     if (!root) return;
@@ -279,83 +374,11 @@ window.EOD_CONTENT = (function () {
       if (hasWebsite) websiteBtn.href = item.websiteUrl;
     }
 
-    // Each gallery entry is { type: "full", src: [one] },
-    // { type: "pair", src: [two] }, { type: "text", heading, body },
-    // or { type: "video", video: one } — see Sanity's `galleryBlock`
-    // schema for why (the source design flows full/pair/pair/full/…,
-    // not a uniform grid). A "pair" just renders its 2 images as
-    // siblings inside one row div; CSS (projects.css) handles the
-    // 50/50 split. "sectionText" and "introText" are both a left-
-    // heading/right-body two-column block (same markup, same
-    // heading/body fields in Sanity) but styled differently:
-    // sectionText is a standalone block with even spacing above and
-    // below; introText leads straight into the media block right
-    // after it, so its own bottom spacing is deliberately tighter —
-    // see projects.css's .eod-project__gallery-row--intro-text (Evy's
-    // new Figma layout: "i sometimes put text in between to explain
-    // the photos that come after it, thats why the padding onder te
-    // text is shorter"). A "video" row is sized/rounded exactly like
-    // a "full" image but with a black backdrop and the video
-    // centred/contained inside it, not cropped — for a
-    // portrait/vertical recording that object-fit: cover would
-    // otherwise crop awkwardly.
+    // See renderGalleryBlocks (above renderProjectDetail) for what
+    // each block type renders — shared with the store's product page.
     const gallery = document.querySelector(".eod-project__gallery");
     if (gallery) {
-      gallery.innerHTML = (item.gallery || []).map(function (block) {
-        if (block.type === "sectionText" || block.type === "introText") {
-          const rowModifier = block.type === "introText" ? "intro-text" : "text";
-          return '<div class="eod-project__gallery-row eod-project__gallery-row--' + rowModifier + '">' +
-            '<h2 class="eod-project__gallery-text-heading">' + block.heading + "</h2>" +
-            '<p class="eod-project__gallery-text-body">' + block.body + "</p>" +
-          "</div>";
-        }
-        if (block.type === "video") {
-          return '<div class="eod-project__gallery-row eod-project__gallery-row--video">' +
-            '<div class="eod-project__gallery-video">' +
-              '<video src="' + block.video + '" controls playsinline></video>' +
-            "</div>" +
-          "</div>";
-        }
-        if (block.type === "process") {
-          // Evy's new Figma layout (node …6871): a bordered card,
-          // badge + heading + body on the left, whatever media goes
-          // with it (images OR a video — Sanity's own galleryBlock
-          // schema keeps these mutually exclusive for this type) on
-          // the right. Media is optional; the card still works
-          // text-only if a project's process has none.
-          const images = block.src || [];
-          let media = "";
-          let mediaModifier = "";
-          if (block.video) {
-            media = '<video src="' + block.video + '" autoplay muted loop playsinline></video>';
-          } else if (images.length > 1) {
-            // More than 1 photo: stack them instead of showing just
-            // the first, and the text column goes sticky (CSS) so it
-            // stays in view while you scroll through the stack rather
-            // than scrolling away after the first photo's height
-            // (Evy: "als ze meer dan 1 foto toevoegen... dat de tekst
-            // links sticky is").
-            mediaModifier = " is--stacked";
-            media = images.map(function (item) {
-              return mediaTag(item);
-            }).join("");
-          } else if (images[0]) {
-            media = mediaTag(images[0]);
-          }
-          return '<div class="eod-project__process">' +
-            '<div class="eod-project__process-text">' +
-              (block.badgeLabel ? '<span class="eod-project__process-badge">' + block.badgeLabel + '</span>' : "") +
-              '<h2 class="eod-project__process-heading">' + block.heading + '</h2>' +
-              '<p class="eod-project__process-body">' + block.body + '</p>' +
-            '</div>' +
-            (media ? '<div class="eod-project__process-media' + mediaModifier + '">' + media + '</div>' : '') +
-          '</div>';
-        }
-        const imgs = (block.src || []).map(function (item) {
-          return mediaTag(item, "eod-project__gallery-img");
-        }).join("");
-        return '<div class="eod-project__gallery-row eod-project__gallery-row--' + block.type + '">' + imgs + "</div>";
-      }).join("");
+      gallery.innerHTML = renderGalleryBlocks(item.gallery);
       gallery.hidden = !item.gallery || !item.gallery.length;
     }
 
@@ -384,6 +407,110 @@ window.EOD_CONTENT = (function () {
     // project-slider.js, not here — it needs the DOM fully settled
     // (clones, a drag proxy) before the slider math can run, which
     // doesn't fit this function's plain render-and-done shape.
+  }
+
+  // Store grid (store.html) — Evy: "I also want to add a store items
+  // on my website, I like the store of the-brandidentity.com/store."
+  // Simpler card than a project's own (no hover-reveal glass, no
+  // shared-element transition into the detail page) — image, then
+  // title/price plainly below it, always visible, matching that
+  // reference. data-category on each card is what initStoreFilters()
+  // (below) shows/hides against.
+  function renderStoreGrid() {
+    const grid = document.querySelector(".eod-store__grid");
+    if (!grid) return;
+    const items = window.EOD_CONTENT.products;
+
+    grid.innerHTML = items.map(function (item, i) {
+      return (
+        '<li>' +
+          '<a href="store-item?slug=' + item.slug + '" class="eod-store__card" data-eod-store-category="' + item.category + '" data-eod-reveal data-eod-reveal-delay="' + (i % 4) + '">' +
+            '<span class="eod-projects__photo-wrap">' +
+              '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" />' +
+            "</span>" +
+            '<span class="eod-store__info">' +
+              '<span>' +
+                '<span class="eod-store__title">' + item.title + "</span>" +
+                '<span class="eod-store__category">' + item.category + "</span>" +
+              "</span>" +
+              '<span class="eod-store__price">€' + item.price + "</span>" +
+            "</span>" +
+          "</a>" +
+        "</li>"
+      );
+    }).join("");
+  }
+
+  // Category filter row (store.html) — every card already lives in
+  // the DOM (renderStoreGrid above); this just toggles [hidden] on
+  // whichever ones don't match the active filter rather than
+  // re-fetching or re-rendering anything.
+  function initStoreFilters() {
+    const filtersEl = document.querySelector("[data-eod-store-filters]");
+    if (!filtersEl) return;
+    filtersEl.addEventListener("click", function (e) {
+      const btn = e.target.closest("[data-eod-store-filter]");
+      if (!btn) return;
+      const filter = btn.getAttribute("data-eod-store-filter");
+      filtersEl.querySelectorAll("[data-eod-store-filter]").forEach(function (b) {
+        b.classList.toggle("is-active", b === btn);
+      });
+      document.querySelectorAll("[data-eod-store-category]").forEach(function (card) {
+        const li = card.closest("li");
+        const show = filter === "all" || card.getAttribute("data-eod-store-category") === filter;
+        if (li) li.hidden = !show;
+      });
+    });
+  }
+
+  // Product detail (store-item.html) — one shared template for every
+  // product, exact same pattern as renderProjectDetail() above,
+  // reusing the same .eod-project__hero/.eod-project__body markup
+  // (projects.css) and the same renderGalleryBlocks() for its
+  // gallery. No shared-element view-transition morph from the grid
+  // here (see store-item.html's own comment) — just price + an Add
+  // to cart button wired to cart.js via data attributes.
+  function renderStoreDetail() {
+    const root = document.querySelector("[data-eod-store-item-detail]");
+    if (!root) return;
+    const slug = new URLSearchParams(window.location.search).get("slug");
+    const items = window.EOD_CONTENT.products;
+    const item = items.find(function (p) { return p.slug === slug; }) || items[0];
+    if (!item) return;
+
+    const heroImgEl = document.querySelector(".eod-project__hero-img");
+    if (heroImgEl) heroImgEl.src = item.cover;
+
+    const heroTitleEl = document.querySelector(".eod-project__hero-title");
+    if (heroTitleEl) heroTitleEl.textContent = item.title;
+
+    const gallery = document.querySelector(".eod-project__gallery");
+    if (gallery) {
+      gallery.innerHTML = renderGalleryBlocks(item.gallery);
+      gallery.hidden = !item.gallery || !item.gallery.length;
+    }
+
+    const titleEl = document.querySelector(".eod-project__title");
+    if (titleEl) titleEl.textContent = item.title;
+    document.title = "Evy Diepenbroek — " + item.title;
+
+    const descEl = document.querySelector(".eod-project__description");
+    if (descEl) descEl.textContent = item.shortDescription || "";
+
+    const priceEl = document.querySelector(".eod-store-item__price");
+    if (priceEl) priceEl.textContent = "€" + item.price;
+
+    const addBtn = document.querySelector("[data-eod-add-to-cart]");
+    if (addBtn) {
+      addBtn.setAttribute("data-slug", item.slug);
+      addBtn.setAttribute("data-title", item.title);
+      addBtn.setAttribute("data-price", item.price);
+      addBtn.setAttribute("data-image", item.cover);
+      // Whether item.buyUrl is set yet (it isn't, pending the
+      // Gumroad/Lemon Squeezy account) doesn't matter here — adding
+      // to the cart always works, that only becomes relevant at
+      // actual checkout time (cart.js).
+    }
   }
 
   // Static per-page copy (home hero, about hero, contact intro) that
@@ -459,4 +586,7 @@ window.EOD_CONTENT = (function () {
   renderTimeline();
   renderProjectsGrid();
   renderProjectDetail();
+  renderStoreGrid();
+  initStoreFilters();
+  renderStoreDetail();
 })();

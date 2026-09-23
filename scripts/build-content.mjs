@@ -53,6 +53,18 @@ const PROJECTS_QUERY = `*[_type == "project"] | order(order asc){
   gallery[]{type, "src": images[]{"url": asset->url, "isVideo": _type == "video"}, heading, body, badgeLabel, "video": video.asset->url}
 }`;
 
+// Same gallery projection as PROJECTS_QUERY above, on purpose — the
+// store's product page reuses the exact same galleryBlock schema and
+// renderGalleryBlocks() frontend function as a project's "view more"
+// (Evy: "use the same layout block that i use in the cases... so if i
+// change this layout somewhere it changes everywhere").
+const PRODUCTS_QUERY = `*[_type == "product"] | order(order asc){
+  "slug": slug.current, title, category, price,
+  "cover": cover.asset->url,
+  alt, shortDescription, buyUrl,
+  gallery[]{type, "src": images[]{"url": asset->url, "isVideo": _type == "video"}, heading, body, badgeLabel, "video": video.asset->url}
+}`;
+
 function queryUrl(groq) {
   return (
     `https://${PROJECT_ID}.apicdn.sanity.io/v${API_VERSION}/data/query/${DATASET}` +
@@ -67,9 +79,10 @@ async function runQuery(groq) {
   return result;
 }
 
-const [site, projects] = await Promise.all([
+const [site, projects, products] = await Promise.all([
   runQuery(SITE_QUERY),
   runQuery(PROJECTS_QUERY),
+  runQuery(PRODUCTS_QUERY),
 ]);
 
 const home = site.home || {};
@@ -101,6 +114,6 @@ const settings = {
 const fs = await import("node:fs/promises");
 const path = await import("node:path");
 const outPath = path.join(import.meta.dirname, "..", "content.json");
-await fs.writeFile(outPath, JSON.stringify({settings, projects}, null, 2));
+await fs.writeFile(outPath, JSON.stringify({settings, projects, products}, null, 2));
 
 console.log(`Wrote ${outPath}`);

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Evy Diepenbroek — Product</title>
+  <link rel="stylesheet" href="shared.css?v=22" />
+  <link rel="stylesheet" href="test-navigation.css?v=13" />
+  <link rel="stylesheet" href="projects.css?v=57" />
+  <link rel="stylesheet" href="store.css?v=1" />
+  <link rel="stylesheet" href="cart.css?v=1" />
+  <style>body { margin: 0; }</style>
+  <!-- Must load before the nav/footer injector scripts below, which
+       call window.EOD_CHROME synchronously as the HTML is parsed. -->
+  <script src="chrome.js?v=5"></script>
+</head>
+<body>
+
+  <!-- Nav — single source of truth is chrome.js (EOD_CHROME.nav()),
+       not this file. -->
+  <script>document.currentScript.insertAdjacentHTML("beforebegin", EOD_CHROME.nav());</script>
+
+  <main class="eod-page" data-eod-store-item-detail>
+    <!-- Everything below is rendered by content.js's renderStoreDetail()
+         from window.EOD_CONTENT.products, picking the entry via ?slug=
+         in the URL — one shared template for every product, same
+         pattern as project.html for a case study.
+
+         Hero/body/gallery below reuse project.html's own classes
+         wholesale (projects.css) — Evy: "use the same layout block
+         that i use in the cases as a view more... so if i change this
+         layout somewhere it changes everywhere." No shared-element
+         view-transition morph from the store grid here (that's
+         specific to the projects flow) — this page's own entrance
+         just uses the same plain [data-eod-reveal] fade+rise as
+         About/Contact. -->
+    <section class="eod-project__hero">
+      <div class="eod-project__hero-top" data-eod-reveal>
+        <a href="store" class="eod-btn eod-btn--secondary eod-btn--icon-lead eod-project__back">
+          <span class="eod-btn__secondary-viewport">
+            <span class="eod-btn__secondary-track">
+              <span class="eod-btn__arrow-slot eod-btn__arrow-slot--front" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M26 16H6M6 16L14 8M6 16L14 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
+              <span class="eod-btn__label">Go back</span>
+              <span class="eod-btn__arrow-slot eod-btn__arrow-slot--back" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M26 16H6M6 16L14 8M6 16L14 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
+            </span>
+          </span>
+        </a>
+      </div>
+      <div class="eod-project__hero-title-row" data-eod-reveal data-eod-reveal-delay="1">
+        <h1 class="eod-project__hero-title"></h1>
+      </div>
+      <img class="eod-project__hero-img" alt="" />
+    </section>
+
+    <!-- Title (left) / description + price + Add to cart (right) —
+         same split as a project's own title/description column,
+         projects.css's .eod-project__body-right just gets a
+         store-specific block (store.css) instead of deliverables. -->
+    <section class="eod-project__body">
+      <div class="eod-project__body-inner">
+        <h2 class="eod-project__title"></h2>
+        <div class="eod-project__body-right">
+          <p class="eod-project__description"></p>
+          <div class="eod-store-item__buy">
+            <span class="eod-store-item__price"></span>
+            <button data-eod-add-to-cart data-slug="" data-title="" data-price="" data-image="" class="eod-btn eod-btn--dark">
+              <span class="eod-btn__label">Add to cart</span>
+              <span class="eod-btn__circle eod-btn__circle--accent" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
+              <span class="eod-btn__circle eod-btn__circle--white" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Same gallery blocks (full/pair/process/video/text/intro),
+         same renderGalleryBlocks() function, as a project's "view
+         more" — see content.js. -->
+    <section class="eod-project__gallery-section">
+      <div class="eod-project__gallery"></div>
+    </section>
+
+  <!-- Footer — single source of truth is chrome.js (EOD_CHROME.footer()). -->
+  <script>document.currentScript.insertAdjacentHTML("beforebegin", EOD_CHROME.footer());</script>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/CustomEase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/Observer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
+  <script src="test-navigation.js?v=13"></script>
+  <script src="sanity-client.js?v=3"></script>
+  <script src="content.js?v=41"></script>
+  <script src="script.js?v=46"></script>
+  <script src="cart.js?v=1"></script>
+</body>
+</html>

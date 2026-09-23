@@ -41,5 +41,8 @@ window.EOD_SANITY = (function () {
     getProjects: function () {
       return load().projects || [];
     },
+    getProducts: function () {
+      return load().products || [];
+    },
   };
 })();

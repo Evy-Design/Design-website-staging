@@ -1,0 +1,227 @@
+/* ===========================================================
+   Evy Diepenbroek — Store cart (icon + side panel)
+   Loaded site-wide (chrome.js injects the icon/panel markup on every
+   page) — cart.js drives the actual open/close/add/remove logic, see
+   that file's own header for the "why" behind the design choices
+   here.
+   =========================================================== */
+
+/* ---- Icon (nav bar) ---- */
+.eod-cart__toggle {
+  pointer-events: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  outline: none;
+  color: inherit; /* same white/dark-on-scroll switching as the rest of the nav (test-navigation.js) */
+  cursor: pointer;
+  width: 1.5em;
+  height: 1.5em;
+  margin: -1em;
+  padding: 1em;
+  font-family: inherit;
+}
+/* Same real bug as .eod-project__website-btn[hidden] (projects.css):
+   this class's own `display: flex` and the browser default
+   `[hidden] { display: none }` are equal specificity, and an author
+   rule always beats a user-agent one at a tie regardless of source
+   order — so without this, the icon stayed visible (with a "0" badge)
+   even while cart.js had actually set [hidden] on it. Confirmed live:
+   hidden was true, computed display was still "flex". */
+.eod-cart__toggle[hidden] {
+  display: none;
+}
+.eod-cart__toggle svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+}
+.eod-cart__count {
+  position: absolute;
+  top: 0.35em;
+  right: 0.35em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.1em;
+  height: 1.1em;
+  padding: 0 0.2em;
+  border-radius: 50%;
+  background: var(--eod-accent);
+  color: var(--eod-white);
+  font-size: 0.65em;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* ---- Overlay ---- */
+.eod-cart__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(10, 10, 10, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.eod-cart__overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ---- Panel — same slide-from-the-side language as the nav menu
+   (test-navigation.css's .underlay-nav__menu: fixed, right: 0, same
+   --menu-width), just its own plain CSS transition instead of being
+   wired into the nav's own GSAP timeline (Evy: "this can be very
+   simple"). ---- */
+.eod-cart__panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10001;
+  width: var(--menu-width);
+  max-width: 100vw;
+  background: var(--eod-white);
+  color: var(--eod-ink);
+  transform: translateX(100%);
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.eod-cart__panel.is-open {
+  transform: translateX(0);
+}
+.eod-cart__panel-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 2.5em 2em 2em;
+  overflow: auto;
+}
+.eod-cart__panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2em;
+}
+.eod-cart__panel-title {
+  font-size: 1.4em;
+  font-weight: 500;
+}
+.eod-cart__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  margin: -0.75em;
+  padding: 0.75em;
+  background: none;
+  border: none;
+  outline: none;
+  color: inherit;
+  cursor: pointer;
+}
+.eod-cart__close svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+}
+
+/* ---- Items ---- */
+.eod-cart__items {
+  list-style: none;
+  margin: 0 0 1.5em;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
+  flex: 1;
+}
+.eod-cart__item {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+.eod-cart__item-image {
+  width: 4em;
+  height: 4em;
+  object-fit: cover;
+  border-radius: calc(var(--eod-radius) * 0.5);
+  flex: none;
+}
+.eod-cart__item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  flex: 1;
+  min-width: 0;
+}
+.eod-cart__item-title {
+  font-size: 0.95em;
+  font-weight: 500;
+}
+.eod-cart__item-price {
+  font-size: 0.85em;
+  color: var(--eod-muted);
+}
+.eod-cart__item-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1em;
+  height: 1.1em;
+  margin: -0.6em;
+  padding: 0.6em;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--eod-muted);
+  cursor: pointer;
+  flex: none;
+}
+.eod-cart__item-remove svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+}
+.eod-cart__item-remove:hover {
+  color: var(--eod-ink);
+}
+
+.eod-cart__empty {
+  flex: 1;
+  color: var(--eod-muted);
+  font-size: 0.95em;
+}
+
+/* ---- Footer (total + checkout) ---- */
+.eod-cart__footer {
+  border-top: 1px solid var(--eod-border);
+  padding-top: 1.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
+}
+.eod-cart__total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 1.1em;
+  font-weight: 500;
+}
+.eod-cart__checkout[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+@media (max-width: 767px) {
+  .eod-cart__panel {
+    width: 80vw;
+  }
+  .eod-cart__panel-inner {
+    padding: 1.5em 1.25em;
+  }
+}

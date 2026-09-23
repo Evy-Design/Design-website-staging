@@ -509,5 +509,43 @@
       "title": "Dissertation: Narrow Vision of Design",
       "websiteUrl": null
     }
+  ],
+  "products": [
+    {
+      "alt": "Test mockup placeholder",
+      "buyUrl": null,
+      "category": "Mockups",
+      "cover": "https://cdn.sanity.io/images/16akn05z/production/c60dac9324f1cedb102ebeeca7e30325d9a4e081-3413x2276.png",
+      "gallery": [
+        {
+          "badgeLabel": null,
+          "body": null,
+          "heading": null,
+          "src": [
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/61204b19de74cbf013974e677b906d65eac705c2-3584x2373.jpg"
+            }
+          ],
+          "type": "full",
+          "video": null
+        }
+      ],
+      "price": 16,
+      "shortDescription": "Placeholder product — replace with a real mockup pack in Sanity.",
+      "slug": "test-mockup-pack",
+      "title": "Test Mockup Pack"
+    },
+    {
+      "alt": "Test motion placeholder",
+      "buyUrl": null,
+      "category": "Motion",
+      "cover": "https://cdn.sanity.io/images/16akn05z/production/61204b19de74cbf013974e677b906d65eac705c2-3584x2373.jpg",
+      "gallery": [],
+      "price": 24,
+      "shortDescription": "Placeholder product — replace with a real motion template in Sanity.",
+      "slug": "test-motion-template",
+      "title": "Test Motion Template"
+    }
   ]
 }

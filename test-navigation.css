@@ -80,6 +80,15 @@
   text-decoration: none;
 }
 
+/* Groups the cart icon + menu toggle so .underlay-nav__container's
+   space-between still only spans TWO items (logo / this group) — see
+   its own comment in chrome.js. */
+.underlay-nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5em;
+}
+
 .underlay-nav__logo-svg {
   width: 100%;
 }

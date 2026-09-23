@@ -46,6 +46,7 @@ window.EOD_CHROME = (function () {
   var NAV_LINKS = [
     { href: "index.html", label: "Home" },
     { href: "projects.html", label: "Projects" },
+    { href: "store.html", label: "Store" },
     { href: "about.html", label: "About" },
     { href: "contact.html", label: "Contact" },
   ];
@@ -89,16 +90,35 @@ window.EOD_CHROME = (function () {
           '<div class="underlay-nav__bar">' +
             '<div class="underlay-nav__container">' +
               '<a href="index.html" class="underlay-nav__logo">' + LOGO_SVG + "</a>" +
-              '<button data-underlay-nav-toggle aria-expanded="false" aria-label="open menu" class="underlay-nav__toggle">' +
-                '<span class="underlay-nav__toggle-text">' +
-                  '<span class="underlay-nav__toggle-label">Menu</span>' +
-                  '<span class="underlay-nav__toggle-label">Close</span>' +
-                "</span>" +
-                '<span class="underlay-nav__toggle-icon">' +
-                  '<span class="underlay-nav__toggle-bar"></span>' +
-                  '<span class="underlay-nav__toggle-bar"></span>' +
-                "</span>" +
-              "</button>" +
+              // Grouped with the menu toggle so .underlay-nav__container's
+              // justify-content: space-between still only sees TWO
+              // items (logo / this group) — a bare 3rd flex child here
+              // would space itself out into the middle of the bar
+              // instead of sitting next to Menu.
+              '<div class="underlay-nav__actions">' +
+                // Hidden until cart.js's own render() sees at least
+                // one item in the cart (Evy: "only if you add
+                // something to your cart there will be a card icont
+                // at the right whit a one" — no permanent icon
+                // sitting there empty). [hidden] here is just the
+                // initial/no-JS state; cart.js checks the real cart
+                // on every page load, not just the moment something
+                // gets added.
+                '<button data-eod-cart-toggle aria-label="Open cart" class="eod-cart__toggle" hidden>' +
+                  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M8 10H24L22.5 26H9.5L8 10Z" stroke-width="2" stroke-linejoin="round"/><path d="M12 10V8C12 5.79086 13.7909 4 16 4C18.2091 4 20 5.79086 20 8V10" stroke-width="2"/></svg>' +
+                  '<span class="eod-cart__count" data-eod-cart-count>0</span>' +
+                "</button>" +
+                '<button data-underlay-nav-toggle aria-expanded="false" aria-label="open menu" class="underlay-nav__toggle">' +
+                  '<span class="underlay-nav__toggle-text">' +
+                    '<span class="underlay-nav__toggle-label">Menu</span>' +
+                    '<span class="underlay-nav__toggle-label">Close</span>' +
+                  "</span>" +
+                  '<span class="underlay-nav__toggle-icon">' +
+                    '<span class="underlay-nav__toggle-bar"></span>' +
+                    '<span class="underlay-nav__toggle-bar"></span>' +
+                  "</span>" +
+                "</button>" +
+              "</div>" +
             "</div>" +
           "</div>" +
         "</header>" +
@@ -129,6 +149,39 @@ window.EOD_CHROME = (function () {
             "</div>" +
           "</div>" +
         "</div>" +
+        // Cart side panel — deliberately its own small slide-in, not
+        // wired into the nav menu's own GSAP timeline above (Evy:
+        // "this can be very simple it will open the same as the
+        // navigation so from the side but then you see your card item
+        // en a check out button and a crose to close it" — same
+        // VISUAL language, simpler mechanism: cart.js just toggles
+        // .is-open and a plain CSS transform transition does the
+        // rest, see cart.css). Markup/content itself (items, total)
+        // is filled in by cart.js, not here.
+        '<div data-eod-cart-panel class="eod-cart__panel" aria-hidden="true">' +
+          '<div class="eod-cart__panel-inner">' +
+            '<div class="eod-cart__panel-header">' +
+              '<span class="eod-cart__panel-title">Cart</span>' +
+              '<button data-eod-cart-close aria-label="Close cart" class="eod-cart__close">' +
+                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M8 8L24 24M24 8L8 24" stroke-width="2" stroke-linecap="round"/></svg>' +
+              "</button>" +
+            "</div>" +
+            '<ul data-eod-cart-items class="eod-cart__items"></ul>' +
+            '<p data-eod-cart-empty class="eod-cart__empty" hidden>Your cart is empty.</p>' +
+            '<div class="eod-cart__footer">' +
+              '<div class="eod-cart__total">' +
+                '<span>Total</span>' +
+                '<span data-eod-cart-total>€0</span>' +
+              "</div>" +
+              '<a data-eod-cart-checkout href="#" class="eod-btn eod-btn--dark eod-cart__checkout">' +
+                '<span class="eod-btn__label">Check out</span>' +
+                '<span class="eod-btn__circle eod-btn__circle--accent" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>' +
+                '<span class="eod-btn__circle eod-btn__circle--white" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>' +
+              "</a>" +
+            "</div>" +
+          "</div>" +
+        "</div>" +
+        '<div data-eod-cart-overlay class="eod-cart__overlay"></div>' +
       "</div>"
     );
   }
