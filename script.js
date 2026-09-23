@@ -159,6 +159,33 @@
     // the cards stay invisible behind until this resolves.
     preloadTornadoImages().then(() => hero.classList.add("is-ready"));
 
+    // shared.css's "@view-transition { navigation: auto; }" is scoped
+    // to every navigation site-wide (it has to be, to cover the
+    // projects-grid -> case-study flow it was actually built for —
+    // see that rule's own comment), including leaving THIS page. A
+    // cross-document view transition snapshots the outgoing page as a
+    // flat image right as you navigate away, and flattening ~10
+    // actively-spinning, nested-3D (transform-style: preserve-3d +
+    // backface-visibility: hidden) cards into one texture is exactly
+    // the kind of scene browsers get wrong — the snapshot can lose
+    // the backface culling entirely, painting every card's hidden
+    // .demo-card__face--back (Evy's own portrait) right on top of its
+    // front face (Evy: "als ik van pagina ga verwisselen springen
+    // alle card images naar de photo van mij"). This page has nothing
+    // that actually NEEDS a view transition on its way OUT (nothing
+    // here carries a view-transition-name into the next page), so
+    // skipping it here avoids the bad snapshot entirely without
+    // touching the transition other pages rely on. `pageswap` +
+    // skipTransition() is the standard, purpose-built API for opting
+    // one specific outgoing navigation out of an otherwise site-wide
+    // "navigation: auto" — support-checked so this silently no-ops on
+    // a browser that doesn't have it yet.
+    if (typeof PageSwapEvent !== "undefined") {
+      window.addEventListener("pageswap", (e) => {
+        if (e.viewTransition) e.viewTransition.skipTransition();
+      });
+    }
+
     if (typeof gsap === "undefined" || typeof Observer === "undefined") {
       console.error(
         "[eod-tornado] GSAP or the Observer plugin isn't loaded. Add the gsap.min.js and Observer.min.js " +
