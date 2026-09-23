@@ -185,6 +185,38 @@
         if (e.viewTransition) e.viewTransition.skipTransition();
       });
     }
+    // `pageswap` is Chrome/Edge-only — Safari supports cross-document
+    // view transitions (the same "navigation: auto" this whole thing
+    // is about) but has no API to opt one page out of them, so the
+    // guard above alone still leaves Safari showing every card's
+    // portrait (confirmed: Evy's screenshot, after the pageswap fix
+    // above had already shipped, still showed it). This is the actual
+    // universal fix — the instant ANY same-page link is clicked
+    // (before the browser has begun navigating, let alone capturing a
+    // snapshot for a transition it may or may not support), hide
+    // every card's back face directly. A hidden element can't get
+    // painted into a bad snapshot regardless of which browser's
+    // engine is doing the capturing or whether backface-visibility
+    // survives that capture intact.
+    document.addEventListener(
+      "click",
+      (e) => {
+        const link = e.target.closest("a[href]");
+        if (!link) return;
+        let url;
+        try {
+          url = new URL(link.href, location.href);
+        } catch (err) {
+          return;
+        }
+        if (url.origin !== location.origin) return;
+        if (url.pathname === location.pathname && url.hash) return; // in-page anchor, no real navigation
+        hero.querySelectorAll(".demo-card__face--back").forEach((face) => {
+          face.style.visibility = "hidden";
+        });
+      },
+      true
+    );
 
     if (typeof gsap === "undefined" || typeof Observer === "undefined") {
       console.error(
