@@ -21,7 +21,11 @@ const API_VERSION = "2026-08-26";
 // .awards, .timeline, ...), so none of the frontend rendering code
 // needed to change for the Studio-side split.
 const SITE_QUERY = `{
-  "home": *[_id == "homePage"][0]{heroTitle, heroBody},
+  "home": *[_id == "homePage"][0]{
+    heroTitle, heroBody,
+    "tornadoPortrait": tornadoPortrait.asset->url,
+    tornadoCards[]{alt, "src": image.asset->url}
+  },
   "about": *[_id == "aboutPage"][0]{
     heroHeading, heroLede, heroDetail1, heroDetail2,
     "portrait": portrait.asset->url,
@@ -77,6 +81,8 @@ const general = site.general || {};
 const settings = {
   homeHeroTitle: home.heroTitle,
   homeHeroBody: home.heroBody,
+  tornadoPortrait: home.tornadoPortrait,
+  tornadoCards: home.tornadoCards,
   aboutHeroHeading: about.heroHeading,
   aboutHeroLede: about.heroLede,
   aboutHeroDetail1: about.heroDetail1,

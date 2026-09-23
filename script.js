@@ -29,20 +29,32 @@
   // than once. A top-level `const` would throw "already declared" on the
   // second copy and abort the entire script — scoping it here means each
   // inclusion gets its own local copy instead of colliding.
+  //
+  // The cards/portrait themselves now come from Sanity (Evy: "Kan je er
+  // voor zorgen dat ik de tornado images ook in sanity kan aanpassen") —
+  // homePage.tornadoCards/tornadoPortrait, flattened into
+  // window.EOD_CONTENT.settings by content.js, which this file's own
+  // <script> tag loads AFTER (see index.html), so it's already populated
+  // by the time this IIFE runs. The original hardcoded list stays as a
+  // fallback only — if Sanity has nothing (e.g. a fetch failure), the
+  // tornado still has something to show instead of spinning empty.
+  const FALLBACK_PORTRAIT = "assets/tornado Images/back-card-image/evy-portrait.jpg";
+  const FALLBACK_CARDS = [
+    { src: "https://glass-music-01613391.figma.site/_assets/v11/f4607dfef1f252d36baff380cd218bfb7296de58.png", alt: "Architecture study" },
+    { src: "https://glass-music-01613391.figma.site/_assets/v11/2d8f6295f3054cb1971dfc6e7ce86f1ab150bc64.png?w=3584", alt: "Landscape sketch" },
+    { src: "assets/tornado Images/1.png", alt: "Plek UX Design - Website design" },
+    { src: "assets/tornado Images/2.jpg", alt: "Penguin shortlisted book cover" },
+    { src: "assets/tornado Images/3.jpg", alt: "Typografic Illustrations" },
+    { src: "assets/tornado Images/4.jpg", alt: "editorial design" },
+    { src: "assets/tornado Images/5.jpg", alt: "design, editorial design" },
+    { src: "assets/tornado Images/6.jpg", alt: "Illustration" },
+    { src: "assets/tornado Images/7.gif", alt: "Studio 3D material" },
+    { src: "assets/tornado Images/8-Cense.jpg", alt: "Cense website design" },
+  ];
+  const eodSettings = (window.EOD_CONTENT && window.EOD_CONTENT.settings) || {};
   const EOD_DATA = {
-    portrait: "assets/tornado Images/back-card-image/evy-portrait.jpg",
-    cards: [
-      { src: "https://glass-music-01613391.figma.site/_assets/v11/f4607dfef1f252d36baff380cd218bfb7296de58.png", alt: "Architecture study" },
-      { src: "https://glass-music-01613391.figma.site/_assets/v11/2d8f6295f3054cb1971dfc6e7ce86f1ab150bc64.png?w=3584", alt: "Landscape sketch" },
-      { src: "assets/tornado Images/1.png", alt: "Plek UX Design - Website design" },
-      { src: "assets/tornado Images/2.jpg", alt: "Penguin shortlisted book cover" },
-      { src: "assets/tornado Images/3.jpg", alt: "Typografic Illustrations" },
-      { src: "assets/tornado Images/4.jpg", alt: "editorial design" },
-      { src: "assets/tornado Images/5.jpg", alt: "design, editorial design" },
-      { src: "assets/tornado Images/6.jpg", alt: "Illustration" },
-      { src: "assets/tornado Images/7.gif", alt: "Studio 3D material" },
-      { src: "assets/tornado Images/8-Cense.jpg", alt: "Cense website design" },
-    ],
+    portrait: eodSettings.tornadoPortrait || FALLBACK_PORTRAIT,
+    cards: eodSettings.tornadoCards && eodSettings.tornadoCards.length ? eodSettings.tornadoCards : FALLBACK_CARDS,
   };
 
   const clamp = (v, min, max) => Math.max(min, Math.min(max, v));

@@ -2,6 +2,49 @@
   "settings": {
     "homeHeroTitle": "Who is behind this work? \nHi, I’m Evy Olivia Diepenbroek",
     "homeHeroBody": "I’m a Designer. always chasing what's next. I'm currently a nominated graphic designer with two degrees in the field and over 4 years of agency experience.",
+    "tornadoPortrait": "https://cdn.sanity.io/images/16akn05z/production/ff4d5ffbde4e60f790b2be7d36f55b005f1e27fc-831x900.jpg",
+    "tornadoCards": [
+      {
+        "alt": "Architecture study",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/c60dac9324f1cedb102ebeeca7e30325d9a4e081-3413x2276.png"
+      },
+      {
+        "alt": "Landscape sketch",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/61204b19de74cbf013974e677b906d65eac705c2-3584x2373.jpg"
+      },
+      {
+        "alt": "Plek UX Design - Website design",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/78ca5f1cc87419a28da27c85d35858cde67a2c04-1622x1216.png"
+      },
+      {
+        "alt": "Penguin shortlisted book cover",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/d87fd99a478c166308c3e7612998bbedd5cb07f4-2114x1500.jpg"
+      },
+      {
+        "alt": "Typografic Illustrations",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/f4c00690a493e4d2c8d7092ca2916e8fce59d537-1501x1500.jpg"
+      },
+      {
+        "alt": "editorial design",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/55822fd266c45b0d426fa7dc6f222fa831820d2e-1900x1427.jpg"
+      },
+      {
+        "alt": "design, editorial design",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/4852741da84edeb6cb6b63c4d3a5aa56ad3d8943-800x622.jpg"
+      },
+      {
+        "alt": "Illustration",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/428e40abb4d0de1b75ac0e1b461704b4b890fcf9-2673x2673.jpg"
+      },
+      {
+        "alt": "Studio 3D material",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/3f2fc319eb775382ce92d6239009e09536fbb164-600x600.gif"
+      },
+      {
+        "alt": "Cense website design",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/659403d4e1a64c63b0ff47c066dd8a7ad23ad040-5906x2594.jpg"
+      }
+    ],
     "aboutHeroHeading": "Hi, I’m Evy Olivia Diepenbroek. Nice to meet you!",
     "aboutHeroLede": "I’m a Graphic Designer, always chasing what’s next. I’m driven by new challenges and staying ahead of trends, and I’m currently a nominated graphic designer with two degrees in the field and over 5 years of agency experience.",
     "aboutHeroDetail1": "I am a creative with two degrees in Graphic and Communication Design. I began my design journey at Grafisch Lyceum Rotterdam in the Netherlands, where I studied Corporate Design and was selected for the Masterclass as one of the top students in my first year. I then earned a Bachelor’s in Graphic Communication from The University of Northampton in the UK. I concluded my studies with a nomination for The Penguin Book Cover Design Award 2022.",
