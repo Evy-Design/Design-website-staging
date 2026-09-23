@@ -512,9 +512,9 @@
   ],
   "products": [
     {
-      "alt": "Test mockup placeholder",
+      "alt": "Motion Design Styles for Adobe After Effects",
       "buyUrl": null,
-      "category": "Mockups",
+      "category": "Motion",
       "cover": "https://cdn.sanity.io/images/16akn05z/production/c60dac9324f1cedb102ebeeca7e30325d9a4e081-3413x2276.png",
       "gallery": [
         {
@@ -532,9 +532,9 @@
         }
       ],
       "price": 16,
-      "shortDescription": "Placeholder product — replace with a real mockup pack in Sanity.",
-      "slug": "test-mockup-pack",
-      "title": "Test Mockup Pack"
+      "shortDescription": "A simple design system for After Effects.\n\nMotion Design Styles lets you create, manage, and apply consistent visual styles directly inside After Effects.\nDefine your Colors, Type, and Variables once, then apply them across your compositions. When you update a style, every layer connected to it updates automatically.\nBuild your system\nCreate a central style guide for your project with reusable design tokens.\nStay consistent\nKeep typography, colors, corner radii, line weights, and spacing consistent across every composition.\nChange once. Update everywhere.\nStyles are linked to your layers, so changes to the source style automatically flow through your entire project.",
+      "slug": "motion-design-styles",
+      "title": "Motion Design Styles"
     },
     {
       "alt": "Test motion placeholder",
