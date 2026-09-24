@@ -219,4 +219,34 @@
   .eod-store-item__hero {
     padding: 6em 1.25em 0;
   }
+  /* Evy: "Op mobile mag dit gewoon een horizontalen slider zijn" —
+     a plain swipeable carousel instead of the desktop's tall
+     one-photo-per-screen vertical stack. Native scroll-snap (no JS
+     needed for a simple swipe-through): .eod-store-item__gallery and
+     .eod-project__gallery (its own child, from renderGalleryBlocks)
+     both go display: contents so every individual gallery ROW
+     becomes a direct flex child here, sitting as its own slide
+     alongside the cover photo — not the whole gallery wrapper
+     collapsed into a single slide. */
+  .eod-store-item__media {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .eod-store-item__gallery,
+  .eod-store-item__gallery .eod-project__gallery {
+    display: contents;
+  }
+  .eod-store-item__image,
+  .eod-store-item__gallery .eod-project__gallery-row {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+  }
+  .eod-store-item__image,
+  .eod-store-item__gallery .eod-project__gallery-img {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
 }
