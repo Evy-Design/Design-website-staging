@@ -136,9 +136,6 @@
   gap: 4em;
   align-items: start;
 }
-.eod-store-item__media {
-  position: relative;
-}
 /* Each photo gets its OWN rounded corners now (matching
    .eod-project__gallery-img's per-image radius) — .eod-store-item__media
    itself is just a plain column wrapper, not a single image frame
@@ -183,19 +180,6 @@
   padding-top: 0.5em;
   position: sticky;
   top: 8em;
-}
-/* Evy: "Deze button mag verplaatst worden naar links boven de image"
-   — floats over the photo's top-left corner instead of sitting in
-   the text panel, so it needs its own solid backing to stay legible
-   regardless of what's in the photo underneath it. */
-.eod-store-item__back {
-  position: absolute;
-  top: 1.25em;
-  left: 1.25em;
-  z-index: 1;
-  padding: 0.6em 1em;
-  background: var(--eod-white);
-  border-radius: 999px;
 }
 .eod-store-item__title {
   margin: 0;

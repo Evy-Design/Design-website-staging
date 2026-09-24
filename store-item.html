@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="shared.css?v=23" />
   <link rel="stylesheet" href="test-navigation.css?v=13" />
   <link rel="stylesheet" href="projects.css?v=57" />
-  <link rel="stylesheet" href="store.css?v=4" />
+  <link rel="stylesheet" href="store.css?v=5" />
   <link rel="stylesheet" href="cart.css?v=4" />
   <style>body { margin: 0; }</style>
   <!-- Must load before the nav/footer injector scripts below, which
@@ -40,17 +40,27 @@
          re-laid into one column here by store.css instead of
          project.html's full-bleed layout. -->
     <section class="eod-store-item__hero">
+      <!-- Same placement/markup as a case study's own "Go back"
+           (project.html's .eod-project__hero-top/.eod-project__back)
+           — Evy: "here you see this placement of the go back button,
+           this is exactly what i also want in the store" — plain
+           text in normal flow above everything, not overlaid on the
+           photo like a first attempt at this had it. Reusing those
+           exact classes instead of new store-specific ones so this
+           really is the same component in both places. -->
+      <div class="eod-project__hero-top" data-eod-reveal>
+        <a href="store" class="eod-btn eod-btn--secondary eod-btn--icon-lead eod-project__back">
+          <span class="eod-btn__secondary-viewport">
+            <span class="eod-btn__secondary-track">
+              <span class="eod-btn__arrow-slot eod-btn__arrow-slot--front" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M26 16H6M6 16L14 8M6 16L14 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
+              <span class="eod-btn__label">Go back</span>
+              <span class="eod-btn__arrow-slot eod-btn__arrow-slot--back" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M26 16H6M6 16L14 8M6 16L14 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
+            </span>
+          </span>
+        </a>
+      </div>
       <div class="eod-store-item__hero-inner">
         <div class="eod-store-item__media" data-eod-reveal>
-          <a href="store" class="eod-btn eod-btn--secondary eod-btn--icon-lead eod-store-item__back">
-            <span class="eod-btn__secondary-viewport">
-              <span class="eod-btn__secondary-track">
-                <span class="eod-btn__arrow-slot eod-btn__arrow-slot--front" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M26 16H6M6 16L14 8M6 16L14 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
-                <span class="eod-btn__label">Go back</span>
-                <span class="eod-btn__arrow-slot eod-btn__arrow-slot--back" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M26 16H6M6 16L14 8M6 16L14 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>
-              </span>
-            </span>
-          </a>
           <img class="eod-store-item__image" alt="" />
           <!-- Rest of the gallery photos stack right after the cover
                photo, same column/width, so the whole thing reads as
