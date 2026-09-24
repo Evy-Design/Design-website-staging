@@ -484,11 +484,17 @@ window.EOD_CONTENT = (function () {
       heroImgEl.alt = item.alt || item.title;
     }
 
-    const gallery = document.querySelector(".eod-project__gallery");
-    if (gallery) {
-      gallery.innerHTML = renderGalleryBlocks(item.gallery);
-      gallery.hidden = !item.gallery || !item.gallery.length;
-    }
+    // Gallery renders INSIDE the left media column, stacked right
+    // after the cover photo, same width as it — not a separate
+    // full-width section below like a project's own gallery (Evy:
+    // "het is eigenlijk links een gallery of fotos 1 voor 1 wanneer
+    // je scrolt en rechts blijft de tekst op zijn plek"). Still the
+    // same renderGalleryBlocks() function/markup as a project's "view
+    // more" — store.css just re-lays out the same
+    // .eod-project__gallery-row/-img classes into one column at this
+    // narrower width instead of redeclaring them.
+    const gallery = document.querySelector(".eod-store-item__gallery");
+    if (gallery) gallery.innerHTML = renderGalleryBlocks(item.gallery);
 
     const titleEl = document.querySelector(".eod-store-item__title");
     if (titleEl) titleEl.textContent = item.title;

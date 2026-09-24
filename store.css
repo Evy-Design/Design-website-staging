@@ -111,8 +111,20 @@
    page (Evy: "De layout van wanneer je op een item heb geklikt mag
    zijn zoals https://benditomockup.com/store/..."). Below this,
    store-item.html goes back to reusing projects.css's own
-   .eod-project__gallery-section/.eod-project__nav wholesale — only
-   this hero is store-specific. */
+   .eod-project__nav wholesale — only this hero is store-specific.
+
+   Left column is now the cover photo PLUS every gallery photo,
+   stacked one after another at this same width, so the whole thing
+   reads as one continuous scrolling photo column — the right panel
+   is sticky (below) and stays in view the whole time you scroll
+   through it (Evy: "het is eigenlijk links een gallery of fotos 1
+   voor 1 wanneer je scrolt en rechts blijft de tekst op zijn plek").
+   Gallery photos are still rendered by the SAME renderGalleryBlocks()
+   function/markup a project's own "view more" gallery uses
+   (content.js) — the overrides below just re-lay those same
+   .eod-project__gallery-row/-img classes into one column at this
+   narrower width instead of the full-bleed layout project.html gives
+   them, rather than duplicating that markup. */
 .eod-store-item__hero {
   padding: 8em 2em 0;
 }
@@ -126,15 +138,42 @@
 }
 .eod-store-item__media {
   position: relative;
-  border-radius: var(--eod-projects-radius);
-  overflow: hidden;
-  background: var(--eod-surface, #f4f4f2);
 }
+/* Each photo gets its OWN rounded corners now (matching
+   .eod-project__gallery-img's per-image radius) — .eod-store-item__media
+   itself is just a plain column wrapper, not a single image frame
+   around the whole stack like it was for the one-photo version. */
 .eod-store-item__image {
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+  border-radius: var(--eod-projects-radius);
+  background: var(--eod-surface, #f4f4f2);
+}
+.eod-store-item__gallery {
+  margin-top: 1.5em;
+}
+.eod-store-item__gallery .eod-project__gallery {
+  max-width: none;
+  margin: 0;
+}
+/* Force every row to one column at this width — project.html's own
+   "pair" (2-up) and text-split rows would be too cramped in a column
+   this narrow, and Evy specifically wants every photo here at the
+   same width as the cover photo, not half-width. */
+.eod-store-item__gallery .eod-project__gallery-row--pair,
+.eod-store-item__gallery .eod-project__gallery-row--text,
+.eod-store-item__gallery .eod-project__gallery-row--intro-text {
+  grid-template-columns: 1fr;
+  gap: 1em;
+}
+/* height: 70svh (projects.css) was tuned for a full-bleed gallery —
+   here every photo just matches the cover photo's own aspect ratio
+   instead. */
+.eod-store-item__gallery .eod-project__gallery-img {
+  height: auto;
+  aspect-ratio: 4 / 3;
 }
 .eod-store-item__panel {
   display: flex;

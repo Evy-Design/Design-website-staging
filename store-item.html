@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="shared.css?v=23" />
   <link rel="stylesheet" href="test-navigation.css?v=13" />
   <link rel="stylesheet" href="projects.css?v=57" />
-  <link rel="stylesheet" href="store.css?v=3" />
+  <link rel="stylesheet" href="store.css?v=4" />
   <link rel="stylesheet" href="cart.css?v=4" />
   <style>body { margin: 0; }</style>
   <!-- Must load before the nav/footer injector scripts below, which
@@ -26,15 +26,19 @@
          in the URL — one shared template for every product, same
          pattern as project.html for a case study.
 
-         Hero is its OWN two-column layout (image left, buy panel
-         right), matching benditomockup.com's product page — Evy: "De
-         layout van wanneer je op een item heb geklikt mag zijn zoals
-         https://benditomockup.com/store/lb26-w37-le-macbook-mockup/".
-         The gallery section below it still reuses project.html's
-         .eod-project__gallery block wholesale (renderGalleryBlocks in
-         content.js) — Evy: "use the same layout block that i use in
-         the cases as a view more... so if i change this layout
-         somewhere it changes everywhere." -->
+         Hero is its OWN two-column layout — left column scrolls
+         through the cover photo + every gallery photo stacked at the
+         same width, right column (buy panel) stays sticky the whole
+         time (Evy: "het is eigenlijk links een gallery of fotos 1
+         voor 1 wanneer je scrolt en rechts blijft de tekst op zijn
+         plek", matching benditomockup.com's product page). The
+         gallery photos are still rendered by content.js's
+         renderGalleryBlocks() — the SAME function/markup a project's
+         own "view more" gallery uses (Evy: "use the same layout
+         block that i use in the cases as a view more... so if i
+         change this layout somewhere it changes everywhere") — just
+         re-laid into one column here by store.css instead of
+         project.html's full-bleed layout. -->
     <section class="eod-store-item__hero">
       <div class="eod-store-item__hero-inner">
         <div class="eod-store-item__media" data-eod-reveal>
@@ -48,7 +52,20 @@
             </span>
           </a>
           <img class="eod-store-item__image" alt="" />
+          <!-- Rest of the gallery photos stack right after the cover
+               photo, same column/width, so the whole thing reads as
+               one continuous scrolling photo column (Evy: "links een
+               gallery of fotos 1 voor 1 wanneer je scrolt") — filled
+               by content.js's renderStoreDetail() via
+               renderGalleryBlocks(), same function/markup as a
+               project's own "view more" gallery (store.css re-lays
+               those same classes into one column here instead of
+               redeclaring them). -->
+          <div class="eod-store-item__gallery"></div>
         </div>
+        <!-- Sticky (store.css) — stays in view while the photo column
+             beside it scrolls (Evy: "rechts blijft de text op zijn
+             plek"). -->
         <div class="eod-store-item__panel" data-eod-reveal data-eod-reveal-delay="1">
           <h1 class="eod-store-item__title"></h1>
           <span class="eod-store-item__price"></span>
@@ -60,13 +77,6 @@
           </button>
         </div>
       </div>
-    </section>
-
-    <!-- Same gallery blocks (full/pair/process/video/text/intro),
-         same renderGalleryBlocks() function, as a project's "view
-         more" — see content.js. -->
-    <section class="eod-project__gallery-section">
-      <div class="eod-project__gallery"></div>
     </section>
 
     <!-- "See more items" — the exact same draggable 3D spatial
@@ -121,7 +131,7 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/InertiaPlugin.min.js"></script>
   <script src="test-navigation.js?v=13"></script>
   <script src="sanity-client.js?v=3"></script>
-  <script src="content.js?v=42"></script>
+  <script src="content.js?v=43"></script>
   <script src="script.js?v=46"></script>
   <script src="cart.js?v=3"></script>
   <script src="project-slider.js?v=5"></script>
