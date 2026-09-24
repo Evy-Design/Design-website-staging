@@ -140,10 +140,14 @@
    .eod-project__gallery-img's per-image radius) — .eod-store-item__media
    itself is just a plain column wrapper, not a single image frame
    around the whole stack like it was for the one-photo version. */
+/* Each photo fills the full viewport height, not a fixed aspect
+   ratio — Evy: "one image can be the total height of the section and
+   then when you scroll the other image will come", i.e. one photo
+   dominates the screen at a time as you scroll through the column. */
 .eod-store-item__image {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: 100svh;
   object-fit: cover;
   border-radius: var(--eod-projects-radius);
   background: var(--eod-surface, #f4f4f2);
@@ -166,11 +170,11 @@
   gap: 1em;
 }
 /* height: 70svh (projects.css) was tuned for a full-bleed gallery —
-   here every photo just matches the cover photo's own aspect ratio
-   instead. */
+   every photo here matches the cover photo's own full-viewport
+   height instead (see .eod-store-item__image above), so each one
+   fills the screen as you scroll to it. */
 .eod-store-item__gallery .eod-project__gallery-img {
-  height: auto;
-  aspect-ratio: 4 / 3;
+  height: 100svh;
 }
 .eod-store-item__panel {
   display: flex;
