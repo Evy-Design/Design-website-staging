@@ -426,9 +426,9 @@ window.EOD_CONTENT = (function () {
         '<li>' +
           '<a href="store-item?slug=' + item.slug + '" class="eod-store__card" data-eod-store-category="' + item.category + '" data-eod-reveal data-eod-reveal-delay="' + (i % 4) + '">' +
             '<span class="eod-projects__photo-wrap">' +
-              '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" />' +
+              '<img class="eod-projects__photo" src="' + item.cover + '" alt="' + (item.alt || "") + '" style="view-transition-name: eod-hero-' + item.slug + '" />' +
             "</span>" +
-            '<span class="eod-store__info">' +
+            '<span class="eod-store__info" style="view-transition-name: eod-out-card-' + Math.min(i, 11) + '">' +
               '<span>' +
                 '<span class="eod-store__title">' + item.title + "</span>" +
                 '<span class="eod-store__category">' + item.category + "</span>" +
@@ -482,6 +482,23 @@ window.EOD_CONTENT = (function () {
     if (heroImgEl) {
       heroImgEl.src = item.cover;
       heroImgEl.alt = item.alt || item.title;
+      // Same shared-element morph as projects.html -> project.html
+      // (Evy: "Zie je hoe deze overgang is van de projects overview
+      // image tot naar de individuele project pagina. Dat wil ik ook"):
+      // same name scheme as renderStoreGrid()'s card image, same
+      // shared.css timing. Lands at card size (.is--compact) and
+      // grows to full height on the first scroll, like a case hero.
+      heroImgEl.style.viewTransitionName = "eod-hero-" + item.slug;
+      heroImgEl.classList.add("is--compact");
+      const expandStoreHero = function () {
+        heroImgEl.classList.add("is--expanding");
+        requestAnimationFrame(function () {
+          heroImgEl.classList.remove("is--compact");
+        });
+        window.removeEventListener("scroll", expandStoreHero);
+      };
+      if (window.scrollY > 0) expandStoreHero();
+      else window.addEventListener("scroll", expandStoreHero, {passive: true});
     }
 
     // Gallery renders INSIDE the left media column, stacked right

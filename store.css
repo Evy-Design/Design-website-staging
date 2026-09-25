@@ -140,6 +140,19 @@
    .eod-project__gallery-img's per-image radius) — .eod-store-item__media
    itself is just a plain column wrapper, not a single image frame
    around the whole stack like it was for the one-photo version. */
+/* Landing state for the grid -> product page morph (see
+   renderStoreDetail): card-sized first, grown to full height on the
+   first scroll. Both endpoints are real lengths (column width x 3/4
+   vs 100svh) so the height can actually transition. Desktop only —
+   below 901px the layout is single-column / a slider. */
+@media (min-width: 901px) {
+  .eod-store-item__image.is--compact {
+    height: calc((min(100vw - 4em, var(--eod-content-max)) - 4em) * 1.2 / 2.2 * 0.75);
+  }
+  .eod-store-item__image.is--expanding {
+    transition: height 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+}
 /* Each photo fills the full viewport height, not a fixed aspect
    ratio — Evy: "one image can be the total height of the section and
    then when you scroll the other image will come", i.e. one photo
