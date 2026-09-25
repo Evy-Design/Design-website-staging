@@ -251,8 +251,8 @@ window.EOD_CONTENT = (function () {
       if (block.type === "sectionText" || block.type === "introText") {
         const rowModifier = block.type === "introText" ? "intro-text" : "text";
         return '<div class="eod-project__gallery-row eod-project__gallery-row--' + rowModifier + '">' +
-          '<h2 class="eod-project__gallery-text-heading">' + block.heading + "</h2>" +
-          '<p class="eod-project__gallery-text-body">' + block.body + "</p>" +
+          (block.heading ? '<h2 class="eod-project__gallery-text-heading">' + block.heading + "</h2>" : "") +
+          (block.body ? '<p class="eod-project__gallery-text-body">' + block.body + "</p>" : "") +
         "</div>";
       }
       if (block.type === "video") {
@@ -291,8 +291,8 @@ window.EOD_CONTENT = (function () {
         return '<div class="eod-project__process">' +
           '<div class="eod-project__process-text">' +
             (block.badgeLabel ? '<span class="eod-project__process-badge">' + block.badgeLabel + '</span>' : "") +
-            '<h2 class="eod-project__process-heading">' + block.heading + '</h2>' +
-            '<p class="eod-project__process-body">' + block.body + '</p>' +
+            (block.heading ? '<h2 class="eod-project__process-heading">' + block.heading + '</h2>' : "") +
+            (block.body ? '<p class="eod-project__process-body">' + block.body + '</p>' : "") +
           '</div>' +
           (media ? '<div class="eod-project__process-media' + mediaModifier + '">' + media + '</div>' : '') +
         '</div>';
