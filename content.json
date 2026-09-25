@@ -612,16 +612,16 @@
       "page": "projects.html"
     },
     {
-      "label": "Store",
-      "page": "store.html"
-    },
-    {
       "label": "About",
       "page": "about.html"
     },
     {
       "label": "Contact",
       "page": "contact.html"
+    },
+    {
+      "label": "Store",
+      "page": "store.html"
     }
   ]
 }
