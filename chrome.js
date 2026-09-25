@@ -105,7 +105,7 @@ window.EOD_CHROME = (function () {
                 // on every page load, not just the moment something
                 // gets added.
                 '<button data-eod-cart-toggle aria-label="Open cart" class="eod-cart__toggle" hidden>' +
-                  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M8 10H24L22.5 26H9.5L8 10Z" stroke-width="2" stroke-linejoin="round"/><path d="M12 10V8C12 5.79086 13.7909 4 16 4C18.2091 4 20 5.79086 20 8V10" stroke-width="2"/></svg>' +
+                  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="6.5 2.5 19 24.5" fill="none" aria-hidden="true"><path d="M8 10H24L22.5 26H9.5L8 10Z" stroke-width="2" stroke-linejoin="round"/><path d="M12 10V8C12 5.79086 13.7909 4 16 4C18.2091 4 20 5.79086 20 8V10" stroke-width="2"/></svg>' +
                   '<span class="eod-cart__count" data-eod-cart-count>0</span>' +
                 "</button>" +
                 '<button data-underlay-nav-toggle aria-expanded="false" aria-label="open menu" class="underlay-nav__toggle">' +

@@ -18,6 +18,13 @@
   outline: none;
   color: inherit; /* same white/dark-on-scroll switching as the rest of the nav (test-navigation.js) */
   cursor: pointer;
+  /* Evy: "Dit mag een tas icon of een cart icon worden waar de height
+     net zo hoog is als de menu" — a <button> defaults to 13.33px
+     text — the "Menu" toggle is a <button> too, so 1.5em here is the
+     exact same height as .underlay-nav__toggle-text (1.75em on
+     mobile, below, like Menu). Explicit content-box so the padding
+     tap area never eats the icon (the nav lives outside .eod-page). */
+  box-sizing: content-box;
   width: 1.5em;
   height: 1.5em;
   margin: -1em;
@@ -41,8 +48,11 @@
 }
 .eod-cart__count {
   position: absolute;
-  top: 0.35em;
-  right: 0.35em;
+  /* count's own em is 0.65 of the toggle's; the toggle has 1em of
+     padding around the icon, so ~1.1em here lands the badge on the
+     icon's top-right corner instead of floating out in the padding. */
+  top: 1.1em;
+  right: 1.1em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -280,6 +290,10 @@
 }
 
 @media (max-width: 767px) {
+  .eod-cart__toggle {
+    width: 1.75em;
+    height: 1.75em;
+  }
   .eod-cart__panel {
     top: 1em;
     right: 1em;
