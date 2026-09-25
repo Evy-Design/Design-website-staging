@@ -261,6 +261,14 @@ window.EOD_CONTENT = (function () {
           (block.body ? '<p class="eod-project__gallery-text-body">' + block.body + "</p>" : "") +
         "</div>";
       }
+      if (block.type === "mockup3d") {
+        // 3D iMac / iPhone with the video on its screen — turned into a
+        // three.js scene by mockup3d.js.
+        if (!block.video) return "";
+        return '<div class="eod-project__gallery-row eod-project__gallery-row--mockup3d">' +
+          '<div class="eod-mockup3d" data-eod-mockup3d="' + (block.device === "iphone" ? "iphone" : "imac") + '" data-video="' + block.video + '"></div>' +
+        "</div>";
+      }
       if (block.type === "video") {
         return '<div class="eod-project__gallery-row eod-project__gallery-row--video">' +
           '<div class="eod-project__gallery-video">' +

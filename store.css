@@ -182,6 +182,9 @@
   grid-template-columns: 1fr;
   gap: 1em;
 }
+.eod-store-item__gallery .eod-mockup3d {
+  height: 70svh;
+}
 /* height: 70svh (projects.css) was tuned for a full-bleed gallery —
    every photo here matches the cover photo's own full-viewport
    height instead (see .eod-store-item__image above), so each one

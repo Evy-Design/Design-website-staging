@@ -57,7 +57,7 @@ const PROJECTS_QUERY = `*[_type == "project"] | order(order asc){
   "hero": coalesce(hero.asset->url, cover.asset->url),
   "heroVideo": heroVideo.asset->url,
   alt, description, deliverables, websiteUrl,
-  gallery[]{type, "src": images[]{"url": asset->url, "isVideo": _type == "video"}, heading, body, badgeLabel, "video": video.asset->url}
+  gallery[]{type, device, "src": images[]{"url": asset->url, "isVideo": _type == "video"}, heading, body, badgeLabel, "video": video.asset->url}
 }`;
 
 // Same gallery projection as PROJECTS_QUERY above, on purpose — the
@@ -69,7 +69,7 @@ const PRODUCTS_QUERY = `*[_type == "product"] | order(order asc){
   "slug": slug.current, title, category, price,
   "cover": cover.asset->url,
   alt, shortDescription, buyUrl,
-  gallery[]{type, "src": images[]{"url": asset->url, "isVideo": _type == "video"}, heading, body, badgeLabel, "video": video.asset->url}
+  gallery[]{type, device, "src": images[]{"url": asset->url, "isVideo": _type == "video"}, heading, body, badgeLabel, "video": video.asset->url}
 }`;
 
 function queryUrl(groq) {
