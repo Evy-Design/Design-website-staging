@@ -24,6 +24,7 @@ window.EOD_CONTENT = (function () {
   var settings = {};
   var projects = [];
   var products = [];
+  var pages = {};
   try {
     settings = window.EOD_SANITY.getSiteSettings() || {};
   } catch (err) {
@@ -39,7 +40,12 @@ window.EOD_CONTENT = (function () {
   } catch (err) {
     console.error("Failed to load products from Sanity", err);
   }
-  return {settings: settings, projects: projects, products: products};
+  try {
+    pages = window.EOD_SANITY.getPages() || {};
+  } catch (err) {
+    console.error("Failed to load page block order from Sanity", err);
+  }
+  return {settings: settings, projects: projects, products: products, pages: pages};
 })();
 
 (function () {
@@ -603,7 +609,50 @@ window.EOD_CONTENT = (function () {
     }
   }
 
+  // Logo section (about.html) — a Sanity block now (Studio > Blocks >
+  // Logo section); the 8 logos hardcoded in the HTML are only what
+  // shows if that block has no logos yet.
+  function renderLogos() {
+    const grid = document.querySelector(".eod-logos__grid");
+    const logos = window.EOD_CONTENT.settings.logos || [];
+    if (!grid || !logos.length) return;
+    grid.innerHTML = logos.map(function (logo, i) {
+      return '<li class="eod-logos__tile" data-eod-reveal' + (i % 4 ? ' data-eod-reveal-delay="' + (i % 4) + '"' : "") + '><img src="' + logo.src + '" alt="' + (logo.alt || "") + '" /></li>';
+    }).join("");
+  }
+
+  // Block order per page (Studio > Pages > [page] > Blocks): every
+  // top-level section is tagged data-eod-block="<sanity block type>"
+  // in the HTML; this re-orders them to match the page's list and
+  // hides any block that's been removed from it. Runs before
+  // script.js measures anything. A page with no list yet is left as
+  // its HTML has it. (about hero + timeline share ONE wrapper — they
+  // sit together at the position of whichever is listed first.)
+  function applyBlockOrder() {
+    const name = (location.pathname.split("/").pop() || "index").replace(/\.html$/, "") || "index";
+    const key = { index: "home", about: "about", contact: "contact" }[name];
+    const order = key && window.EOD_CONTENT.pages[key];
+    if (!order || !order.length) return;
+    const els = Array.prototype.slice.call(document.querySelectorAll("main [data-eod-block]"));
+    if (!els.length) return;
+    const typesOf = function (el) { return el.getAttribute("data-eod-block").split(" "); };
+    const sorted = [];
+    order.forEach(function (type) {
+      const el = els.find(function (e) { return typesOf(e).indexOf(type) !== -1; });
+      if (el && sorted.indexOf(el) === -1) sorted.push(el);
+    });
+    els.forEach(function (el) {
+      if (sorted.indexOf(el) === -1) el.style.display = "none";
+    });
+    const anchor = document.createComment("blocks");
+    els[0].parentNode.insertBefore(anchor, els[0]);
+    sorted.forEach(function (el) { anchor.parentNode.insertBefore(el, anchor); });
+    anchor.remove();
+  }
+
+  applyBlockOrder();
   renderStaticText();
+  renderLogos();
   renderAwards();
   renderCta();
   renderTimeline();

@@ -12,7 +12,7 @@
   <style>body { margin: 0; }</style>
   <!-- Must load before the nav/footer injector scripts below, which
        call window.EOD_CHROME synchronously as the HTML is parsed. -->
-  <script src="chrome.js?v=8"></script>
+  <script src="chrome.js?v=9"></script>
 </head>
 <body>
 
@@ -21,7 +21,7 @@
   <script>document.currentScript.insertAdjacentHTML("beforebegin", EOD_CHROME.nav());</script>
 
   <main class="eod-page">
-    <section class="eod-contact" data-eod-contact>
+    <section class="eod-contact" data-eod-contact data-eod-block="contactBlock">
       <div class="eod-contact__group">
         <p class="eod-contact__text" data-eod-word-reveal data-eod-text="contactIntro">Don&rsquo;t be a stranger, and let&rsquo;s team up. You can find me on my <a href="#" class="eod-contact__link" data-eod-reveal-text="@Evy.Design" data-eod-text="instagramUrl">Instagram</a> or <a href="#" class="eod-contact__link" data-eod-reveal-text="/in/EvyDiepenbroek" data-eod-text="linkedinUrl">LinkedIn</a> and send me a message there.</p>
       </div>
@@ -47,8 +47,8 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/Observer.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
   <script src="test-navigation.js?v=14"></script>
-  <script src="sanity-client.js?v=3"></script>
-  <script src="content.js?v=45"></script>
+  <script src="sanity-client.js?v=4"></script>
+  <script src="content.js?v=46"></script>
   <script src="script.js?v=46"></script>
   <script src="cart.js?v=3"></script>
   <script src="contact.js?v=3"></script>

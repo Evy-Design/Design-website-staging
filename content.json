@@ -127,6 +127,40 @@
         "year": "2018"
       }
     ],
+    "logos": [
+      {
+        "alt": "BAM",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/54fab5a047b5434d5abccffa19a4856029ba6ac0-500x142.svg"
+      },
+      {
+        "alt": "Berkman",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/1019a6787d81e1dda5559c3192642485b87abee6-704x656.svg"
+      },
+      {
+        "alt": "Cense",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/aac54faf4b17cde2f2921ab6a538f7bf45b91542-603x202.svg"
+      },
+      {
+        "alt": "Kool Collective",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/eecccc7fc556eb877636db84061ef8365ad91187-741x343.svg"
+      },
+      {
+        "alt": "Microsoft",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/26d29da11e80a55330aeb98dee595e089b2c62b6-1280x640.svg"
+      },
+      {
+        "alt": "NoSuch",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/94072e86090dcc285ea6cb1304cffb509041dc4c-150x26.svg"
+      },
+      {
+        "alt": "Shell",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/53b573822b15a89f5cde0594706cbe2d83f6cc59-2500x2500.svg"
+      },
+      {
+        "alt": "Weavr",
+        "src": "https://cdn.sanity.io/images/16akn05z/production/1d764c176677abbdd89bbd5e97b8f1bfdb2bd48c-1896x431.svg"
+      }
+    ],
     "contactIntro": "Don’t be a stranger, and let’s team up. You can find me on my",
     "email": "Evy@Diepenbroek.com",
     "instagramUrl": null,
@@ -546,6 +580,48 @@
       "shortDescription": "Placeholder product — replace with a real motion template in Sanity.",
       "slug": "test-motion-template",
       "title": "Test Motion Template"
+    }
+  ],
+  "pages": {
+    "about": [
+      "aboutHeroBlock",
+      "timelineBlock",
+      "awardsBlock",
+      "logosBlock",
+      "ctaBlock",
+      "footer"
+    ],
+    "contact": [
+      "contactBlock",
+      "footer"
+    ],
+    "home": [
+      "homeHeroBlock",
+      "awardsBlock",
+      "ctaBlock",
+      "footer"
+    ]
+  },
+  "nav": [
+    {
+      "label": "Home",
+      "page": "index.html"
+    },
+    {
+      "label": "Projects",
+      "page": "projects.html"
+    },
+    {
+      "label": "Store",
+      "page": "store.html"
+    },
+    {
+      "label": "About",
+      "page": "about.html"
+    },
+    {
+      "label": "Contact",
+      "page": "contact.html"
     }
   ]
 }

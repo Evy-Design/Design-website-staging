@@ -43,13 +43,35 @@ window.EOD_CHROME = (function () {
       '<path d="M1109.2 189V56.5H1135.2L1137.45 77C1146.95 61.75 1162.7 53 1181.45 53C1209.45 53 1227.7 71.5 1227.7 100.25V189H1198.45V105.75C1198.45 88 1189.2 77.75 1171.7 77.75C1151.95 77.75 1138.45 92.25 1138.45 115V189H1109.2Z" fill="currentColor"/>' +
     "</svg>";
 
-  var NAV_LINKS = [
+  var DEFAULT_NAV_LINKS = [
     { href: "index.html", label: "Home" },
     { href: "projects.html", label: "Projects" },
     { href: "store.html", label: "Store" },
     { href: "about.html", label: "About" },
     { href: "contact.html", label: "Contact" },
   ];
+
+  // Menu order/labels come from Sanity (Site Settings > Navigation —
+  // Evy: "een navigation tab. Waar je de volgorde van de pages kan
+  // veranderen"), via the same content.json content.js reads. chrome.js
+  // runs in <head> before any of that is loaded, so this is its own
+  // same-origin sync XHR (cached by the browser for the later read);
+  // if it fails or the list is empty the hardcoded order above is used.
+  var PAGE_LABELS = { "index.html": "Home", "projects.html": "Projects", "store.html": "Store", "about.html": "About", "contact.html": "Contact" };
+  var NAV_LINKS = (function () {
+    try {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "content.json", false);
+      xhr.send(null);
+      if (xhr.status >= 200 && xhr.status < 300) {
+        var nav = (JSON.parse(xhr.responseText).nav || []).filter(function (n) { return n && PAGE_LABELS[n.page]; });
+        if (nav.length) {
+          return nav.map(function (n) { return { href: n.page, label: n.label || PAGE_LABELS[n.page] }; });
+        }
+      }
+    } catch (err) {}
+    return DEFAULT_NAV_LINKS;
+  })();
 
   // Production only, not staging (Evy: "voordat we weer aan de github
   // staging websites gaan werken, kan je de project page offline
@@ -188,7 +210,7 @@ window.EOD_CHROME = (function () {
 
   function footer() {
     return (
-      '<div class="eod-footer-wrap" data-eod-footer-parallax>' +
+      '<div class="eod-footer-wrap" data-eod-footer-parallax data-eod-block="footer">' +
         '<footer class="eod-footer" data-eod-footer-parallax-inner>' +
           '<div class="eod-footer__top">' +
             '<div class="eod-footer__col" data-eod-reveal>' +

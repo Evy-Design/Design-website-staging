@@ -21,26 +21,33 @@ const API_VERSION = "2026-08-26";
 // .awards, .timeline, ...), so none of the frontend rendering code
 // needed to change for the Studio-side split.
 const SITE_QUERY = `{
-  "home": *[_id == "homePage"][0]{
+  "home": *[_id == "homeHeroBlock"][0]{
     heroTitle, heroBody,
     "tornadoPortrait": tornadoPortrait.asset->url,
     tornadoCards[]{alt, "src": image.asset->url}
   },
-  "about": *[_id == "aboutPage"][0]{
+  "aboutHero": *[_id == "aboutHeroBlock"][0]{
     heroHeading, heroLede, heroDetail1, heroDetail2,
-    "portrait": portrait.asset->url,
-    awards[]{year, title, body},
-    timeline[]{year, title, "image": image.asset->url, alt, body, ctaLabel, ctaHref}
+    "portrait": portrait.asset->url
   },
-  "contact": *[_id == "contactPage"][0]{intro},
+  "timeline": *[_id == "timelineBlock"][0].timeline[]{year, title, "image": image.asset->url, alt, body, ctaLabel, ctaHref},
+  "awards": *[_id == "awardsBlock"][0].awards[]{year, title, body},
+  "logos": *[_id == "logosBlock"][0].logos[]{alt, "src": image.asset->url},
+  "contact": *[_id == "contactBlock"][0]{intro},
   "footer": *[_id == "footer"][0]{email, instagramUrl, linkedinUrl},
+  "cta": *[_id == "ctaBlock"][0]{
+    "roles": ctaRoles[]{word, "image": image.asset->url},
+    "suffix": ctaSuffix,
+    "body": ctaBody
+  },
   "general": *[_id == "siteSettings"][0]{
     "favicon": favicon.asset->url,
-    "cta": {
-      "roles": ctaRoles[]{word, "image": image.asset->url},
-      "suffix": ctaSuffix,
-      "body": ctaBody
-    }
+    "nav": navigation[]{page, label}
+  },
+  "pages": {
+    "home": *[_id == "homePage"][0].blocks[]->_type,
+    "about": *[_id == "aboutPage"][0].blocks[]->_type,
+    "contact": *[_id == "contactPage"][0].blocks[]->_type
   }
 }`;
 
@@ -86,7 +93,7 @@ const [site, projects, products] = await Promise.all([
 ]);
 
 const home = site.home || {};
-const about = site.about || {};
+const aboutHero = site.aboutHero || {};
 const contact = site.contact || {};
 const footer = site.footer || {};
 const general = site.general || {};
@@ -96,24 +103,31 @@ const settings = {
   homeHeroBody: home.heroBody,
   tornadoPortrait: home.tornadoPortrait,
   tornadoCards: home.tornadoCards,
-  aboutHeroHeading: about.heroHeading,
-  aboutHeroLede: about.heroLede,
-  aboutHeroDetail1: about.heroDetail1,
-  aboutHeroDetail2: about.heroDetail2,
-  aboutPortrait: about.portrait,
-  awards: about.awards,
-  timeline: about.timeline,
+  aboutHeroHeading: aboutHero.heroHeading,
+  aboutHeroLede: aboutHero.heroLede,
+  aboutHeroDetail1: aboutHero.heroDetail1,
+  aboutHeroDetail2: aboutHero.heroDetail2,
+  aboutPortrait: aboutHero.portrait,
+  awards: site.awards,
+  timeline: site.timeline,
+  logos: site.logos,
   contactIntro: contact.intro,
   email: footer.email,
   instagramUrl: footer.instagramUrl,
   linkedinUrl: footer.linkedinUrl,
   favicon: general.favicon,
-  cta: general.cta,
+  cta: site.cta,
 };
+
+// Block order per page (a page's `blocks` references, in order) and the
+// menu order — see studio/schemaTypes/blocks.ts. A page whose list is
+// null/empty is left exactly as its HTML has it.
+const pages = site.pages || {};
+const nav = general.nav || [];
 
 const fs = await import("node:fs/promises");
 const path = await import("node:path");
 const outPath = path.join(import.meta.dirname, "..", "content.json");
-await fs.writeFile(outPath, JSON.stringify({settings, projects, products}, null, 2));
+await fs.writeFile(outPath, JSON.stringify({settings, projects, products, pages, nav}, null, 2));
 
 console.log(`Wrote ${outPath}`);
