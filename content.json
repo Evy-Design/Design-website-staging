@@ -265,12 +265,12 @@
           "video": null
         },
         {
-          "badgeLabel": null,
+          "badgeLabel": "The process",
           "body": null,
-          "device": null,
+          "device": "iphone",
           "heading": null,
           "src": null,
-          "type": "video",
+          "type": "mockup3d",
           "video": "https://cdn.sanity.io/files/16akn05z/production/827726d5c342e8f6d58b699426497290f7507918.mp4"
         },
         {
@@ -313,15 +313,6 @@
           ],
           "type": "full",
           "video": null
-        },
-        {
-          "badgeLabel": "The process",
-          "body": null,
-          "device": "iphone",
-          "heading": null,
-          "src": null,
-          "type": "mockup3d",
-          "video": "https://cdn.sanity.io/files/16akn05z/production/827726d5c342e8f6d58b699426497290f7507918.mp4"
         },
         {
           "badgeLabel": "The process",
