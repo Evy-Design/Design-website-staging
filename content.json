@@ -496,10 +496,45 @@
     {
       "alt": null,
       "cover": "https://cdn.sanity.io/images/16akn05z/production/164cba6a597ca7ebc9197c4fdfed696ee0770809-2000x1500.jpg",
-      "deliverables": null,
-      "description": null,
-      "gallery": null,
-      "hero": "https://cdn.sanity.io/images/16akn05z/production/7e799ecf2c2138f266d18322d49621d33d5eb828-2250x2250.gif",
+      "deliverables": [
+        "Editorial Design"
+      ],
+      "description": "I made 2 video’s for this interactive article. You can scan this with your phone and the Artivive app to bring the page to life.\n\nThe article talks about the overprint setting in indesign. In this they mention this techniek a lot with the 50’s - 60’s that’s why I justed a font that is inspired my the 50/60’s but is also very modern. My target audience (graphic designers) and everyone that’s interested in overprinting, color and design are going to read it. This are usually people that have knowledge about design that is why I put a style on number one and really want to add something with the interactive motions. These literally show what overprint is. Because even though graphic designers like text so much, seeing a visual explanation works better with a creative brain.",
+      "gallery": [
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "device": "imac",
+          "heading": null,
+          "src": [
+            {
+              "isVideo": true,
+              "url": "https://cdn.sanity.io/files/16akn05z/production/fe09ed164f5422a858de9f2a8220a4cf43cc6117.mp4"
+            },
+            {
+              "isVideo": true,
+              "url": "https://cdn.sanity.io/files/16akn05z/production/e2eda0fed18106e9242a885b1f8050db182a1752.mp4"
+            }
+          ],
+          "type": "pair",
+          "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "device": "imac",
+          "heading": null,
+          "src": [
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/2b708a56e4e0b57edfc583fc26ac370683fe33d0-5000x2812.jpg"
+            }
+          ],
+          "type": "full",
+          "video": null
+        }
+      ],
+      "hero": "https://cdn.sanity.io/images/16akn05z/production/164cba6a597ca7ebc9197c4fdfed696ee0770809-2000x1500.jpg",
       "heroVideo": null,
       "slug": "beyond-the-page",
       "title": "Editorial Beyond The Page: When 1+1=3",
