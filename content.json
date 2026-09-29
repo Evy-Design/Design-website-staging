@@ -316,6 +316,15 @@
         },
         {
           "badgeLabel": "The process",
+          "body": null,
+          "device": "iphone",
+          "heading": null,
+          "src": null,
+          "type": "mockup3d",
+          "video": "https://cdn.sanity.io/files/16akn05z/production/827726d5c342e8f6d58b699426497290f7507918.mp4"
+        },
+        {
+          "badgeLabel": "The process",
           "body": "Throughout the process, I was involved every step of the way. That’s why you’ll see my face multiple times in this magazine ;) All the connections, illustrations, and everything else you see were created by me myself.",
           "device": null,
           "heading": "I handled everything from developing the idea and concept to conducting research, writing, collecting content, and designing the visuals.",
