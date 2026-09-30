@@ -591,9 +591,23 @@
           ],
           "type": "full",
           "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "device": "imac",
+          "heading": null,
+          "src": [
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/d9498277b7812314bafb8157eb148da734f9fbf3-2000x1485.jpg"
+            }
+          ],
+          "type": "full",
+          "video": null
         }
       ],
-      "hero": "https://cdn.sanity.io/images/16akn05z/production/d9498277b7812314bafb8157eb148da734f9fbf3-2000x1485.jpg",
+      "hero": "https://cdn.sanity.io/images/16akn05z/production/5eaad511f1cc4b722ee6a3ee76857095aeb3802e-2299x1500.jpg",
       "heroVideo": null,
       "slug": "narrow-vision-of-design",
       "title": "Dissertation: Narrow Vision of Design",
