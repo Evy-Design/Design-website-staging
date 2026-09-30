@@ -34,6 +34,7 @@ const SITE_QUERY = `{
   "awards": *[_id == "awardsBlock"][0].awards[]{year, title, body},
   "logos": *[_id == "logosBlock"][0].logos[]{alt, "src": image.asset->url},
   "contact": *[_id == "contactBlock"][0]{intro},
+  "projectsIntro": *[_id == "projectsPage"][0].intro,
   "footer": *[_id == "footer"][0]{email, instagramUrl, linkedinUrl},
   "cta": *[_id == "ctaBlock"][0]{
     "roles": ctaRoles[]{word, "image": image.asset->url},
@@ -112,6 +113,7 @@ const settings = {
   timeline: site.timeline,
   logos: site.logos,
   contactIntro: contact.intro,
+  projectsIntro: site.projectsIntro,
   email: footer.email,
   instagramUrl: footer.instagramUrl,
   linkedinUrl: footer.linkedinUrl,

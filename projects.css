@@ -46,6 +46,18 @@
   font-weight: 400;
   letter-spacing: -0.02em;
 }
+/* Sits between the heading and the grid — width capped so a long
+   disclaimer doesn't stretch full-bleed at wide viewports, same
+   spirit as the about page's own lede column. */
+.eod-projects__intro {
+  max-width: 34em;
+  margin: 0 0 3em;
+}
+.eod-projects__intro-text {
+  margin: 0 0 1.5em;
+  color: var(--eod-muted);
+  line-height: 1.6;
+}
 .eod-projects__grid {
   list-style: none;
   margin: 0;

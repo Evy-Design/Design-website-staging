@@ -162,6 +162,19 @@ window.EOD_CONTENT = (function () {
   // visible on touch devices (no :hover to reveal it there). aria-
   // label still carries the accessible name since the visible title
   // text stays aria-hidden.
+  // Small disclaimer above the work grid (Evy: "voornamelijk bij
+  // agency heb gewerkt en daarom helaas voor een groot deel van mijn
+  // werk... niet kan laten zien") — hidden entirely (not just an
+  // empty paragraph) when there's no text in Sanity, same
+  // don't-show-empty-fields convention as everything else here.
+  function renderProjectsIntro() {
+    const wrap = document.querySelector(".eod-projects__intro");
+    if (!wrap) return;
+    const text = window.EOD_CONTENT.settings.projectsIntro;
+    wrap.hidden = !text;
+    if (text) wrap.querySelector(".eod-projects__intro-text").textContent = text;
+  }
+
   function renderProjectsGrid() {
     const grid = document.querySelector(".eod-projects__grid");
     if (!grid) return;
@@ -664,6 +677,7 @@ window.EOD_CONTENT = (function () {
   renderAwards();
   renderCta();
   renderTimeline();
+  renderProjectsIntro();
   renderProjectsGrid();
   renderProjectDetail();
   renderStoreGrid();
