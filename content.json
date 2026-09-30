@@ -399,9 +399,11 @@
       "deliverables": [
         "Visual Identity",
         "UI/UX design",
-        "Development"
+        "Development",
+        "Office Templates",
+        "Social Templates"
       ],
-      "description": null,
+      "description": "Weavr is a B2B growth marketing agency. Its belief is simple: growth only lasts when everything in an organisation is connected, from strategy and people to processes and culture. Weavr helps companies grow from the inside out by bringing insight, structure and direction together in one holistic approach.\n\nI created the full visual identity for Weavr, built around that core idea of connection. The name says it already: weaving separate threads into one strong whole. That thinking runs through the brand, from the logo and visual language to the way every touchpoint fits together.\n\nBeyond the identity, I designed and built the website and a complete set of templates, including PowerPoint and Word templates for daily use and social media templates for consistent communication. The result is a brand that feels as strategic and connected as the work Weavr does for its clients.\n\nSlim verbonden. Gericht op groei.",
       "gallery": [
         {
           "badgeLabel": "The process",
@@ -479,6 +481,20 @@
             }
           ],
           "type": "pair",
+          "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "device": "imac",
+          "heading": null,
+          "src": [
+            {
+              "isVideo": false,
+              "url": "https://cdn.sanity.io/images/16akn05z/production/4aebfde48b25af24db4fea95cb1ac3c8beac5cc0-1920x808.jpg"
+            }
+          ],
+          "type": "full",
           "video": null
         },
         {
