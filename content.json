@@ -406,6 +406,24 @@
         {
           "badgeLabel": "The process",
           "body": null,
+          "device": "imac",
+          "heading": null,
+          "src": null,
+          "type": "video",
+          "video": "https://cdn.sanity.io/files/16akn05z/production/65e981dc2230a7873305b4143e510e1844206c3c.mp4"
+        },
+        {
+          "badgeLabel": "The process",
+          "body": "Het logo van Weavr draait voornamelijk om de W, een krachtig symbool waarin meerdere betekenissen samenkomen. De W is opgebouwd als een trapje: een opstap naar groei. In de animatie verschijnt de vorm trede voor trede, als metafoor voor de beweging die Weavr in organisaties creëert, gestructureerd, doelgericht, duurzaam en omhoog. \n\nDe trap begint niet helemaal onderaan, maar al een stukje hoger. Dat kleine verschil vertelt iets groots. Bij Weavr begin je niet vanaf nul, maar bouw je verder op wat er al is.\n\nDe vorm is strak en eenvoudig, maar heeft zachte, afgeronde hoeken die vriendelijkheid en toegankelijkheid toevoegen. Zo ontstaat een logo dat helder en professioneel is, zonder afstandelijk te worden.\n\nEn nog een leuk extra detail: de W kan ook gelezen worden als een omgekeerde M, een knipoog naar oprichter Martijn van Leeuwen.",
+          "device": "imac",
+          "heading": "Het samen weven van alle draden tot een sterk geheel. Alles met elkaar verbonden. ",
+          "src": null,
+          "type": "introText",
+          "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
           "device": null,
           "heading": null,
           "src": [
@@ -439,7 +457,7 @@
           "src": [
             {
               "isVideo": false,
-              "url": "https://cdn.sanity.io/images/16akn05z/production/f27cebcf719218a084b225294513b383ce7cfd20-1920x1080.jpg"
+              "url": "https://cdn.sanity.io/images/16akn05z/production/92a72cdb8f16f35ab7dc100307e844dc70764965-1920x1080.jpg"
             }
           ],
           "type": "full",
@@ -475,15 +493,6 @@
             }
           ],
           "type": "full",
-          "video": null
-        },
-        {
-          "badgeLabel": "The process",
-          "body": null,
-          "device": null,
-          "heading": null,
-          "src": null,
-          "type": "introText",
           "video": null
         }
       ],
