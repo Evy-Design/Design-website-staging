@@ -40,8 +40,19 @@
   max-width: var(--eod-content-max);
   margin: 0 auto;
 }
+/* Heading (left) / intro disclaimer (right) — same side-by-side ->
+   stacked pattern as .eod-project__body-inner (title/description on
+   a case-study page). */
+.eod-projects__top {
+  max-width: var(--eod-content-max);
+  margin: 0 auto 3em;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3em;
+  align-items: start;
+}
 .eod-projects__heading {
-  margin: 0 0 1.5em;
+  margin: 0;
   font-size: clamp(2.5em, 4vw, 4em);
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -50,8 +61,7 @@
    disclaimer doesn't stretch full-bleed at wide viewports, same
    spirit as the about page's own lede column. */
 .eod-projects__intro {
-  max-width: 34em;
-  margin: 0 0 3em;
+  min-width: 0;
 }
 .eod-projects__intro-text {
   margin: 0 0 1.5em;
@@ -275,7 +285,16 @@
   .eod-projects__grid {
     grid-template-columns: 1fr;
   }
-
+  /* Side-by-side -> stacked, and a tighter gap than the desktop 3em
+     specifically between the heading and the intro text here (Evy:
+     "mag de padding tussen de header en de tekst nog wat kleiner",
+     stacked-on-mobile only — the grid gap doubles as that spacing
+     once there's just 1 column). */
+  .eod-projects__top {
+    grid-template-columns: 1fr;
+    gap: 0.75em;
+    margin-bottom: 2em;
+  }
 }
 
 /* ---- Detail (project.html, one shared template per case study) ----
