@@ -106,6 +106,15 @@ window.EOD_CONTENT = (function () {
     list.innerHTML = items.map(function (item, i) {
       const hasCta = item.ctaLabel && item.ctaHref;
       const isExternal = hasCta && /^https?:\/\//.test(item.ctaHref);
+      // Diagonal corner-arrow (external link, opens elsewhere) vs the
+      // same straight shaft-arrow "Go back"/the slider's own prev-
+      // next controls use (internal, same site) — Evy: "als het een
+      // link naar een andere web pagina is dat die dan schuin omhoog
+      // staat... als het gewoon naar een andere pagina is op deze
+      // website dat het dan een recht horizontale arrow is".
+      const ctaArrowSvg = isExternal
+        ? '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg>'
+        : '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M6 16H26M26 16L18 8M26 16L18 24" stroke-width="2" stroke-miterlimit="10"/></svg>';
       return (
         '<li class="eod-timeline__item" data-eod-timeline-item data-index="' + i + '">' +
           '<div class="eod-timeline__row">' +
@@ -120,9 +129,9 @@ window.EOD_CONTENT = (function () {
                   '<a href="' + item.ctaHref + '" class="eod-btn eod-btn--secondary"' + (isExternal ? ' target="_blank" rel="noopener noreferrer"' : "") + '>' +
                     '<span class="eod-btn__secondary-viewport">' +
                       '<span class="eod-btn__secondary-track">' +
-                        '<span class="eod-btn__arrow-slot eod-btn__arrow-slot--lead" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>' +
+                        '<span class="eod-btn__arrow-slot eod-btn__arrow-slot--lead" aria-hidden="true">' + ctaArrowSvg + "</span>" +
                         '<span class="eod-btn__label">' + item.ctaLabel + "</span>" +
-                        '<span class="eod-btn__arrow-slot eod-btn__arrow-slot--trail" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>' +
+                        '<span class="eod-btn__arrow-slot eod-btn__arrow-slot--trail" aria-hidden="true">' + ctaArrowSvg + "</span>" +
                       "</span>" +
                     "</span>" +
                   "</a>" +
