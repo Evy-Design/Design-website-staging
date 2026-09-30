@@ -61,7 +61,7 @@ window.EOD_CHROME = (function () {
   var NAV_LINKS = (function () {
     try {
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", "content.json", false);
+      xhr.open("GET", "content.json?t=" + Math.floor(Date.now() / 120000), false); // same cache-bust as sanity-client.js
       xhr.send(null);
       if (xhr.status >= 200 && xhr.status < 300) {
         var nav = (JSON.parse(xhr.responseText).nav || []).filter(function (n) { return n && PAGE_LABELS[n.page]; });
