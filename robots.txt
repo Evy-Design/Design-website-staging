@@ -1,0 +1,10 @@
+# This is the STAGING site (evy-design.github.io/Design-website-staging).
+# Deliberately blocked from every crawler so it never competes with
+# evydiepenbroek.nl for search ranking as duplicate content.
+#
+# evydiepenbroek.nl's own robots.txt is the opposite (Allow: / +
+# a Sitemap line) and lives directly in the Design-website repo, NOT
+# copied from here — this file is repo-specific, same as CNAME/
+# .github: do not include it in a staging -> production sync.
+User-agent: *
+Disallow: /
