@@ -301,14 +301,13 @@ body.eod-is-scrolling .eod-btn {
   height: 100%;
   stroke: currentColor;
 }
-/* Same fixed 45° rotation .eod-btn__circle--accent's own icon carries
-   (permanently — nothing animates the rotation itself, only the
-   track's position) so revealing this one on hover echoes the primary
-   button's accent/white icon pairing instead of just showing the same
-   glyph twice. */
-.eod-btn--secondary .eod-btn__arrow-slot--lead svg {
-  transform: rotate(45deg);
-}
+/* No rotation here (there used to be a fixed 45deg one, back when
+   lead/trail always shared one diagonal glyph and rotating one of
+   them was the only way to tell them apart) — the hover-revealed lead
+   icon is always the plain straight arrow now regardless of what the
+   resting trail icon is (Evy: "de arrow die tevoorschijn komt als je
+   er overheen hovert mag altijd horizontaal recht zijn"), so the
+   markup itself already supplies the right glyph. */
 .eod-btn--secondary:hover .eod-btn__secondary-track {
   transform: translateX(calc(0.9em + 0.6em));
 }

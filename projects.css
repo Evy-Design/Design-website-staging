@@ -53,6 +53,13 @@
 }
 .eod-projects__heading {
   margin: 0;
+  /* Grid's align-items: start already lines up both columns' BOXES
+     at the same pixel — this tight line-height is what brings the
+     actual glyph (cap-height) up to match, since a 48px heading's
+     default line-height leaves much more leading above the letters
+     than the 16px intro text's does (Evy: "het mag beiden aan de
+     bovenkant uitlijnen"). */
+  line-height: 1;
   font-size: clamp(2.5em, 4vw, 4em);
   font-weight: 400;
   letter-spacing: -0.02em;
