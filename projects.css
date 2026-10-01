@@ -655,14 +655,17 @@
   height: 70svh;
   background: var(--eod-black);
   border-radius: var(--eod-projects-radius);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
 }
+/* Fills the whole frame now (Evy: "video altijd het hele vlak
+   vullen") — was max-width/max-height: 100% (contain, letterboxed)
+   specifically to avoid cropping a portrait recording; cover crops
+   instead, same trade-off every photo in this gallery already
+   makes. */
 .eod-project__gallery-video video {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 /* "Process" — the bordered card from Evy's new Figma layout (node

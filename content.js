@@ -298,9 +298,15 @@ window.EOD_CONTENT = (function () {
         "</div>";
       }
       if (block.type === "video") {
+        // Fills the frame and autoplays with no controls, like any
+        // other gallery media (Evy: "video altijd het hele vlak
+        // vullen en automatisch afspelen, dus geen control bar") —
+        // muted (autoplay requires it) + loop, since there's no
+        // control bar left to replay it with. initGalleryVideoPlay()
+        // further down only actually plays it while it's on screen.
         return '<div class="eod-project__gallery-row eod-project__gallery-row--video">' +
           '<div class="eod-project__gallery-video">' +
-            '<video src="' + block.video + '" controls playsinline></video>' +
+            '<video src="' + block.video + '" muted loop playsinline data-eod-gallery-video></video>' +
           "</div>" +
         "</div>";
       }
@@ -686,6 +692,23 @@ window.EOD_CONTENT = (function () {
     anchor.remove();
   }
 
+  // Gallery "video" blocks (renderGalleryBlocks above) only actually
+  // play while on screen — several autoplaying/looping videos running
+  // at once further down a long case study would be wasted CPU/
+  // bandwidth for nothing visible. Plain play()/pause(), not
+  // mockup3d.js's heavier machinery (no three.js/canvas here).
+  function initGalleryVideoPlay() {
+    const videos = document.querySelectorAll("[data-eod-gallery-video]");
+    if (!videos.length) return;
+    const io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) entry.target.play().catch(function () {});
+        else entry.target.pause();
+      });
+    }, { rootMargin: "200px 0px" });
+    videos.forEach(function (v) { io.observe(v); });
+  }
+
   applyBlockOrder();
   renderStaticText();
   renderLogos();
@@ -698,4 +721,5 @@ window.EOD_CONTENT = (function () {
   renderStoreGrid();
   initStoreFilters();
   renderStoreDetail();
+  initGalleryVideoPlay();
 })();
