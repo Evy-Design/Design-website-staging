@@ -73,16 +73,17 @@ window.EOD_CHROME = (function () {
     return DEFAULT_NAV_LINKS;
   })();
 
-  // Production only, not staging (Evy: "voordat we weer aan de github
-  // staging websites gaan werken, kan je de project page offline
-  // zetten... en daar coming soon terug zetten") — checked by hostname
-  // rather than a hardcoded flag so this can't accidentally get
-  // reverted the next time staging's chrome.js is copied over to
-  // production wholesale; the same file behaves correctly on both
-  // domains without needing to remember to flip anything back.
-  // Restores the exact markup/copy the site used before the Sanity
-  // project pages existed (disabled label + badge, no real href).
-  var PROJECTS_COMING_SOON =
+  // Production only, not staging (Evy: "kan je hierna evydiepenbroek.nl
+  // updaten en de projecten ook toevoegen, dus nog niet de store") —
+  // checked by hostname rather than a hardcoded flag so this can't
+  // accidentally get reverted the next time staging's chrome.js is
+  // copied over to production wholesale; the same file behaves
+  // correctly on both domains without needing to remember to flip
+  // anything back. Projects itself used this same gate until now
+  // (production had its own "Coming soon" badge while the Sanity
+  // project pages were still being built) — that's lifted, Store
+  // takes its place as the one section still held back on production.
+  var STORE_COMING_SOON =
     typeof location !== "undefined" &&
     /(^|\.)evydiepenbroek\.nl$/.test(location.hostname);
 
@@ -94,7 +95,7 @@ window.EOD_CHROME = (function () {
   // same thing.
   function nav() {
     var links = NAV_LINKS.map(function (link) {
-      if (PROJECTS_COMING_SOON && link.href === "projects.html") {
+      if (STORE_COMING_SOON && link.href === "store.html") {
         return (
           '<li data-reveal-l><span class="underlay-nav__link-large is--soon" aria-disabled="true"><span class="underlay-nav__link-label">' +
             link.label +

@@ -81,21 +81,13 @@
   // (Evy: "als je op een van de cards van de tornado klickt ga je
   // naar de my work... project overview page toe".)
   //
-  // Production only (same hostname check as chrome.js's own
-  // PROJECTS_COMING_SOON, kept independent here rather than shared
-  // since this file doesn't otherwise depend on chrome.js) — while
-  // the projects page is offline there, the card becomes a plain
-  // (unclickable) div instead of a link. Nothing else about the
-  // tornado changes: position: absolute + GSAP targeting by class,
-  // not tag, both already tolerate either element (see the comment
-  // above this function).
-  var PROJECTS_COMING_SOON =
-    typeof location !== "undefined" &&
-    /(^|\.)evydiepenbroek\.nl$/.test(location.hostname);
-
+  // Projects is live on every domain now (production had its own
+  // "Coming soon" gate here, same hostname check as chrome.js's own,
+  // while the Sanity project pages were still being built — lifted
+  // now, see chrome.js's STORE_COMING_SOON for what replaced it).
   function buildCardMarkup() {
-    const tag = PROJECTS_COMING_SOON ? "div" : "a";
-    const linkAttrs = PROJECTS_COMING_SOON ? "" : 'href="projects" ';
+    const tag = "a";
+    const linkAttrs = 'href="projects" ';
     return EOD_DATA.cards
       .map(
         (card) => `
