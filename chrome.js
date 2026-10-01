@@ -209,21 +209,27 @@ window.EOD_CHROME = (function () {
   }
 
   function footer() {
+    // data-eod-reveal-repeat (script.js) — Evy: "de footer blijft
+    // animeren elke keer als je na een tijdje weer naar beneden
+    // gaat": unlike every other [data-eod-reveal]/
+    // [data-eod-letters-reveal] on the site (which reveal once and
+    // stay revealed), the footer's own columns + wordmark replay
+    // every time they scroll back into view.
     return (
       '<div class="eod-footer-wrap" data-eod-footer-parallax data-eod-block="footer">' +
         '<footer class="eod-footer" data-eod-footer-parallax-inner>' +
           '<div class="eod-footer__top">' +
-            '<div class="eod-footer__col" data-eod-reveal>' +
+            '<div class="eod-footer__col" data-eod-reveal data-eod-reveal-repeat>' +
               '<span class="eod-footer__label">CONTACT</span>' +
               '<a href="mailto:Evy@Diepenbroek.com" class="eod-footer__link eod-hidden" data-eod-text="email">Evy@Diepenbroek.com</a>' +
             "</div>" +
-            '<div class="eod-footer__col eod-footer__col--right" data-eod-reveal data-eod-reveal-delay="1">' +
+            '<div class="eod-footer__col eod-footer__col--right" data-eod-reveal data-eod-reveal-delay="1" data-eod-reveal-repeat>' +
               '<span class="eod-footer__label">SOCIAL</span>' +
               '<a href="#" class="eod-footer__link" data-eod-text="instagramUrl-nav">Instagram</a>' +
               '<a href="#" class="eod-footer__link" data-eod-text="linkedinUrl-nav">LinkedIn</a>' +
             "</div>" +
           "</div>" +
-          '<svg class="eod-footer__logo" data-eod-letters-reveal xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1228 244">' +
+          '<svg class="eod-footer__logo" data-eod-letters-reveal data-eod-reveal-repeat xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1228 244">' +
             '<path style="--i:0" d="M0 189V14H123.5V40H30.25V86H114.25V111.5H30.25V163H125.75V189H0Z" fill="currentColor"/>' +
             '<path style="--i:1" d="M182.92 189L129.17 56.5H160.42L197.67 158.5L234.92 56.5H266.17L212.42 189H182.92Z" fill="currentColor"/>' +
             '<path style="--i:2" d="M282.469 241.5V218H302.969C313.469 218 316.969 214.5 319.969 206.25L323.719 195.75L267.969 56.5H299.719L338.219 162.75L374.719 56.5H406.719L345.719 215C338.219 234.25 329.469 241.5 307.219 241.5H282.469Z" fill="currentColor"/>' +

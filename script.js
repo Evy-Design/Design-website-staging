@@ -1146,12 +1146,24 @@
       if (delay) el.style.transitionDelay = delay * 0.09 + "s";
     });
 
+    // data-eod-reveal-repeat (Evy: "de footer blijft animeren elke
+    // keer als je na een tijdje weer naar beneden gaat") opts an
+    // element OUT of the usual fire-once behaviour: it re-plays every
+    // time it scrolls back into view instead of staying "revealed"
+    // forever after the first time, by removing is-inview on the way
+    // out too instead of unobserving. Off by default (every Award/
+    // Timeline/CTA item etc. keeps the normal one-time reveal) —
+    // currently only set on the footer's own two columns.
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-inview");
-          io.unobserve(entry.target);
+          const repeat = entry.target.hasAttribute("data-eod-reveal-repeat");
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-inview");
+            if (!repeat) io.unobserve(entry.target);
+          } else if (repeat) {
+            entry.target.classList.remove("is-inview");
+          }
         });
       },
       { threshold: 0.2, rootMargin: "0px 0px -8% 0px" }
@@ -1247,12 +1259,20 @@
 
     els.forEach(setupClipMasks);
 
+    // Same data-eod-reveal-repeat opt-out of fire-once as the plain
+    // reveal system above — set on the footer logo so the letters
+    // wipe back in every time you scroll down to the footer again,
+    // not just the first time on a given page load.
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-inview");
-          io.unobserve(entry.target);
+          const repeat = entry.target.hasAttribute("data-eod-reveal-repeat");
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-inview");
+            if (!repeat) io.unobserve(entry.target);
+          } else if (repeat) {
+            entry.target.classList.remove("is-inview");
+          }
         });
       },
       { threshold: 0.2, rootMargin: "0px 0px -8% 0px" }
