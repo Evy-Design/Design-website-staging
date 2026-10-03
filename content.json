@@ -469,16 +469,16 @@
         {
           "badgeLabel": "The process",
           "body": null,
-          "device": null,
+          "device": "imac",
           "heading": null,
           "src": [
             {
-              "isVideo": false,
-              "url": "https://cdn.sanity.io/images/16akn05z/production/9f47d40f43dce4133295f2b246d6c6faab170aef-1920x1080.png"
+              "isVideo": true,
+              "url": "https://cdn.sanity.io/files/16akn05z/production/ae8f89d7f33c59ced95d95b5268ea4bab9897ad6.mp4"
             },
             {
-              "isVideo": false,
-              "url": "https://cdn.sanity.io/images/16akn05z/production/b322e3277fc7b48afc74b6b528a88d4ee43f941f-1920x1080.jpg"
+              "isVideo": true,
+              "url": "https://cdn.sanity.io/files/16akn05z/production/25ace6d598acc01486808742df3ed17004b5eec4.mp4"
             }
           ],
           "type": "pair",
@@ -511,6 +511,15 @@
           ],
           "type": "full",
           "video": null
+        },
+        {
+          "badgeLabel": "The process",
+          "body": null,
+          "device": "imac",
+          "heading": null,
+          "src": null,
+          "type": "mockup3d",
+          "video": "https://cdn.sanity.io/files/16akn05z/production/6bc6e446224d4767abd83cf261e528dfd9c4e375.mp4"
         }
       ],
       "hero": "https://cdn.sanity.io/images/16akn05z/production/7167eea7a4d3db67084cf1aa6f9b8654ce3c2dde-1920x1198.jpg",
