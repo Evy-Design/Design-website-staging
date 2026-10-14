@@ -772,28 +772,17 @@
     let targetProgress = 0;
     let smoothP = 0;
     gsap.ticker.add((time, deltaTime) => {
-      if (!ejectedItem) return;
-      if (!isLanded) {
-        const dt = Math.min(deltaTime, 50) / 1000;
-        smoothP += (targetProgress - smoothP) * (1 - Math.exp(-dt / SMOOTH_TAU_S));
-        if (Math.abs(targetProgress - smoothP) < 0.0005) smoothP = targetProgress;
-        if (isGliding) {
-          // The item's own transform is mid-transition (the pop-in
-          // glide), so only the flip — on the inner face, which has
-          // no transition — follows the scroll meanwhile.
-          ejectedFace.style.transform = `rotateY(${ejectEase(smoothP) * EJECT_TURNS}deg)`;
-        } else {
-          updateEject(smoothP);
-        }
-      }
-      if (!isLanded && targetProgress >= 1 && smoothP >= 0.995) {
-        smoothP = 1;
-        updateEject(1);
-        settle();
-      }
-      if (targetProgress <= 0 && smoothP <= 0.003 && !isGliding && !isLanded) {
-        smoothP = 0;
-        returnToOrbit();
+      if (!ejectedItem || isLanded) return;
+      const dt = Math.min(deltaTime, 50) / 1000;
+      smoothP += (targetProgress - smoothP) * (1 - Math.exp(-dt / SMOOTH_TAU_S));
+      if (Math.abs(targetProgress - smoothP) < 0.0005) smoothP = targetProgress;
+      if (isGliding) {
+        // The item's own transform is mid-transition (the pop-in
+        // glide), so only the flip — on the inner face, which has
+        // no transition — follows the scroll meanwhile.
+        ejectedFace.style.transform = `rotateY(${ejectEase(smoothP) * EJECT_TURNS}deg)`;
+      } else {
+        updateEject(smoothP);
       }
     });
 
@@ -1075,6 +1064,19 @@
       if (progress > 0 && !ejectedItem) {
         smoothP = 0;
         beginEject();
+      }
+      if (progress <= 0 && ejectedItem) {
+        // A jump straight from "landed" to the very top (tapping the
+        // iOS status bar, a fast flick) skips every progress<1 tick, so
+        // undo the landed state (hug height, .is-landed) explicitly.
+        if (isLanded) unsettle();
+        smoothP = 0;
+        returnToOrbit();
+      }
+      if (ejectedItem && progress >= 1 && !isLanded) {
+        smoothP = 1;
+        updateEject(1);
+        settle();
       }
       // Math.min() inside updateEject already makes this safe to call
       // unconditionally, at any progress, in either scroll direction.
