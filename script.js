@@ -266,7 +266,15 @@
     // stuck in the wrong spot on phones. This only gets refreshed once
     // things are idle (see the debounced resize handler below), so one
     // scroll gesture always measures against one stable number.
-    let stableViewportHeight = window.innerHeight;
+    // Read from a 100svh probe rather than window.innerHeight: on iOS
+    // Safari innerHeight follows the collapsing toolbar (and so differs
+    // from the 220svh/100svh the layout is built on), svh never does.
+    const svhProbe = document.createElement("div");
+    svhProbe.style.cssText = "position:fixed;left:0;top:0;width:0;height:100svh;visibility:hidden;pointer-events:none";
+    document.body.appendChild(svhProbe);
+    const getSmallViewportHeight = () => svhProbe.offsetHeight || window.innerHeight;
+    let stableViewportHeight = getSmallViewportHeight();
+    let lastViewportWidth = window.innerWidth;
 
     const state = {
       amount: 0,
@@ -569,6 +577,12 @@
         hasStarted, ejected: !!ejectedItem, heroScrollProgress,
         innerWidth: window.innerWidth, innerHeight: window.innerHeight,
       });
+      // The toolbar collapsing/expanding on a phone fires resize with
+      // neither the width nor the (small) viewport height actually
+      // changed — nothing to re-measure, and rebuilding the tornado
+      // there is what shook the hero in Safari.
+      if (window.innerWidth === lastViewportWidth && getSmallViewportHeight() === stableViewportHeight) return;
+      lastViewportWidth = window.innerWidth;
       // Not started yet (still hidden on this breakpoint, or the
       // bootObserver/eager check haven't caught up) — bootObserver will
       // call ensureStarted() itself once this copy actually becomes
@@ -591,7 +605,7 @@
       // progress — so a mobile address-bar flicker mid-scroll never
       // gets picked up as the new "stable" number; only a real,
       // settled resize (rotation, actual window resize) does.
-      stableViewportHeight = window.innerHeight;
+      stableViewportHeight = getSmallViewportHeight();
       resizeTimer = setTimeout(() => waitForStableLayout(60, () => rebuild("resize")), 150);
     });
 
@@ -665,7 +679,7 @@
       // the landing point lower, off dead-center, without this needing
       // its own breakpoint check.
       card.style.position = "sticky";
-      card.style.top = "var(--eod-eject-anchor-y, 50vh)";
+      card.style.top = "var(--eod-eject-anchor-y, 50svh)";
       card.style.left = "50%";
       card.style.width = cardWidth + "px";
       card.style.height = cardHeight + "px";
@@ -1019,7 +1033,7 @@
       isLanded = false;
       const card = ejectedItem;
       card.style.position = "sticky";
-      card.style.top = "var(--eod-eject-anchor-y, 50vh)";
+      card.style.top = "var(--eod-eject-anchor-y, 50svh)";
       card.style.left = "50%";
       hero.classList.remove("is-landed");
       clearTimeout(hugResizeTimer);
@@ -1551,6 +1565,8 @@
   function initFooterParallax() {
     if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
     gsap.registerPlugin(ScrollTrigger);
+    // Don't re-measure every trigger each time a phone's toolbar collapses.
+    ScrollTrigger.config({ ignoreMobileResize: true });
 
     document.querySelectorAll("[data-eod-footer-parallax]").forEach((wrap) => {
       if (wrap.dataset.eodFooterParallaxInit) return;

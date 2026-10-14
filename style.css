@@ -47,7 +47,7 @@
      JS-side breakpoint check. Dead center on desktop, where title/body
      flank the card left-right; overridden lower on mobile, where they
      stack above/below it instead (see that media query for why). */
-  --eod-eject-anchor-y: 50vh;
+  --eod-eject-anchor-y: 50svh;
 }
 /* script.js measures the landed intro text and resizes .eod-hero
    (via .style.height) to hug it — once scrolling has gone idle after
@@ -147,7 +147,7 @@
   left: 50%;
   width: calc(100% - 5em);
   max-width: var(--eod-content-max);
-  top: 50vh;
+  top: 50svh;
   transform: translate(-50%, -50%);
   z-index: 5; /* above the stage, below the landed card (9999) */
   display: flex;
@@ -212,7 +212,7 @@
      measured out to still leave the title fully on-screen (~35px of
      margin above it in testing) without reintroducing that cutoff. */
   .eod-hero {
-    --eod-eject-anchor-y: 44vh;
+    --eod-eject-anchor-y: 44svh;
   }
   /* Desktop lays "Have a look" / "at all my work" side by side,
      bookending the card stack. On mobile it crowded the cards for
