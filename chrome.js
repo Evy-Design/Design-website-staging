@@ -163,9 +163,9 @@ window.EOD_CHROME = (function () {
   // Secondary link button for links to other sites: resting ↗, the
   // hover-revealed arrow is the straight →, same as everywhere else.
   // `attrs` is the raw attribute string (href, data-*, hidden, ...).
-  function externalButton(label, attrs, newTab) {
+  function externalButton(label, attrs) {
     return (
-      '<a ' + attrs + (newTab ? ' target="_blank" rel="noopener noreferrer"' : "") + ' class="eod-btn eod-btn--secondary">' +
+      '<a ' + attrs + ' class="eod-btn eod-btn--secondary">' +
         '<span class="eod-btn__secondary-viewport"><span class="eod-btn__secondary-track">' +
           '<span class="eod-btn__arrow-slot eod-btn__arrow-slot--lead" aria-hidden="true">' + ARROW_STRAIGHT + "</span>" +
           '<span class="eod-btn__label">' + label + "</span>" +
@@ -182,7 +182,7 @@ window.EOD_CHROME = (function () {
 
   function nav() {
     var portalLink = PORTAL_LIVE
-      ? '<div class="underlay-nav__portal" data-reveal-s>' + externalButton("Go to Client portal", 'href="client-portal.html"', false) + "</div>"
+      ? '<div class="underlay-nav__portal" data-reveal-s>' + externalButton("Go to Client portal", 'href="client-portal.html"') + "</div>"
       : "";
     var links = NAV_LINKS.map(function (link) {
       if (STORE_COMING_SOON && link.href === "store.html") {
@@ -239,11 +239,11 @@ window.EOD_CHROME = (function () {
           '<div class="underlay-nav__inner">' +
             '<ul class="underlay-nav__list">' + links + "</ul>" +
             '<div class="underlay-nav__bottom">' +
-              '<div class="underlay-nav__bottom-col" data-eod-socials hidden>' +
+              '<div class="underlay-nav__bottom-col">' +
                 '<div data-reveal-s><span class="underlay-nav__link-small is--faded">Socials</span></div>' +
                 '<ul class="underlay-nav__list is--small">' +
-                  '<li data-reveal-s hidden>' + externalButton("Instagram", 'href="#" data-eod-text="instagramUrl-nav" hidden', true) + "</li>" +
-                  '<li data-reveal-s hidden>' + externalButton("LinkedIn", 'href="#" data-eod-text="linkedinUrl-nav" hidden', true) + "</li>" +
+                  '<li data-reveal-s>' + externalButton("Instagram", 'href="#" data-eod-text="instagramUrl-nav"') + "</li>" +
+                  '<li data-reveal-s>' + externalButton("LinkedIn", 'href="#" data-eod-text="linkedinUrl-nav"') + "</li>" +
                 "</ul>" +
               "</div>" +
               portalLink +
@@ -315,10 +315,10 @@ window.EOD_CHROME = (function () {
               '<span class="eod-footer__label">CONTACT</span>' +
               '<a href="mailto:Evy@Diepenbroek.com" class="eod-footer__link eod-hidden" data-eod-text="email">Evy@Diepenbroek.com</a>' +
             "</div>" +
-            '<div class="eod-footer__col eod-footer__col--right" data-eod-socials hidden data-eod-reveal data-eod-reveal-delay="1" data-eod-reveal-repeat>' +
+            '<div class="eod-footer__col eod-footer__col--right" data-eod-reveal data-eod-reveal-delay="1" data-eod-reveal-repeat>' +
               '<span class="eod-footer__label">SOCIAL</span>' +
-              externalButton("Instagram", 'href="#" data-eod-text="instagramUrl-nav" hidden', true) +
-              externalButton("LinkedIn", 'href="#" data-eod-text="linkedinUrl-nav" hidden', true) +
+              externalButton("Instagram", 'href="#" data-eod-text="instagramUrl-nav"') +
+              externalButton("LinkedIn", 'href="#" data-eod-text="linkedinUrl-nav"') +
             "</div>" +
           "</div>" +
           '<svg class="eod-footer__logo" data-eod-letters-reveal data-eod-reveal-repeat xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1228 244">' +

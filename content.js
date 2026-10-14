@@ -668,22 +668,17 @@ window.EOD_CONTENT = (function () {
       el.setAttribute("href", "mailto:" + s.email);
       el.textContent = s.email;
     });
-    // Nav + footer social buttons: shown only once the URL is filled in
-    // (Studio > Blocks > Footer), instead of a dead "#" link.
-    function showSocial(selector, url) {
+    // Nav + footer social buttons (Studio > Site Settings > General).
+    function setSocial(selector, url) {
       if (!url) return;
       document.querySelectorAll(selector).forEach(function (el) {
         el.setAttribute("href", url);
-        el.hidden = false;
-        const li = el.closest("li");
-        if (li) li.hidden = false;
+        el.setAttribute("target", "_blank");
+        el.setAttribute("rel", "noopener noreferrer");
       });
     }
-    showSocial("[data-eod-text='instagramUrl-nav']", s.instagramUrl);
-    showSocial("[data-eod-text='linkedinUrl-nav']", s.linkedinUrl);
-    document.querySelectorAll("[data-eod-socials]").forEach(function (box) {
-      box.hidden = !(s.instagramUrl || s.linkedinUrl);
-    });
+    setSocial("[data-eod-text='instagramUrl-nav']", s.instagramUrl);
+    setSocial("[data-eod-text='linkedinUrl-nav']", s.linkedinUrl);
 
     // Favicon (Evy: "Ik kan nog steeds geen favorite icon of web icon
     // toevoegen") — there's no <link rel="icon"> in any page's own

@@ -119,13 +119,6 @@ body.eod-is-scrolling .eod-btn {
   display: none;
 }
 
-/* .eod-btn / flex containers set their own display, which beats the
-   browser's [hidden] rule — restore it for the ones toggled from JS. */
-.eod-btn[hidden],
-[data-eod-socials][hidden] {
-  display: none;
-}
-
 /* Three parts, two of them fixed in place: an accent-blue circle at
    the very left and a white-outlined circle at the very right never
    move — only the black label between them slides. At rest, the
