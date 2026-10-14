@@ -766,7 +766,9 @@
     // (frame-rate independent) turns those steps into one continuous
     // glide, in both directions. settle() and returnToOrbit() wait for
     // the chase to actually arrive so the hand-offs never jump.
-    const SMOOTH_TAU_S = 0.14;
+    // Touch scrolling already has the OS's own momentum easing, so a
+    // long chase on top of it just reads as floaty lag there.
+    const SMOOTH_TAU_S = window.matchMedia && window.matchMedia("(pointer: coarse)").matches ? 0.08 : 0.14;
     let targetProgress = 0;
     let smoothP = 0;
     gsap.ticker.add((time, deltaTime) => {
@@ -1044,6 +1046,7 @@
     }
 
     let scrollTicking = false;
+    let lastMixedColor = "";
     function updateScroll() {
       scrollTicking = false;
       const rect = hero.getBoundingClientRect();
@@ -1062,8 +1065,11 @@
       const colorProgress = clamp((progress - 0.65) / 0.35, 0, 1);
       const easedColor = gsap.parseEase("power2.in")(colorProgress);
       const mixedColor = mixColor("#0a0a0a", "#fafafa", easedColor);
-      hero.style.backgroundColor = mixedColor;
-      backdrop.style.backgroundColor = mixedColor;
+      if (mixedColor !== lastMixedColor) {
+        lastMixedColor = mixedColor;
+        hero.style.backgroundColor = mixedColor;
+        backdrop.style.backgroundColor = mixedColor;
+      }
 
       targetProgress = progress;
       if (progress > 0 && !ejectedItem) {
