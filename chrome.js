@@ -157,7 +157,23 @@ window.EOD_CHROME = (function () {
   // this markup lands in the DOM), so hardcoding it per-page here
   // would just be a second, redundant source of truth for the exact
   // same thing.
+  // Client portal link, bottom right of the menu. Staging only for now —
+  // same hostname gate as STORE_COMING_SOON, so a staging -> production
+  // sync can't expose it before the portal is ready.
+  var PORTAL_LIVE = !/(^|\.)evydiepenbroek\.nl$/.test(location.hostname);
+
   function nav() {
+    var portalLink = PORTAL_LIVE
+      ? '<div class="underlay-nav__portal" data-reveal-s>' +
+          '<a href="client-portal.html" class="eod-btn eod-btn--secondary">' +
+            '<span class="eod-btn__secondary-viewport"><span class="eod-btn__secondary-track">' +
+              '<span class="eod-btn__arrow-slot eod-btn__arrow-slot--lead" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M6 16H26M26 16L18 8M26 16L18 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>' +
+              '<span class="eod-btn__label">Go to Client portal</span>' +
+              '<span class="eod-btn__arrow-slot eod-btn__arrow-slot--trail" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path d="M24 20L24 6.66667L10.6667 6.66667M24 6.66667L6.66667 24" stroke-width="2" stroke-miterlimit="10"/></svg></span>' +
+            "</span></span>" +
+          "</a>" +
+        "</div>"
+      : "";
     var links = NAV_LINKS.map(function (link) {
       if (STORE_COMING_SOON && link.href === "store.html") {
         return (
@@ -220,6 +236,7 @@ window.EOD_CHROME = (function () {
                   '<li data-reveal-s><a href="#" class="underlay-nav__link-small" data-eod-text="linkedinUrl-nav">LinkedIn</a></li>' +
                 "</ul>" +
               "</div>" +
+              portalLink +
             "</div>" +
           "</div>" +
         "</nav>" +
