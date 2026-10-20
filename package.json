@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "build-content": "node scripts/build-content.mjs",
-    "dev": "npx serve . -l 3000"
+    "dev": "npx serve . -l 3000",
+    "build-hub": "node scripts/build-hub.mjs"
   }
 }

@@ -74,3 +74,22 @@ jobs:
               -o PreferredAuthentications=password \
               -b - "$SFTP_USER@$SFTP_HOST"
           echo "Uploaded content.json to ${SFTP_PATH%/}/"
+
+      # The client hub (hub.evydiepenbroek.nl) reuses the menu and
+      # footer text from content.json, so keep its copy up to date too.
+      - name: Upload content.json to the client hub (SFTP)
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+          SFTP_HUB_PATH: ${{ secrets.SFTP_HUB_PATH }}
+        run: |
+          if [ -z "$SFTP_HOST" ] || [ -z "$SFTP_USER" ] || [ -z "$SFTP_PASSWORD" ] || [ -z "$SFTP_HUB_PATH" ]; then
+            echo "SFTP_HUB_PATH not set - skipping the hub copy."
+            exit 0
+          fi
+          echo "put content.json ${SFTP_HUB_PATH%/}/content.json" | \
+            SSHPASS="$SFTP_PASSWORD" sshpass -e sftp \
+              -o StrictHostKeyChecking=yes \
+              -o PreferredAuthentications=password \
+              -b - "$SFTP_USER@$SFTP_HOST"
