@@ -5,6 +5,7 @@
   "scripts": {
     "build-content": "node scripts/build-content.mjs",
     "dev": "npx serve . -l 3000",
-    "build-hub": "node scripts/build-hub.mjs"
+    "build-hub": "node scripts/build-hub.mjs",
+    "hub": "node scripts/build-hub.mjs && npx serve dist-hub -l 3001"
   }
 }

@@ -1,31 +1,25 @@
 // Builds the client hub into dist-hub/, ready to upload to the folder
 // that hub.evydiepenbroek.nl points to on Strato.
 //
-// The hub reuses the website's shared files (styles, fonts, menu,
-// footer), so this copies exactly what the two hub pages need. The
-// website pages themselves are not copied; client-hub-links.js sends
-// menu and footer links to the main site instead.
+// The hub's own files live in hub/. It also reuses the website's
+// shared files (styles, fonts, menu, footer); those stay in one place
+// in this folder and are only copied in here at build time, so there
+// is never a second copy to keep up to date. The website pages are
+// not copied; client-hub-links.js sends menu and footer links to the
+// main site instead.
 //
-//   npm run build-hub
-import {cpSync, mkdirSync, rmSync, writeFileSync, readFileSync, existsSync} from "node:fs";
+//   npm run build-hub   build dist-hub/
+//   npm run hub         build + preview on http://localhost:3001
+import {cpSync, mkdirSync, rmSync, writeFileSync, readFileSync, existsSync, readdirSync} from "node:fs";
 import {dirname, join} from "node:path";
 import {fileURLToPath} from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = join(ROOT, "dist-hub");
 
-const FILES = [
-  // hub pages + their own code
-  "client-portal.html",
-  "client-portal.css",
-  "client-portal.js",
-  "client-hub.html",
-  "client-hub.css",
-  "client-hub.js",
-  "client-hub-data.js",
-  "client-hub-load.js",
-  "client-hub-links.js",
-  // shared website pieces the pages load
+const HUB = join(ROOT, "hub");
+// Shared website files the hub pages load.
+const SHARED = [
   "shared.css",
   "test-navigation.css",
   "style.css",
@@ -43,7 +37,10 @@ const DIRS = ["fonts"];
 rmSync(OUT, {recursive: true, force: true});
 mkdirSync(OUT, {recursive: true});
 
-for (const f of FILES) {
+for (const f of readdirSync(HUB)) {
+  if (!f.startsWith(".")) cpSync(join(HUB, f), join(OUT, f), {recursive: true});
+}
+for (const f of SHARED) {
   if (!existsSync(join(ROOT, f))) throw new Error(`Missing ${f}`);
   cpSync(join(ROOT, f), join(OUT, f));
 }

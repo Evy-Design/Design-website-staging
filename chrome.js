@@ -257,7 +257,7 @@ window.EOD_CHROME = (function () {
 
   function nav() {
     var portalLink = PORTAL_LIVE
-      ? '<div class="underlay-nav__portal" data-reveal-s>' + externalButton("Go to Client portal", 'href="client-portal.html"') + "</div>"
+      ? '<div class="underlay-nav__portal" data-reveal-s>' + externalButton("Go to Client portal", 'href="https://hub.evydiepenbroek.nl/"') + "</div>"
       : "";
     var links = NAV_LINKS.map(function (link) {
       if (STORE_COMING_SOON && link.href === "store.html") {
