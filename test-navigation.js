@@ -597,12 +597,13 @@
         return;
       }
       try { sessionStorage.setItem("eod-nav-resume", "1"); } catch (err) {}
-      gsap.to(mainEl, {
-        opacity: 0,
-        duration: 0.3,
-        ease: "power2.in",
-        onComplete: function () { location.href = url.href; }
+      // The clicked page is the current one from here on, and nothing in
+      // the menu or the page reacts to the pointer until it's all over.
+      document.documentElement.classList.add("eod-nav-busy");
+      document.querySelectorAll(".underlay-nav__link-large").forEach(function (l) {
+        l.classList.toggle("w--current", l === link);
       });
+      location.href = url.href;
     });
 
     // New page after such a choice: render in the open state, fade the page
@@ -614,22 +615,22 @@
       document.body.setAttribute("data-menu-status", "open");
       tl.invalidate();
       tl.time(enterEndTime);
-      gsap.set(mainEl, { opacity: 0 });
       document.documentElement.classList.remove("eod-nav-resume");
-      gsap.to(mainEl, {
-        opacity: 1,
-        duration: 0.5,
-        delay: 0.1,
-        ease: "power2.out",
-        onComplete: function () {
-          gsap.delayedCall(0.2, function () { if (isOpen) toggle(); });
-        }
+      // The screen on the left crossfades to this page (view transition),
+      // then the menu closes straight after it.
+      (window.EOD_NAV_READY || Promise.resolve()).then(function () {
+        gsap.delayedCall(0.08, function () {
+          if (isOpen) toggle();
+          gsap.delayedCall(0.9, function () {
+            document.documentElement.classList.remove("eod-nav-busy");
+          });
+        });
       });
     }
 
-    // Back/forward cache: a page restored after the fade-out above.
+    // Back/forward cache: a page restored after choosing from the menu.
     window.addEventListener("pageshow", function (e) {
-      if (e.persisted) gsap.set(mainEl, { opacity: 1 });
+      if (e.persisted) document.documentElement.classList.remove("eod-nav-busy");
     });
 
     overlayEl.addEventListener("click", function () {
