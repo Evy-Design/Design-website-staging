@@ -441,13 +441,19 @@
 }
 html[data-intro] .eod-intro { display: flex; }
 
+.eod-intro {
+  /* One size for the greeting and the phrase: the hero heading's own. */
+  --eod-intro-fs: clamp(1.8em, 5vw, 3.5em);
+}
 .eod-intro__hello {
+  /* Hidden until intro.js has put the lines in their start position. */
+  visibility: hidden;
   margin: 0;
   padding: 0 1.25em;
-  font-size: clamp(2.4em, 8.5vw, 7.5em);
+  font-size: var(--eod-intro-fs);
   font-weight: 400;
-  letter-spacing: -0.03em;
-  line-height: 1.02;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 /* One mask per line: the text slides up out of its own line box. The
    bottom padding (given back with a negative margin) keeps descenders
@@ -461,8 +467,6 @@ html[data-intro] .eod-intro { display: flex; }
 .eod-intro__line > span {
   display: block;
   will-change: transform;
-  /* Start hidden in CSS so nothing flashes before intro.js runs. */
-  transform: translateY(115%);
 }
 
 /* The phrase that splits. Same font-size as .eod-hero__heading so the
@@ -477,7 +481,7 @@ html[data-intro] .eod-intro { display: flex; }
   display: flex;
   justify-content: center;
   gap: 0.3em;
-  font-size: clamp(1.8em, 5vw, 3.5em);
+  font-size: var(--eod-intro-fs);
   font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1;
@@ -495,7 +499,9 @@ html[data-intro] .eod-intro { display: flex; }
     flex-direction: column;
     align-items: center;
     gap: 0.15em;
-    font-size: clamp(2.2em, 9vw, 3.5em);
+  }
+  .eod-intro {
+    --eod-intro-fs: clamp(2.2em, 9vw, 3.5em);
   }
 }
 

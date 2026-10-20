@@ -63,6 +63,7 @@
       }
 
       gsap.set(lines, { yPercent: 115 });
+      gsap.set(intro.querySelector(".eod-intro__hello"), { visibility: "visible" });
       gsap.set(parts, { opacity: 0, y: 36 });
 
       var tl = gsap.timeline({ onComplete: done });
@@ -71,8 +72,8 @@
       tl.to(lines, { yPercent: 0, duration: 1.1, ease: "power4.out", stagger: 0.14 }, 0.3)
         .to(lines, { yPercent: -115, duration: 0.8, ease: "power3.inOut", stagger: 0.08 }, "+=" + HOLD_HELLO);
 
-      // 2. The phrase appears, centred
-      tl.set(work, { visibility: "visible" }, "-=0.35")
+      // 2. The phrase appears, centred — only once the greeting is gone
+      tl.set(work, { visibility: "visible" }, ">+0.15")
         .to(parts, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out", stagger: 0.12 }, "<");
 
       // 3. It splits in two
