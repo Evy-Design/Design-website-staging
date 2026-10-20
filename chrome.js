@@ -93,6 +93,24 @@
   gtag("config", GA_MEASUREMENT_ID);
 })();
 
+// Choosing a page from the open menu keeps the menu open across the page
+// load (test-navigation.js sets the flag on click): the new page starts in
+// the open state, its content fades in on the shifted screen, and then the
+// menu closes. Read here, in the head, so the very first paint is already
+// in that state.
+(function () {
+  try {
+    if (sessionStorage.getItem("eod-nav-resume") === "1") {
+      sessionStorage.removeItem("eod-nav-resume");
+      var root = document.documentElement;
+      root.classList.add("eod-nav-resume");
+      // Failsafe: never leave the page invisible if the script that
+      // finishes the hand-over doesn't run.
+      setTimeout(function () { root.classList.remove("eod-nav-resume"); }, 5000);
+    }
+  } catch (e) {}
+})();
+
 // Page transitions. Every page change gets a quick crossfade (shared.css).
 // The long choreography — card captions leaving one by one, the photo
 // gliding to its new spot, then the rest fading in — only belongs to the
@@ -139,6 +157,14 @@
     if (a) leavingTo(a.href);
   }, true);
   window.addEventListener("pageswap", function (e) {
+    // Leaving through the open menu: the menu does its own hand-over,
+    // so no crossfade on top of it.
+    try {
+      if (e.viewTransition && sessionStorage.getItem("eod-nav-resume") === "1") {
+        e.viewTransition.skipTransition();
+        return;
+      }
+    } catch (err) {}
     if (e.activation && e.activation.entry) leavingTo(e.activation.entry.url);
   });
 })();

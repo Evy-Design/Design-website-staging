@@ -427,3 +427,22 @@
     align-self: flex-end;
   }
 }
+
+/* ---- Arriving through the open menu (see chrome.js / test-navigation.js):
+   first paint is already in the open state, page content hidden until the
+   script fades it in. ---- */
+html.eod-nav-resume body > main {
+  transform: translateX(calc(-1 * var(--menu-width)));
+  opacity: 0;
+}
+html.eod-nav-resume .underlay-nav__overlay {
+  visibility: visible;
+}
+html.eod-nav-resume .underlay-nav__dark {
+  opacity: 1;
+}
+html.eod-nav-resume::view-transition-old(root),
+html.eod-nav-resume::view-transition-new(root),
+html.eod-nav-resume::view-transition-group(root) {
+  animation: none;
+}

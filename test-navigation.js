@@ -407,7 +407,9 @@
 
     gsap.set(overlayEl, { visibility: "hidden", pointerEvents: "none" });
     gsap.set(darkEl, { autoAlpha: 0 });
-    gsap.set(mainEl, { x: 0 });
+    var resuming = document.documentElement.classList.contains("eod-nav-resume");
+    // When resuming, the CSS has already shifted main to the open position.
+    if (!resuming) gsap.set(mainEl, { x: 0 });
     gsap.set(toggleLabels, { yPercent: 0 });
     gsap.set(toggleBars, { y: 0, rotation: 0 });
     gsap.set(menuBorder, { scaleX: 0 });
@@ -578,6 +580,57 @@
     buildTimeline();
 
     toggleBtn.addEventListener("click", toggle);
+
+    // Choosing a page from the open menu: the screen on the left changes
+    // to the new page while the menu stays put, then the menu closes.
+    document.addEventListener("click", function (e) {
+      if (!isOpen || e.defaultPrevented || e.button !== 0) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var link = e.target.closest && e.target.closest("a[href]");
+      if (!link || !menuEl.contains(link) || (link.target && link.target !== "_self")) return;
+      var url;
+      try { url = new URL(link.href, location.href); } catch (err) { return; }
+      if (url.origin !== location.origin) return;
+      e.preventDefault();
+      if (url.pathname === location.pathname && url.search === location.search) {
+        toggle(); // already here: just close
+        return;
+      }
+      try { sessionStorage.setItem("eod-nav-resume", "1"); } catch (err) {}
+      gsap.to(mainEl, {
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: function () { location.href = url.href; }
+      });
+    });
+
+    // New page after such a choice: render in the open state, fade the page
+    // in on the shifted screen, then close the menu.
+    if (resuming) {
+      isOpen = true;
+      toggleBtn.setAttribute("aria-expanded", "true");
+      toggleBtn.setAttribute("aria-label", "close menu");
+      document.body.setAttribute("data-menu-status", "open");
+      tl.invalidate();
+      tl.time(enterEndTime);
+      gsap.set(mainEl, { opacity: 0 });
+      document.documentElement.classList.remove("eod-nav-resume");
+      gsap.to(mainEl, {
+        opacity: 1,
+        duration: 0.5,
+        delay: 0.1,
+        ease: "power2.out",
+        onComplete: function () {
+          gsap.delayedCall(0.2, function () { if (isOpen) toggle(); });
+        }
+      });
+    }
+
+    // Back/forward cache: a page restored after the fade-out above.
+    window.addEventListener("pageshow", function (e) {
+      if (e.persisted) gsap.set(mainEl, { opacity: 1 });
+    });
 
     overlayEl.addEventListener("click", function () {
       if (isOpen) toggle();
